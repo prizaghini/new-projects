@@ -2,18 +2,18 @@
 """Digital marketing email digest.
 
 Scans Gmail (via IMAP) for the last N days of emails related to digital
-marketing / social media / PPC, summarizes recent themes with Claude, and
+marketing / social media / PPC, summarizes recent themes with Gemini, and
 emails a digest with content ideas back to the user.
 
 Required environment variables:
     GMAIL_ADDRESS        - the Gmail account to read and send from
     GMAIL_APP_PASSWORD   - a Gmail "App Password" (not your normal password)
-    ANTHROPIC_API_KEY    - Claude API key used to write the digest
+    GEMINI_API_KEY        - free Google AI Studio API key used to write the digest
 
 Optional environment variables:
     DIGEST_RECIPIENT     - where to email the digest (default: GMAIL_ADDRESS)
     LOOKBACK_DAYS         - how many days back to search (default: 7)
-    MAX_EMAILS            - cap on emails sent to Claude (default: 40)
+    MAX_EMAILS            - cap on emails sent to Gemini (default: 40)
 """
 
 import email
@@ -28,7 +28,7 @@ from email.header import decode_header
 from email.mime.text import MIMEText
 from pathlib import Path
 
-import anthropic
+from google import genai
 
 ROOT = Path(__file__).resolve().parent.parent
 KEYWORDS_PATH = ROOT / "config" / "keywords.json"
@@ -36,7 +36,7 @@ REPORTS_DIR = ROOT / "reports"
 
 GMAIL_ADDRESS = os.environ["GMAIL_ADDRESS"]
 GMAIL_APP_PASSWORD = os.environ["GMAIL_APP_PASSWORD"]
-ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
+GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 DIGEST_RECIPIENT = os.environ.get("DIGEST_RECIPIENT") or GMAIL_ADDRESS
 LOOKBACK_DAYS = int(os.environ.get("LOOKBACK_DAYS", "7"))
 MAX_EMAILS = int(os.environ.get("MAX_EMAILS", "40"))
@@ -163,16 +163,14 @@ def format_emails_for_prompt(emails: list[dict]) -> str:
 
 
 def summarize(emails: list[dict]) -> str:
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    client = genai.Client(api_key=GEMINI_API_KEY)
     prompt = DIGEST_PROMPT.format(
         days=LOOKBACK_DAYS, emails=format_emails_for_prompt(emails)
     )
-    response = client.messages.create(
-        model="claude-sonnet-5",
-        max_tokens=2000,
-        messages=[{"role": "user", "content": prompt}],
+    response = client.models.generate_content(
+        model="gemini-2.0-flash", contents=prompt
     )
-    return response.content[0].text
+    return response.text
 
 
 def save_report(markdown: str) -> Path:

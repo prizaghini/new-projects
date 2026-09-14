@@ -2,7 +2,7 @@
 
 Reads your Gmail for recent emails related to digital marketing / social
 media / PPC / SEO (newsletters, platform updates, industry news), and uses
-Claude to turn them into:
+Google's Gemini (free tier) to turn them into:
 
 1. A summary of what was being talked about
 2. A list of concrete social media content ideas based on it
@@ -26,9 +26,12 @@ your real password, so it never sees your normal login credentials.
 3. Make sure IMAP is enabled: Gmail → Settings → "Forwarding and
    POP/IMAP" → Enable IMAP.
 
-### 2. Get a Claude API key
+### 2. Get a free Gemini API key
 
-Create one at https://console.anthropic.com/settings/keys.
+Go to https://aistudio.google.com/apikey and click "Create API key." This
+is free for the volume this project uses (a couple of digests a week) —
+no credit card required. Sign in with the same Google account as your
+Gmail if you like, it doesn't have to match.
 
 ### 3. Add repo secrets
 
@@ -39,7 +42,7 @@ secret**. Add:
 |---|---|
 | `GMAIL_ADDRESS` | your Gmail address |
 | `GMAIL_APP_PASSWORD` | the app password from step 1 |
-| `ANTHROPIC_API_KEY` | the key from step 2 |
+| `GEMINI_API_KEY` | the key from step 2 |
 | `DIGEST_RECIPIENT` *(optional)* | where to send the digest, defaults to `GMAIL_ADDRESS` |
 
 ### 4. Try it
@@ -74,14 +77,14 @@ python scripts/weekly_marketing_digest.py
   Gmail's own search syntax (`X-GM-RAW`) to find matching emails from the
   last N days across all labels, and pulls subject/sender/date/snippet
   from each.
-- Those emails are sent to Claude with a prompt asking for a themed
+- Those emails are sent to Gemini with a prompt asking for a themed
   summary plus social content ideas.
 - The result is saved to `reports/YYYY-MM-DD-digest.md` and emailed to you
   via SMTP.
 
 ## Privacy note
 
-Email content is sent to the Anthropic API to generate the summary. Only
-emails matching the marketing-related keywords are included — not your
-full inbox. Credentials live only in GitHub Actions secrets / your local
-`.env`, never in code.
+Email content is sent to the Google Gemini API to generate the summary.
+Only emails matching the marketing-related keywords are included — not
+your full inbox. Credentials live only in GitHub Actions secrets / your
+local `.env`, never in code.
