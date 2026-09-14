@@ -1,0 +1,52 @@
+name: Marketing email digest
+
+on:
+  schedule:
+    # Mondays and Thursdays at 13:00 UTC. Adjust to taste.
+    - cron: "0 13 * * 1,4"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate and email digest
+        id: digest
+        env:
+          OUTLOOK_CLIENT_ID: ${{ secrets.OUTLOOK_CLIENT_ID }}
+          OUTLOOK_REFRESH_TOKEN: ${{ secrets.OUTLOOK_REFRESH_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DIGEST_RECIPIENT: ${{ secrets.DIGEST_RECIPIENT }}
+          LOOKBACK_DAYS: "4"
+        run: python scripts/weekly_marketing_digest.py
+
+      # Microsoft rotates the Outlook refresh token on every use, so the
+      # script prints the new one and we must save it back to the secret
+      # or the next scheduled run will fail to log in.
+      - name: Persist rotated Outlook refresh token
+        if: steps.digest.outputs.new_refresh_token != ''
+        env:
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          gh secret set OUTLOOK_REFRESH_TOKEN \
+            --repo "${{ github.repository }}" \
+            --body "${{ steps.digest.outputs.new_refresh_token }}"
+
+      - name: Commit report to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git diff --staged --quiet || git commit -m "Add marketing digest"
+          git push
