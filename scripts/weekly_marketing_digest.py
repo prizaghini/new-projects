@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Weekly digital marketing email digest.
+"""Digital marketing email digest.
 
 Scans Gmail (via IMAP) for the last N days of emails related to digital
-marketing / social media / PPC, summarizes the week's themes with Claude,
-and emails a digest with content ideas back to the user.
+marketing / social media / PPC, summarizes recent themes with Claude, and
+emails a digest with content ideas back to the user.
 
 Required environment variables:
     GMAIL_ADDRESS        - the Gmail account to read and send from

@@ -1,15 +1,17 @@
-# Weekly Marketing Digest
+# Marketing Email Digest
 
-Reads your Gmail for the past week, finds emails related to digital
-marketing / social media / PPC / SEO (newsletters, platform updates,
-industry news), and uses Claude to turn them into:
+Reads your Gmail for recent emails related to digital marketing / social
+media / PPC / SEO (newsletters, platform updates, industry news), and uses
+Claude to turn them into:
 
-1. A summary of what was being talked about that week
+1. A summary of what was being talked about
 2. A list of concrete social media content ideas based on it
 
 The digest is emailed to you and saved under `reports/`. A GitHub Actions
-workflow runs this automatically every Monday, so once it's set up you
-don't need to trigger it yourself.
+workflow runs this automatically every **Monday and Thursday**, so once
+it's set up you don't need to trigger it yourself. Each run only looks
+back 4 days, so the two digests don't overlap and together cover the
+full week.
 
 ## One-time setup
 
@@ -42,16 +44,18 @@ secret**. Add:
 
 ### 4. Try it
 
-Go to the **Actions** tab → "Weekly marketing digest" → **Run workflow** to
-trigger it manually the first time instead of waiting for Monday. Check
-your inbox and the `reports/` folder afterward.
+Go to the **Actions** tab → "Marketing email digest" → **Run workflow** to
+trigger it manually the first time instead of waiting for the next
+scheduled run. Check your inbox and the `reports/` folder afterward.
 
 ## Customizing
 
 - **Keywords/topics**: edit `config/keywords.json`. These are combined
   into a Gmail search query (`OR`'d together), so add/remove terms freely.
 - **Schedule**: edit the `cron` line in
-  `.github/workflows/weekly-digest.yml` (currently Mondays 13:00 UTC).
+  `.github/workflows/weekly-digest.yml` (currently Mondays and Thursdays
+  at 13:00 UTC). If you change the cadence, also adjust the `LOOKBACK_DAYS`
+  env var in that same workflow file so runs don't overlap or leave gaps.
 - **How far back it looks / how many emails it reads**: `LOOKBACK_DAYS`
   and `MAX_EMAILS` env vars (see `.env.example`).
 
