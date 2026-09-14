@@ -1,43 +1,47 @@
 #!/usr/bin/env python3
-"""Digital marketing email digest.
+"""Digital marketing email digest (Outlook + Gemini).
 
-Scans Gmail (via IMAP) for the last N days of emails related to digital
-marketing / social media / PPC, summarizes recent themes with Gemini, and
-emails a digest with content ideas back to the user.
+Scans Outlook (via Microsoft Graph) for the last N days of emails related
+to digital marketing / social media / PPC, summarizes recent themes with
+Gemini, and emails a digest with content ideas back to the user.
 
 Required environment variables:
-    GMAIL_ADDRESS        - the Gmail account to read and send from
-    GMAIL_APP_PASSWORD   - a Gmail "App Password" (not your normal password)
-    GEMINI_API_KEY        - free Google AI Studio API key used to write the digest
+    OUTLOOK_CLIENT_ID      - Azure app registration's Application (client) ID
+    OUTLOOK_REFRESH_TOKEN  - refresh token from the one-time device login
+    GEMINI_API_KEY          - free Google AI Studio API key used to write the digest
 
 Optional environment variables:
-    DIGEST_RECIPIENT     - where to email the digest (default: GMAIL_ADDRESS)
-    LOOKBACK_DAYS         - how many days back to search (default: 7)
-    MAX_EMAILS            - cap on emails sent to Gemini (default: 40)
+    DIGEST_RECIPIENT   - where to email the digest (default: your Outlook address)
+    LOOKBACK_DAYS       - how many days back to search (default: 7)
+    MAX_EMAILS          - cap on emails sent to Gemini (default: 40)
+
+Microsoft rotates the refresh token on every use, so each run may produce
+a new one. When running in GitHub Actions, this script prints it as a
+masked step output (new_refresh_token) so the workflow can save it back
+to the OUTLOOK_REFRESH_TOKEN secret for the next run.
 """
 
-import email
 import html
-import imaplib
 import json
 import os
 import re
-import smtplib
-from datetime import datetime, timezone
-from email.header import decode_header
-from email.mime.text import MIMEText
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import msal
+import requests
 from google import genai
 
 ROOT = Path(__file__).resolve().parent.parent
 KEYWORDS_PATH = ROOT / "config" / "keywords.json"
 REPORTS_DIR = ROOT / "reports"
+GRAPH_ROOT = "https://graph.microsoft.com/v1.0"
+GRAPH_SCOPES = ["Mail.Read", "Mail.Send", "offline_access"]
+AUTHORITY = "https://login.microsoftonline.com/consumers"
 
-GMAIL_ADDRESS = os.environ["GMAIL_ADDRESS"]
-GMAIL_APP_PASSWORD = os.environ["GMAIL_APP_PASSWORD"]
+OUTLOOK_CLIENT_ID = os.environ["OUTLOOK_CLIENT_ID"]
+OUTLOOK_REFRESH_TOKEN = os.environ["OUTLOOK_REFRESH_TOKEN"]
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
-DIGEST_RECIPIENT = os.environ.get("DIGEST_RECIPIENT") or GMAIL_ADDRESS
 LOOKBACK_DAYS = int(os.environ.get("LOOKBACK_DAYS", "7"))
 MAX_EMAILS = int(os.environ.get("MAX_EMAILS", "40"))
 SNIPPET_CHARS = 600
@@ -47,20 +51,20 @@ professional stay on top of their inbox. Below are emails from the last \
 {days} days related to digital marketing, social media, PPC, SEO, and \
 advertising - newsletters, industry updates, platform announcements, etc.
 
-Write a concise weekly digest with two sections:
+Write a concise digest with two sections:
 
-## What's happening this week
+## What's happening
 Group the key themes/news/trends from these emails (platform changes, \
 industry shifts, notable campaigns, tools, data points). Cite the specific \
 source briefly where useful. Skip pure noise (receipts, unrelated promos).
 
 ## Content ideas for social media
-Based on this week's themes, propose 6-8 concrete social media post ideas. \
+Based on these themes, propose 6-8 concrete social media post ideas. \
 For each: a short hook/headline, the format (e.g. carousel, short video, \
 poll, thread), and one line on the angle/why it's timely.
 
-Keep it tight and actionable - this is a working professional's weekly \
-briefing, not a report.
+Keep it tight and actionable - this is a working professional's briefing, \
+not a report.
 
 EMAILS:
 {emails}
@@ -71,22 +75,6 @@ def load_keywords() -> list[str]:
     return json.loads(KEYWORDS_PATH.read_text())["keywords"]
 
 
-def build_gmail_query(keywords: list[str]) -> str:
-    terms = " OR ".join(f'"{k}"' if " " in k else k for k in keywords)
-    return f"newer_than:{LOOKBACK_DAYS}d ({terms})"
-
-
-def decode_mime_words(value: str) -> str:
-    parts = decode_header(value or "")
-    decoded = ""
-    for text, charset in parts:
-        if isinstance(text, bytes):
-            decoded += text.decode(charset or "utf-8", errors="replace")
-        else:
-            decoded += text
-    return decoded
-
-
 def strip_html(raw: str) -> str:
     text = re.sub(r"(?is)<(script|style).*?>.*?(</\1>)", " ", raw)
     text = re.sub(r"(?s)<[^>]+>", " ", text)
@@ -94,63 +82,81 @@ def strip_html(raw: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def extract_body(msg: "email.message.Message") -> str:
-    if msg.is_multipart():
-        plain, htm = "", ""
-        for part in msg.walk():
-            ctype = part.get_content_type()
-            disp = str(part.get("Content-Disposition") or "")
-            if "attachment" in disp:
-                continue
-            payload = part.get_payload(decode=True)
-            if not payload:
-                continue
-            charset = part.get_content_charset() or "utf-8"
-            text = payload.decode(charset, errors="replace")
-            if ctype == "text/plain" and not plain:
-                plain = text
-            elif ctype == "text/html" and not htm:
-                htm = text
-        return plain.strip() or strip_html(htm)
-
-    payload = msg.get_payload(decode=True) or b""
-    charset = msg.get_content_charset() or "utf-8"
-    text = payload.decode(charset, errors="replace")
-    return text if msg.get_content_type() == "text/plain" else strip_html(text)
+def get_access_token() -> tuple[str, str | None]:
+    app = msal.PublicClientApplication(OUTLOOK_CLIENT_ID, authority=AUTHORITY)
+    result = app.acquire_token_by_refresh_token(
+        OUTLOOK_REFRESH_TOKEN, scopes=GRAPH_SCOPES
+    )
+    if "access_token" not in result:
+        raise RuntimeError(
+            "Outlook login failed - the refresh token may have expired, "
+            "re-run the one-time device login: "
+            f"{result.get('error')}: {result.get('error_description')}"
+        )
+    return result["access_token"], result.get("refresh_token")
 
 
-def fetch_marketing_emails() -> list[dict]:
-    query = build_gmail_query(load_keywords())
+def get_my_email(access_token: str) -> str:
+    resp = requests.get(
+        f"{GRAPH_ROOT}/me",
+        headers={"Authorization": f"Bearer {access_token}"},
+        params={"$select": "mail,userPrincipalName"},
+        timeout=30,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    return data.get("mail") or data["userPrincipalName"]
 
-    imap = imaplib.IMAP4_SSL("imap.gmail.com")
-    imap.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
-    imap.select('"[Gmail]/All Mail"', readonly=True)
 
-    # X-GM-RAW is a Gmail IMAP extension that accepts the same query
-    # syntax as the Gmail search box, so this reuses one query across
-    # every label/folder instead of re-implementing Gmail's search.
-    status, data = imap.uid("search", "X-GM-RAW", f'"{query}"')
-    if status != "OK":
-        raise RuntimeError(f"Gmail search failed: {data}")
+def fetch_marketing_emails(access_token: str) -> list[dict]:
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)).strftime(
+        "%Y-%m-%dT%H:%M:%SZ"
+    )
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        # Ask Graph to convert HTML bodies to plain text for us.
+        "Prefer": 'outlook.body-content-type="text"',
+    }
+    params = {
+        "$filter": f"receivedDateTime ge {cutoff}",
+        "$select": "subject,from,receivedDateTime,body",
+        "$orderby": "receivedDateTime desc",
+        "$top": "100",
+    }
+    resp = requests.get(
+        f"{GRAPH_ROOT}/me/messages", headers=headers, params=params, timeout=30
+    )
+    resp.raise_for_status()
+    messages = resp.json().get("value", [])
 
-    uids = data[0].split()[-MAX_EMAILS:]
-    emails = []
-    for uid in uids:
-        status, msg_data = imap.uid("fetch", uid, "(RFC822)")
-        if status != "OK" or not msg_data or not msg_data[0]:
+    keywords = [k.lower() for k in load_keywords()]
+    matched = []
+    for m in messages:
+        subject = m.get("subject") or "(no subject)"
+        body = m.get("body") or {}
+        content = body.get("content", "")
+        if body.get("contentType") == "html":
+            content = strip_html(content)
+
+        haystack = f"{subject} {content}".lower()
+        if not any(k in haystack for k in keywords):
             continue
-        msg = email.message_from_bytes(msg_data[0][1])
-        emails.append(
+
+        sender = ((m.get("from") or {}).get("emailAddress") or {}).get(
+            "address", "unknown"
+        )
+        matched.append(
             {
-                "subject": decode_mime_words(msg.get("Subject", "(no subject)")),
-                "sender": decode_mime_words(msg.get("From", "unknown")),
-                "date": msg.get("Date", ""),
-                "snippet": extract_body(msg)[:SNIPPET_CHARS],
+                "subject": subject,
+                "sender": sender,
+                "date": m.get("receivedDateTime", ""),
+                "snippet": content[:SNIPPET_CHARS],
             }
         )
+        if len(matched) >= MAX_EMAILS:
+            break
 
-    imap.logout()
-    return emails
+    return matched
 
 
 def format_emails_for_prompt(emails: list[dict]) -> str:
@@ -180,22 +186,45 @@ def save_report(markdown: str) -> Path:
     return path
 
 
-def send_email(markdown: str) -> None:
-    msg = MIMEText(markdown, "plain", "utf-8")
-    msg["Subject"] = f"Your marketing digest - {datetime.now(timezone.utc):%b %d, %Y}"
-    msg["From"] = GMAIL_ADDRESS
-    msg["To"] = DIGEST_RECIPIENT
+def send_email(access_token: str, markdown: str, recipient: str) -> None:
+    payload = {
+        "message": {
+            "subject": f"Your marketing digest - {datetime.now(timezone.utc):%b %d, %Y}",
+            "body": {"contentType": "Text", "content": markdown},
+            "toRecipients": [{"emailAddress": {"address": recipient}}],
+        },
+        "saveToSentItems": "true",
+    }
+    resp = requests.post(
+        f"{GRAPH_ROOT}/me/sendMail",
+        headers={"Authorization": f"Bearer {access_token}"},
+        json=payload,
+        timeout=30,
+    )
+    resp.raise_for_status()
 
-    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-        smtp.starttls()
-        smtp.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
-        smtp.send_message(msg)
+
+def persist_rotated_token(new_refresh_token: str | None) -> None:
+    if not new_refresh_token or new_refresh_token == OUTLOOK_REFRESH_TOKEN:
+        return
+    # Mask it in the Actions log, then expose it as a step output so the
+    # workflow can save it back to the OUTLOOK_REFRESH_TOKEN secret.
+    print(f"::add-mask::{new_refresh_token}")
+    github_output = os.environ.get("GITHUB_OUTPUT")
+    if github_output:
+        with open(github_output, "a") as f:
+            f.write(f"new_refresh_token={new_refresh_token}\n")
 
 
 def main() -> None:
-    emails = fetch_marketing_emails()
+    access_token, new_refresh_token = get_access_token()
+    persist_rotated_token(new_refresh_token)
+
+    recipient = os.environ.get("DIGEST_RECIPIENT") or get_my_email(access_token)
+
+    emails = fetch_marketing_emails(access_token)
     if not emails:
-        print("No matching emails found this week.")
+        print("No matching emails found this period.")
         return
 
     print(f"Found {len(emails)} matching emails. Summarizing...")
@@ -204,8 +233,8 @@ def main() -> None:
     path = save_report(digest)
     print(f"Saved report to {path}")
 
-    send_email(digest)
-    print(f"Emailed digest to {DIGEST_RECIPIENT}")
+    send_email(access_token, digest, recipient)
+    print(f"Emailed digest to {recipient}")
 
 
 if __name__ == "__main__":
