@@ -2,8 +2,10 @@ name: Marketing email digest
 
 on:
   schedule:
-    # Mondays and Thursdays at 13:00 UTC. Adjust to taste.
-    - cron: "0 13 * * 1,4"
+    # Weekdays at 05:45 UTC -> lands by ~7am UK time year-round (06:45
+    # BST in summer, 05:45 GMT in winter; cron doesn't auto-adjust for
+    # daylight saving, so this is deliberately early enough to cover both).
+    - cron: "45 5 * * 1-5"
   workflow_dispatch: {}
 
 permissions:
@@ -21,13 +23,25 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # Runs daily on weekdays, so each day just needs the last 24h -
+      # except Monday, which also needs to cover the whole weekend back
+      # to Friday's run.
+      - name: Compute lookback window
+        id: lookback
+        run: |
+          if [ "$(date -u +%u)" = "1" ]; then
+            echo "days=3" >> "$GITHUB_OUTPUT"
+          else
+            echo "days=1" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate and email digest
         env:
           GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DIGEST_RECIPIENT: ${{ secrets.DIGEST_RECIPIENT }}
-          LOOKBACK_DAYS: "4"
+          LOOKBACK_DAYS: ${{ steps.lookback.outputs.days }}
         run: python scripts/weekly_marketing_digest.py
 
       - name: Commit report to repo
