@@ -75,9 +75,25 @@ never invent or guess one, and omit source_label/source_url entirely if \
 nothing in the list matches.
 
 2. "content_ideas" - 6-8 concrete social media post ideas based on those \
-themes. For each: a short punchy headline, the format (e.g. Carousel, \
-Short video, Poll, Thread), and one sentence on the angle/why it's \
-timely.
+themes. For each, give:
+   - "headline": a short punchy headline/hook
+   - "format": the format (e.g. Carousel, Short video, Poll, Thread, \
+Infographic, Newsletter)
+   - "angle": one sentence on why this is timely/worth posting now
+   - "key_points": 4-6 specific, concrete points the professional can \
+actually use to make the post, written for the chosen format:
+       * Carousel/Infographic -> one point per slide, in order
+       * Short video/Reels/TikTok -> a script outline as ordered beats \
+(hook, then each supporting point, then a closing CTA)
+       * Poll -> the exact poll question as the first point, then each \
+answer option as its own point
+       * Thread (X/LinkedIn) -> one point per individual post in the \
+thread, in posting order
+       * Other formats -> the key points to cover, in a sensible order
+     Every point must reference a specific fact, number, or detail from \
+the source articles above (not generic marketing advice) - this needs \
+to be detailed enough that the professional could draft the actual post \
+straight from these points without re-reading the source emails.
 
 EMAILS:
 {emails}
@@ -107,8 +123,12 @@ DIGEST_SCHEMA = {
                     "headline": {"type": "string"},
                     "format": {"type": "string"},
                     "angle": {"type": "string"},
+                    "key_points": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
                 },
-                "required": ["headline", "format", "angle"],
+                "required": ["headline", "format", "angle", "key_points"],
             },
         },
     },
@@ -324,6 +344,8 @@ def render_markdown(data: dict) -> str:
             f"{i}. **{idea.get('headline', '')}** "
             f"({idea.get('format', '')}) - {idea.get('angle', '')}"
         )
+        for point in idea.get("key_points", []):
+            lines.append(f"   - {point}")
     return "\n".join(lines)
 
 
@@ -362,7 +384,10 @@ def render_html(data: dict, digest_date: str) -> str:
                 {esc(idea.get('format')).upper()}
               </span>
               <p style="margin:10px 0 6px 0;font-size:16px;font-weight:700;color:#111827;">{i}. {esc(idea.get('headline'))}</p>
-              <p style="margin:0;font-size:14px;line-height:1.5;color:#374151;">{esc(idea.get('angle'))}</p>
+              <p style="margin:0 0 10px 0;font-size:14px;line-height:1.5;color:#374151;">{esc(idea.get('angle'))}</p>
+              <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:#4B5563;">
+                {"".join(f'<li style="margin:0 0 4px 0;">{esc(p)}</li>' for p in idea.get("key_points", []))}
+              </ul>
             </td></tr>
           </table>
         </td></tr>"""
