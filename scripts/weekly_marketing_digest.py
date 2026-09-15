@@ -171,25 +171,35 @@ def format_emails_for_prompt(emails: list[dict]) -> str:
     return "\n".join(blocks)
 
 
+GEMINI_MODELS = ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
+
+
 def summarize(emails: list[dict]) -> str:
     client = genai.Client(api_key=GEMINI_API_KEY)
     prompt = DIGEST_PROMPT.format(
         days=LOOKBACK_DAYS, emails=format_emails_for_prompt(emails)
     )
-    # Gemini's hosted models occasionally return a transient 503 under
-    # load; ride that out with a few retries before giving up.
-    retry_delays = [5, 15, 30]
-    for attempt, delay in enumerate([0, *retry_delays]):
-        if delay:
-            time.sleep(delay)
-        try:
-            response = client.models.generate_content(
-                model="gemini-3.6-flash", contents=prompt
-            )
-            return response.text
-        except genai_errors.ServerError:
-            if attempt == len(retry_delays):
-                raise
+
+    last_error: Exception | None = None
+    for model in GEMINI_MODELS:
+        # A model may be temporarily overloaded (503) - worth a couple of
+        # retries. A model that's missing/retired (404, a ClientError)
+        # won't fix itself, so move straight to the next model instead.
+        for attempt, delay in enumerate([0, 5, 15]):
+            if delay:
+                time.sleep(delay)
+            try:
+                response = client.models.generate_content(
+                    model=model, contents=prompt
+                )
+                return response.text
+            except genai_errors.ServerError as e:
+                last_error = e
+            except genai_errors.ClientError as e:
+                last_error = e
+                break
+
+    raise last_error
 
 
 def save_report(markdown: str) -> Path:
