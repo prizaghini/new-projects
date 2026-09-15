@@ -85,8 +85,12 @@ source_url to that exact URL. Only ever use a URL that's actually \
 listed for that email; never invent or guess one, and omit \
 source_label/source_url entirely if nothing in the list matches.
 
-2. "content_ideas" - 6-8 concrete social media post ideas based on those \
-themes. For each, give:
+2. "content_ideas" - 6-8 concrete social media post ideas built ONLY \
+from the "themes" you just produced above - do not go back to the raw \
+EMAILS text for extra facts or stats, even ones from a passage you \
+correctly excluded from themes as an ad/vendor pitch. If a claim only \
+appeared in promotional copy you excluded, it must not surface in a \
+content idea either. For each idea, give:
    - "headline": a short punchy headline/hook
    - "format": the format (e.g. Carousel, Short video, Poll, Thread, \
 Infographic, Newsletter)
@@ -102,8 +106,8 @@ answer option as its own point
 thread, in posting order
        * Other formats -> the key points to cover, in a sensible order
      Every point must reference a specific fact, number, or detail from \
-the source articles above (not generic marketing advice) - this needs \
-to be detailed enough that the professional could draft the actual post \
+one of the themes above (not generic marketing advice) - this needs to \
+be detailed enough that the professional could draft the actual post \
 straight from these points without re-reading the source emails.
 
 EMAILS:
