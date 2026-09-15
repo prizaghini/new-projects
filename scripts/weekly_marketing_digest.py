@@ -54,7 +54,10 @@ Write a concise weekly digest with two sections:
 ## What's happening this week
 Group the key themes/news/trends from these emails (platform changes, \
 industry shifts, notable campaigns, tools, data points). Cite the specific \
-source briefly where useful. Skip pure noise (receipts, unrelated promos).
+source briefly where useful, and when an email includes a "Source link(s)" \
+line, link back to it as a markdown link (e.g. "([source](url))") so the \
+reader can click through to the original article. Skip pure noise \
+(receipts, unrelated promos).
 
 ## Content ideas for social media
 Based on this week's themes, propose 6-8 concrete social media post ideas. \
@@ -96,7 +99,25 @@ def strip_html(raw: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def extract_body(msg: "email.message.Message") -> str:
+LINK_RE = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
+SKIP_LINK_PATTERNS = ("unsubscribe", "mailto:", "list-manage", "optout")
+
+
+def extract_links(raw_html: str, limit: int = 3) -> list[str]:
+    links = []
+    for url in LINK_RE.findall(raw_html):
+        if not url.startswith(("http://", "https://")):
+            continue
+        if any(p in url.lower() for p in SKIP_LINK_PATTERNS):
+            continue
+        if url not in links:
+            links.append(url)
+        if len(links) >= limit:
+            break
+    return links
+
+
+def extract_body_and_links(msg: "email.message.Message") -> tuple[str, list[str]]:
     if msg.is_multipart():
         plain, htm = "", ""
         for part in msg.walk():
@@ -113,12 +134,15 @@ def extract_body(msg: "email.message.Message") -> str:
                 plain = text
             elif ctype == "text/html" and not htm:
                 htm = text
-        return plain.strip() or strip_html(htm)
+        body = plain.strip() or strip_html(htm)
+        return body, (extract_links(htm) if htm else [])
 
     payload = msg.get_payload(decode=True) or b""
     charset = msg.get_content_charset() or "utf-8"
     text = payload.decode(charset, errors="replace")
-    return text if msg.get_content_type() == "text/plain" else strip_html(text)
+    if msg.get_content_type() == "text/html":
+        return strip_html(text), extract_links(text)
+    return text, []
 
 
 def imap_quoted(value: str) -> str:
@@ -149,12 +173,14 @@ def fetch_marketing_emails() -> list[dict]:
         if status != "OK" or not msg_data or not msg_data[0]:
             continue
         msg = email.message_from_bytes(msg_data[0][1])
+        body, links = extract_body_and_links(msg)
         emails.append(
             {
                 "subject": decode_mime_words(msg.get("Subject", "(no subject)")),
                 "sender": decode_mime_words(msg.get("From", "unknown")),
                 "date": msg.get("Date", ""),
-                "snippet": extract_body(msg)[:SNIPPET_CHARS],
+                "snippet": body[:SNIPPET_CHARS],
+                "links": links,
             }
         )
 
@@ -163,11 +189,15 @@ def fetch_marketing_emails() -> list[dict]:
 
 
 def format_emails_for_prompt(emails: list[dict]) -> str:
-    blocks = [
-        f"---\nFrom: {e['sender']}\nDate: {e['date']}\n"
-        f"Subject: {e['subject']}\n{e['snippet']}\n"
-        for e in emails
-    ]
+    blocks = []
+    for e in emails:
+        block = (
+            f"---\nFrom: {e['sender']}\nDate: {e['date']}\n"
+            f"Subject: {e['subject']}\n{e['snippet']}\n"
+        )
+        if e.get("links"):
+            block += "Source link(s): " + ", ".join(e["links"]) + "\n"
+        blocks.append(block)
     return "\n".join(blocks)
 
 
