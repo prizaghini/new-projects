@@ -62,17 +62,27 @@ multiple stories.
 
 Analyze them and return two things:
 
-1. "themes" - one entry per distinct news item/trend found (platform \
-changes, industry shifts, notable campaigns, tools, data points). Skip \
-pure noise (receipts, unrelated promos, ads, sponsor blurbs). For each \
-theme give a short title and a 1-2 sentence summary in your own words \
-(don't just copy the newsletter's headline verbatim). Each email below \
-may include a "Links found in this email" list of (link text -> URL) \
-pairs - when one of those link texts corresponds to this story, include \
-the newsletter/sender name as source_label and that exact URL as \
-source_url. Only ever use a URL that's actually listed for that email; \
-never invent or guess one, and omit source_label/source_url entirely if \
-nothing in the list matches.
+1. "themes" - one entry per distinct, independently-reported news item \
+or trend (a platform change, industry shift, notable campaign, tool, or \
+data point that actually happened). Exclude anything that is really an \
+ad or vendor pitch for a product/service, even when it isn't explicitly \
+labeled "sponsored" or "partner spotlight" - watch for the telltale \
+signs: a company or product name paired with a claim about its OWN \
+capabilities, a call to action ("try it free", "get X% off", "sign up", \
+a discount code), or a headline whose real purpose is to get you to \
+click through to buy/try something rather than to inform you that \
+something happened in the industry. A bold hook statement right at the \
+top of a newsletter is very often this kind of ad banner - read past it \
+for the actual news. Also skip receipts and unrelated promos. For each \
+genuine theme give a short title and a 1-2 sentence summary in your own \
+words (don't just copy the newsletter's headline verbatim). Each email \
+below may include a "Links found in this email" list of (link text -> \
+URL) pairs - when one of those link texts corresponds to this story, \
+set source_label to the specific company/publication/person the story \
+is actually about or from (not just the newsletter's own name), and \
+source_url to that exact URL. Only ever use a URL that's actually \
+listed for that email; never invent or guess one, and omit \
+source_label/source_url entirely if nothing in the list matches.
 
 2. "content_ideas" - 6-8 concrete social media post ideas based on those \
 themes. For each, give:
