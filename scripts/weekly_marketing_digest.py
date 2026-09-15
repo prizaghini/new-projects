@@ -23,12 +23,14 @@ import json
 import os
 import re
 import smtplib
+import time
 from datetime import datetime, timezone
 from email.header import decode_header
 from email.mime.text import MIMEText
 from pathlib import Path
 
 from google import genai
+from google.genai import errors as genai_errors
 
 ROOT = Path(__file__).resolve().parent.parent
 KEYWORDS_PATH = ROOT / "config" / "keywords.json"
@@ -174,10 +176,20 @@ def summarize(emails: list[dict]) -> str:
     prompt = DIGEST_PROMPT.format(
         days=LOOKBACK_DAYS, emails=format_emails_for_prompt(emails)
     )
-    response = client.models.generate_content(
-        model="gemini-3.6-flash", contents=prompt
-    )
-    return response.text
+    # Gemini's hosted models occasionally return a transient 503 under
+    # load; ride that out with a few retries before giving up.
+    retry_delays = [5, 15, 30]
+    for attempt, delay in enumerate([0, *retry_delays]):
+        if delay:
+            time.sleep(delay)
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.6-flash", contents=prompt
+            )
+            return response.text
+        except genai_errors.ServerError:
+            if attempt == len(retry_delays):
+                raise
 
 
 def save_report(markdown: str) -> Path:
