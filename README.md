@@ -8,10 +8,11 @@ and uses Google's Gemini (free tier) to turn them into:
 2. A list of concrete social media content ideas based on it
 
 The digest is emailed to you and saved under `reports/`. A GitHub Actions
-workflow runs this automatically every **Monday and Thursday**, so once
-it's set up you don't need to trigger it yourself. Each run only looks
-back 4 days, so the two digests don't overlap and together cover the
-full week.
+workflow runs this automatically every **weekday (Mon-Fri) at 05:45
+UTC**, so once it's set up you don't need to trigger it yourself. Each
+run looks back exactly as far as the previous one — 1 day Tuesday
+through Friday, and 3 days on Monday to also cover the weekend — so
+consecutive digests tile the week with no gaps and no overlap.
 
 If your actual mailbox is Outlook rather than Gmail: set up an Outlook
 inbox rule that forwards matching mail to a Gmail address (step 0 below),
@@ -72,11 +73,14 @@ scheduled run. Check your inbox and the `reports/` folder afterward.
 - **Keywords/topics**: edit `config/keywords.json`. These are combined
   into a Gmail search query (`OR`'d together), so add/remove terms freely.
 - **Schedule**: edit the `cron` line in
-  `.github/workflows/weekly-digest.yml` (currently Mondays and Thursdays
-  at 13:00 UTC). If you change the cadence, also adjust the `LOOKBACK_DAYS`
-  env var in that same workflow file so runs don't overlap or leave gaps.
-- **How far back it looks / how many emails it reads**: `LOOKBACK_DAYS`
-  and `MAX_EMAILS` env vars (see `.env.example`).
+  `.github/workflows/weekly-digest.yml` (currently weekdays at 05:45
+  UTC — chosen to land by 7am UK time year-round, since GitHub Actions
+  cron doesn't auto-adjust for daylight saving). If you change the
+  cadence, also update the "Compute lookback window" step in that same
+  file so runs don't overlap or leave gaps.
+- **How many emails it reads per run**: `MAX_EMAILS` env var (see
+  `.env.example`). `LOOKBACK_DAYS` is now computed automatically by the
+  workflow rather than set as a fixed value.
 
 ## Running locally
 
