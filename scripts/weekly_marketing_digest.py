@@ -175,7 +175,7 @@ def summarize(emails: list[dict]) -> str:
         days=LOOKBACK_DAYS, emails=format_emails_for_prompt(emails)
     )
     response = client.models.generate_content(
-        model="gemini-2.0-flash", contents=prompt
+        model="gemini-3.6-flash", contents=prompt
     )
     return response.text
 
