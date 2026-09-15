@@ -23,6 +23,9 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # For screenshotting the social-post mockups embedded in the email.
+      - run: playwright install --with-deps chromium
+
       # Runs daily on weekdays, so each day just needs the last 24h -
       # except Monday, which also needs to cover the whole weekend back
       # to Friday's run.
