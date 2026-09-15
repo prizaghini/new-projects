@@ -5,7 +5,10 @@ social media / PPC / SEO (newsletters, platform updates, industry news),
 and uses Google's Gemini (free tier) to turn them into:
 
 1. A summary of what was being talked about
-2. A list of concrete social media content ideas based on it
+2. A list of concrete social media content ideas based on it, each with
+   a visual mockup (carousel slides, a poll card, a thread preview, or
+   an infographic layout — everything except video, which can't be
+   mocked up as a static image)
 
 The digest is emailed to you and saved under `reports/`. A GitHub Actions
 workflow runs this automatically every **weekday (Mon-Fri) at 05:45
@@ -98,9 +101,14 @@ python scripts/weekly_marketing_digest.py
   last N days across all labels, and pulls subject/sender/date/snippet
   from each.
 - Those emails are sent to Gemini with a prompt asking for a themed
-  summary plus social content ideas.
-- The result is saved to `reports/YYYY-MM-DD-digest.md` and emailed to you
-  via SMTP.
+  summary plus social content ideas, returned as structured JSON.
+- For each content idea (except video), a small HTML mockup matching its
+  format is rendered and screenshotted with a headless Chromium
+  (Playwright) — a slide grid for Carousel, a card for Poll, stacked
+  bubbles for Thread, a numbered layout for Infographic/other formats.
+- The result is saved to `reports/YYYY-MM-DD-digest.md` (text only) and
+  emailed to you via SMTP as a styled HTML email with the mockups
+  embedded inline, plus a plain-text fallback.
 
 ## Privacy note
 

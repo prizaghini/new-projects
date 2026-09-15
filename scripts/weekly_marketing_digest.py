@@ -26,6 +26,7 @@ import smtplib
 import time
 from datetime import datetime, timezone
 from email.header import decode_header
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
@@ -363,7 +364,10 @@ def esc(value) -> str:
     return html.escape(str(value or ""))
 
 
-def render_html(data: dict, digest_date: str) -> str:
+def render_html(
+    data: dict, digest_date: str, mockups: list[bytes | None] | None = None
+) -> str:
+    mockups = mockups or []
     theme_cards = "".join(
         f"""
         <tr><td style="padding:0 0 16px 0;">
@@ -398,6 +402,11 @@ def render_html(data: dict, digest_date: str) -> str:
               <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:#4B5563;">
                 {"".join(f'<li style="margin:0 0 4px 0;">{esc(p)}</li>' for p in idea.get("key_points", []))}
               </ul>
+              {
+                f'<img src="cid:mockup-{i - 1}" alt="content mockup" '
+                f'style="width:100%;max-width:520px;border-radius:8px;margin-top:14px;display:block;">'
+                if i - 1 < len(mockups) and mockups[i - 1] else ""
+              }
             </td></tr>
           </table>
         </td></tr>"""
@@ -445,6 +454,125 @@ def render_html(data: dict, digest_date: str) -> str:
 """
 
 
+def _mockup_page(inner_html: str) -> str:
+    return f"""<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  * {{ box-sizing: border-box; }}
+  body {{ margin:0; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }}
+</style></head>
+<body>{inner_html}</body></html>"""
+
+
+SLIDE_PREFIX_RE = re.compile(r"^\s*slide\s*\d+\s*[:\-]\s*", re.IGNORECASE)
+
+
+def render_carousel_mockup(idea: dict) -> str:
+    points = (idea.get("key_points") or [idea.get("headline", "")])[:6]
+    slides = "".join(
+        f'''<div style="width:150px;height:150px;background:#4F46E5;
+             background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:12px;color:#fff;
+             padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+          <span style="font-size:10px;font-weight:700;opacity:0.85;letter-spacing:0.5px;">SLIDE {i}</span>
+          <span style="font-size:12px;font-weight:600;line-height:1.35;">{esc(SLIDE_PREFIX_RE.sub("", p))[:110]}</span>
+        </div>'''
+        for i, p in enumerate(points, 1)
+    )
+    return _mockup_page(
+        f'<div style="display:flex;flex-wrap:wrap;gap:10px;padding:16px;background:#F3F4F6;width:520px;">{slides}</div>'
+    )
+
+
+def render_poll_mockup(idea: dict) -> str:
+    points = idea.get("key_points") or []
+    question = points[0] if points else idea.get("headline", "")
+    options = points[1:5] or ["Option A", "Option B"]
+    options_html = "".join(
+        f'''<div style="background:#EEF2FF;border:1.5px solid #C7D2FE;border-radius:10px;
+             padding:12px 16px;margin-bottom:8px;font-size:14px;font-weight:600;color:#3730A3;">{esc(o)}</div>'''
+        for o in options
+    )
+    return _mockup_page(f'''
+      <div style="width:480px;padding:24px;background:#FFFFFF;">
+        <div style="font-size:17px;font-weight:800;color:#111827;margin-bottom:16px;line-height:1.35;">{esc(question)}</div>
+        {options_html}
+      </div>
+    ''')
+
+
+def render_thread_mockup(idea: dict) -> str:
+    points = (idea.get("key_points") or [idea.get("headline", "")])[:6]
+    posts = "".join(
+        f'''<div style="display:flex;gap:10px;margin-bottom:14px;">
+          <div style="flex:0 0 32px;width:32px;height:32px;border-radius:50%;background:#4F46E5;
+               background:linear-gradient(135deg,#4F46E5,#7C3AED);"></div>
+          <div style="flex:1;background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;
+               padding:12px 14px;font-size:13px;line-height:1.5;color:#1F2937;">{esc(p)}</div>
+        </div>'''
+        for p in points
+    )
+    return _mockup_page(f'<div style="width:480px;padding:20px;background:#FFFFFF;">{posts}</div>')
+
+
+def render_infographic_mockup(idea: dict) -> str:
+    points = (idea.get("key_points") or [idea.get("headline", "")])[:6]
+    rows = "".join(
+        f'''<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
+          <div style="flex:0 0 28px;width:28px;height:28px;border-radius:8px;background:#4F46E5;color:#fff;
+               display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;">{i}</div>
+          <div style="flex:1;font-size:13px;line-height:1.5;color:#1F2937;padding-top:3px;">{esc(p)}</div>
+        </div>'''
+        for i, p in enumerate(points, 1)
+    )
+    return _mockup_page(f'''
+      <div style="width:480px;padding:24px;background:#EEF2FF;">
+        <div style="font-size:16px;font-weight:800;color:#111827;margin-bottom:16px;">{esc(idea.get("headline", ""))}</div>
+        {rows}
+      </div>
+    ''')
+
+
+def render_mockup_html(idea: dict) -> str | None:
+    fmt = (idea.get("format") or "").lower()
+    if any(v in fmt for v in ("video", "reel", "tiktok", "short")):
+        return None
+    if "carousel" in fmt:
+        return render_carousel_mockup(idea)
+    if "poll" in fmt:
+        return render_poll_mockup(idea)
+    if "thread" in fmt:
+        return render_thread_mockup(idea)
+    # Infographic and any other/unrecognized static format fall back to
+    # the same numbered-outline layout.
+    return render_infographic_mockup(idea)
+
+
+def generate_mockups(content_ideas: list[dict]) -> list[bytes | None]:
+    htmls = [render_mockup_html(idea) for idea in content_ideas]
+    if not any(htmls):
+        return [None] * len(htmls)
+
+    # Mockups are a nice-to-have on top of an otherwise-working digest;
+    # never let a browser-automation failure break the actual send.
+    try:
+        from playwright.sync_api import sync_playwright
+
+        results: list[bytes | None] = [None] * len(htmls)
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            for i, page_html in enumerate(htmls):
+                if page_html is None:
+                    continue
+                page = browser.new_page(viewport={"width": 560, "height": 100})
+                page.set_content(page_html)
+                results[i] = page.screenshot(full_page=True)
+                page.close()
+            browser.close()
+        return results
+    except Exception as e:
+        print(f"Skipping content mockups (screenshot failed): {e}")
+        return [None] * len(htmls)
+
+
 def save_report(markdown: str) -> Path:
     REPORTS_DIR.mkdir(exist_ok=True)
     path = REPORTS_DIR / f"{datetime.now(timezone.utc):%Y-%m-%d}-digest.md"
@@ -453,6 +581,8 @@ def save_report(markdown: str) -> Path:
 
 
 def send_email(data: dict, digest_date: str) -> None:
+    mockups = generate_mockups(data.get("content_ideas", []))
+
     msg = MIMEMultipart("alternative")
     msg["Subject"] = f"Your marketing digest - {datetime.now(timezone.utc):%b %d, %Y}"
     msg["From"] = GMAIL_ADDRESS
@@ -461,7 +591,19 @@ def send_email(data: dict, digest_date: str) -> None:
     # Ordered least- to most-preferred: clients that can't render HTML
     # fall back to the plain-text part.
     msg.attach(MIMEText(render_markdown(data), "plain", "utf-8"))
-    msg.attach(MIMEText(render_html(data, digest_date), "html", "utf-8"))
+
+    # The HTML part and its inline mockup images travel together in a
+    # multipart/related, itself the "html" alternative above.
+    related = MIMEMultipart("related")
+    related.attach(MIMEText(render_html(data, digest_date, mockups), "html", "utf-8"))
+    for i, png in enumerate(mockups):
+        if png is None:
+            continue
+        image = MIMEImage(png, "png")
+        image.add_header("Content-ID", f"<mockup-{i}>")
+        image.add_header("Content-Disposition", "inline", filename=f"mockup-{i}.png")
+        related.attach(image)
+    msg.attach(related)
 
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.starttls()
