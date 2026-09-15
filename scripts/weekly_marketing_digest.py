@@ -171,7 +171,22 @@ def format_emails_for_prompt(emails: list[dict]) -> str:
     return "\n".join(blocks)
 
 
-GEMINI_MODELS = ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
+# Guessing model names drifts out of date as Google renames/retires
+# them; ask the API which ones are actually live for this key instead.
+FALLBACK_MODELS = ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
+
+
+def discover_models(client: "genai.Client") -> list[str]:
+    try:
+        names = []
+        for model in client.models.list():
+            name = (model.name or "").removeprefix("models/")
+            actions = model.supported_actions or []
+            if "generateContent" in actions and "flash" in name.lower():
+                names.append(name)
+        return names or FALLBACK_MODELS
+    except Exception:
+        return FALLBACK_MODELS
 
 
 def summarize(emails: list[dict]) -> str:
@@ -181,11 +196,11 @@ def summarize(emails: list[dict]) -> str:
     )
 
     last_error: Exception | None = None
-    for model in GEMINI_MODELS:
-        # A model may be temporarily overloaded (503) - worth a couple of
-        # retries. A model that's missing/retired (404, a ClientError)
-        # won't fix itself, so move straight to the next model instead.
-        for attempt, delay in enumerate([0, 5, 15]):
+    for model in discover_models(client):
+        # A model may be temporarily overloaded (503) - worth a few
+        # retries with real backoff. A model that's missing/retired
+        # (404, a ClientError) won't fix itself, so move on immediately.
+        for attempt, delay in enumerate([0, 10, 30, 60]):
             if delay:
                 time.sleep(delay)
             try:
