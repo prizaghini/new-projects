@@ -1,8 +1,8 @@
 # Marketing Email Digest
 
-Reads your Outlook mailbox for recent emails related to digital marketing
-/ social media / PPC / SEO (newsletters, platform updates, industry
-news), and uses Google's Gemini (free tier) to turn them into:
+Reads a Gmail inbox for recent emails related to digital marketing /
+social media / PPC / SEO (newsletters, platform updates, industry news),
+and uses Google's Gemini (free tier) to turn them into:
 
 1. A summary of what was being talked about
 2. A list of concrete social media content ideas based on it
@@ -13,80 +13,55 @@ it's set up you don't need to trigger it yourself. Each run only looks
 back 4 days, so the two digests don't overlap and together cover the
 full week.
 
-Outlook requires a few more setup steps than Gmail would (Microsoft
-retired simple password-based mail access), but they're all one-time and
-happen once — after that it runs on its own indefinitely.
+If your actual mailbox is Outlook rather than Gmail: set up an Outlook
+inbox rule that forwards matching mail to a Gmail address (step 0 below),
+and this script reads/summarizes from that Gmail inbox instead. Your
+original Outlook mail is untouched — forwarding just leaves a copy there.
 
 ## One-time setup
 
-### 1. Register a free Azure app (lets the script read/send mail as you)
+### 0. (Outlook users) Forward marketing mail to Gmail
 
-1. Go to https://portal.azure.com, sign in with your Outlook account, and
-   open **Microsoft Entra ID → App registrations → New registration**.
-2. Name it anything (e.g. "Marketing Digest"). Under "Supported account
-   types" choose **"Personal Microsoft accounts only."** Leave Redirect
-   URI blank. Click **Register**.
-3. Copy the **Application (client) ID** shown on the overview page — this
-   is `OUTLOOK_CLIENT_ID`.
-4. Go to **Authentication** (left sidebar) → under "Advanced settings"
-   turn **"Allow public client flows"** to **Yes** → Save.
-5. Go to **API permissions** → **Add a permission → Microsoft Graph →
-   Delegated permissions** → add `Mail.Read`, `Mail.Send`, and
-   `offline_access`. No admin approval is needed for a personal account —
-   you approve it yourself on first login in step 3 below.
+1. Sign in to https://outlook.com with your Outlook account.
+2. Go to **Settings (gear icon) → Mail → Rules → Add new rule**.
+3. **Condition**: "Subject or body includes" → paste in the same keywords
+   as `config/keywords.json` (or a representative subset — digital
+   marketing, social media, PPC, SEO, advertising, newsletter, etc.).
+4. **Action**: "Forward to" → your Gmail address.
+5. Save. This leaves the original email in Outlook and just sends a copy
+   to Gmail — nothing is moved or deleted.
 
-This is free; Azure won't ask for billing info for this.
+### 1. Create a Gmail App Password
+
+The script signs in to Gmail over IMAP/SMTP using an **App Password**, not
+your real password, so it never sees your normal login credentials.
+
+1. Turn on 2-Step Verification: https://myaccount.google.com/security
+2. Create an App Password: https://myaccount.google.com/apppasswords
+   (choose "Mail" as the app) and copy the 16-character password.
+3. Make sure IMAP is enabled: Gmail → Settings → "Forwarding and
+   POP/IMAP" → Enable IMAP.
 
 ### 2. Get a free Gemini API key
 
 Go to https://aistudio.google.com/apikey and click "Create API key." This
 is free for the volume this project uses (a couple of digests a week) —
-no credit card required.
+no credit card required. Sign in with the same Google account as your
+Gmail if you like, it doesn't have to match.
 
-### 3. Get an Outlook refresh token (one-time login)
-
-Run `scripts/outlook_first_login.py` once with `OUTLOOK_CLIENT_ID` set —
-either locally, or ask Claude to run it in a session. It prints a short
-code and a URL; open the URL on any device, enter the code, and sign in
-with your Outlook account to approve access. It then prints a refresh
-token — save it, you'll paste it into a secret in the next step.
-
-```bash
-pip install msal
-OUTLOOK_CLIENT_ID=your-client-id python scripts/outlook_first_login.py
-```
-
-You only do this once. After that, the scheduled workflow refreshes the
-token itself and keeps the secret below updated automatically.
-
-### 4. Create a GitHub personal access token for secret rotation
-
-Microsoft rotates your Outlook refresh token every time it's used, so
-each scheduled run needs to save the new one back to this repo's secret
-— otherwise the *next* run would fail to log in. To let the workflow do
-that:
-
-1. Go to https://github.com/settings/personal-access-tokens/new
-2. Set **Resource owner** to your account, **Repository access** to
-   "Only select repositories" → this repo.
-3. Under **Permissions → Repository permissions**, set **Secrets** to
-   **Read and write**.
-4. Generate it and copy the token — this is `GH_SECRETS_PAT`.
-
-### 5. Add repo secrets
+### 3. Add repo secrets
 
 In this repo: **Settings → Secrets and variables → Actions → New repository
 secret**. Add:
 
 | Secret | Value |
 |---|---|
-| `OUTLOOK_CLIENT_ID` | the Application (client) ID from step 1 |
-| `OUTLOOK_REFRESH_TOKEN` | the refresh token from step 3 |
+| `GMAIL_ADDRESS` | your Gmail address |
+| `GMAIL_APP_PASSWORD` | the app password from step 1 |
 | `GEMINI_API_KEY` | the key from step 2 |
-| `GH_SECRETS_PAT` | the token from step 4 |
-| `DIGEST_RECIPIENT` *(optional)* | where to send the digest, defaults to your Outlook address |
+| `DIGEST_RECIPIENT` *(optional)* | where to send the digest, defaults to `GMAIL_ADDRESS` |
 
-### 6. Try it
+### 4. Try it
 
 Go to the **Actions** tab → "Marketing email digest" → **Run workflow** to
 trigger it manually the first time instead of waiting for the next
@@ -94,9 +69,8 @@ scheduled run. Check your inbox and the `reports/` folder afterward.
 
 ## Customizing
 
-- **Keywords/topics**: edit `config/keywords.json`. Matching is done
-  against each email's subject and body text (case-insensitive), so
-  add/remove terms freely.
+- **Keywords/topics**: edit `config/keywords.json`. These are combined
+  into a Gmail search query (`OR`'d together), so add/remove terms freely.
 - **Schedule**: edit the `cron` line in
   `.github/workflows/weekly-digest.yml` (currently Mondays and Thursdays
   at 13:00 UTC). If you change the cadence, also adjust the `LOOKBACK_DAYS`
@@ -115,19 +89,14 @@ python scripts/weekly_marketing_digest.py
 
 ## How it works
 
-- `scripts/weekly_marketing_digest.py` signs in to Microsoft Graph using
-  a refresh token (OAuth, no stored password), pulls messages from the
-  last N days across your whole mailbox, and locally filters them by
-  subject/body keyword match.
+- `scripts/weekly_marketing_digest.py` connects to Gmail via IMAP, uses
+  Gmail's own search syntax (`X-GM-RAW`) to find matching emails from the
+  last N days across all labels, and pulls subject/sender/date/snippet
+  from each.
 - Those emails are sent to Gemini with a prompt asking for a themed
   summary plus social content ideas.
-- The result is saved to `reports/YYYY-MM-DD-digest.md` and emailed to
-  you via Graph's sendMail.
-- Because Microsoft rotates the refresh token on each use, the workflow
-  saves the new one back to the `OUTLOOK_REFRESH_TOKEN` secret after
-  every run (see `.github/workflows/weekly-digest.yml`). If that step
-  ever breaks, re-run `scripts/outlook_first_login.py` to get a fresh
-  token.
+- The result is saved to `reports/YYYY-MM-DD-digest.md` and emailed to you
+  via SMTP.
 
 ## Privacy note
 
