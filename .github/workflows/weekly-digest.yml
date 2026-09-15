@@ -22,26 +22,13 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: Generate and email digest
-        id: digest
         env:
-          OUTLOOK_CLIENT_ID: ${{ secrets.OUTLOOK_CLIENT_ID }}
-          OUTLOOK_REFRESH_TOKEN: ${{ secrets.OUTLOOK_REFRESH_TOKEN }}
+          GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DIGEST_RECIPIENT: ${{ secrets.DIGEST_RECIPIENT }}
           LOOKBACK_DAYS: "4"
         run: python scripts/weekly_marketing_digest.py
-
-      # Microsoft rotates the Outlook refresh token on every use, so the
-      # script prints the new one and we must save it back to the secret
-      # or the next scheduled run will fail to log in.
-      - name: Persist rotated Outlook refresh token
-        if: steps.digest.outputs.new_refresh_token != ''
-        env:
-          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
-        run: |
-          gh secret set OUTLOOK_REFRESH_TOKEN \
-            --repo "${{ github.repository }}" \
-            --body "${{ steps.digest.outputs.new_refresh_token }}"
 
       - name: Commit report to repo
         run: |
