@@ -26,6 +26,7 @@ import smtplib
 import time
 from datetime import datetime, timezone
 from email.header import decode_header
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
 
@@ -49,27 +50,56 @@ professional stay on top of their inbox. Below are emails from the last \
 {days} days related to digital marketing, social media, PPC, SEO, and \
 advertising - newsletters, industry updates, platform announcements, etc.
 
-Write a concise weekly digest with two sections:
+Analyze them and return two things:
 
-## What's happening this week
-Group the key themes/news/trends from these emails (platform changes, \
-industry shifts, notable campaigns, tools, data points). Cite the specific \
-source briefly where useful, and when an email includes a "Source link(s)" \
-line, link back to it as a markdown link (e.g. "([source](url))") so the \
-reader can click through to the original article. Skip pure noise \
-(receipts, unrelated promos).
+1. "themes" - the key trends/news from these emails (platform changes, \
+industry shifts, notable campaigns, tools, data points). Skip pure noise \
+(receipts, unrelated promos). For each theme give a short title and a \
+1-2 sentence summary. Only when the source email included a \
+"Source link(s)" line, also include source_label (the newsletter/sender \
+name) and source_url (the first of those URLs). Omit source_label and \
+source_url entirely rather than guessing a URL that wasn't given.
 
-## Content ideas for social media
-Based on this week's themes, propose 6-8 concrete social media post ideas. \
-For each: a short hook/headline, the format (e.g. carousel, short video, \
-poll, thread), and one line on the angle/why it's timely.
-
-Keep it tight and actionable - this is a working professional's weekly \
-briefing, not a report.
+2. "content_ideas" - 6-8 concrete social media post ideas based on those \
+themes. For each: a short punchy headline, the format (e.g. Carousel, \
+Short video, Poll, Thread), and one sentence on the angle/why it's \
+timely.
 
 EMAILS:
 {emails}
 """
+
+DIGEST_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "themes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string"},
+                    "summary": {"type": "string"},
+                    "source_label": {"type": "string"},
+                    "source_url": {"type": "string"},
+                },
+                "required": ["title", "summary"],
+            },
+        },
+        "content_ideas": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "headline": {"type": "string"},
+                    "format": {"type": "string"},
+                    "angle": {"type": "string"},
+                },
+                "required": ["headline", "format", "angle"],
+            },
+        },
+    },
+    "required": ["themes", "content_ideas"],
+}
 
 
 def load_keywords() -> list[str]:
@@ -219,11 +249,15 @@ def discover_models(client: "genai.Client") -> list[str]:
         return FALLBACK_MODELS
 
 
-def summarize(emails: list[dict]) -> str:
+def generate_digest(emails: list[dict]) -> dict:
     client = genai.Client(api_key=GEMINI_API_KEY)
     prompt = DIGEST_PROMPT.format(
         days=LOOKBACK_DAYS, emails=format_emails_for_prompt(emails)
     )
+    config = {
+        "response_mime_type": "application/json",
+        "response_json_schema": DIGEST_SCHEMA,
+    }
 
     last_error: Exception | None = None
     for model in discover_models(client):
@@ -235,9 +269,9 @@ def summarize(emails: list[dict]) -> str:
                 time.sleep(delay)
             try:
                 response = client.models.generate_content(
-                    model=model, contents=prompt
+                    model=model, contents=prompt, config=config
                 )
-                return response.text
+                return json.loads(response.text)
             except genai_errors.ServerError as e:
                 last_error = e
             except genai_errors.ClientError as e:
@@ -247,6 +281,108 @@ def summarize(emails: list[dict]) -> str:
     raise last_error
 
 
+def render_markdown(data: dict) -> str:
+    lines = ["## What's happening\n"]
+    for t in data.get("themes", []):
+        line = f"- **{t.get('title', '')}**: {t.get('summary', '')}"
+        url = t.get("source_url")
+        if url:
+            label = t.get("source_label") or "source"
+            line += f" ([{label}]({url}))"
+        lines.append(line)
+
+    lines.append("\n## Content ideas for social media\n")
+    for i, idea in enumerate(data.get("content_ideas", []), 1):
+        lines.append(
+            f"{i}. **{idea.get('headline', '')}** "
+            f"({idea.get('format', '')}) - {idea.get('angle', '')}"
+        )
+    return "\n".join(lines)
+
+
+def esc(value) -> str:
+    return html.escape(str(value or ""))
+
+
+def render_html(data: dict, digest_date: str) -> str:
+    theme_cards = "".join(
+        f"""
+        <tr><td style="padding:0 0 16px 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                 style="background:#FFFFFF;border-radius:12px;border:1px solid #E5E7EB;">
+            <tr><td style="padding:20px 24px;">
+              <p style="margin:0 0 8px 0;font-size:16px;font-weight:700;color:#111827;">{esc(t.get('title'))}</p>
+              <p style="margin:0 0 12px 0;font-size:14px;line-height:1.5;color:#374151;">{esc(t.get('summary'))}</p>
+              {
+                f'<a href="{esc(t["source_url"])}" style="color:#4F46E5;text-decoration:none;'
+                f'font-size:13px;font-weight:600;">{esc(t.get("source_label") or "Read source")} &rarr;</a>'
+                if t.get("source_url") else ""
+              }
+            </td></tr>
+          </table>
+        </td></tr>"""
+        for t in data.get("themes", [])
+    )
+
+    idea_cards = "".join(
+        f"""
+        <tr><td style="padding:0 0 16px 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                 style="background:#FFFFFF;border-radius:12px;border:1px solid #E5E7EB;">
+            <tr><td style="padding:20px 24px;">
+              <span style="display:inline-block;background:#EEF2FF;color:#4F46E5;font-size:11px;
+                           font-weight:700;letter-spacing:0.5px;padding:4px 10px;border-radius:999px;">
+                {esc(idea.get('format')).upper()}
+              </span>
+              <p style="margin:10px 0 6px 0;font-size:16px;font-weight:700;color:#111827;">{i}. {esc(idea.get('headline'))}</p>
+              <p style="margin:0;font-size:14px;line-height:1.5;color:#374151;">{esc(idea.get('angle'))}</p>
+            </td></tr>
+          </table>
+        </td></tr>"""
+        for i, idea in enumerate(data.get("content_ideas", []), 1)
+    )
+
+    return f"""\
+<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:#F3F4F6;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3F4F6;padding:24px 0;">
+      <tr><td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+          <tr><td style="padding:0 16px;">
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                   style="background:#4F46E5;background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:16px;margin-bottom:24px;">
+              <tr><td style="padding:32px 28px;">
+                <p style="margin:0;font-size:22px;font-weight:800;color:#FFFFFF;">Your Marketing Digest</p>
+                <p style="margin:6px 0 0 0;font-size:13px;color:#E0E7FF;">{esc(digest_date)}</p>
+              </td></tr>
+            </table>
+
+            <p style="margin:0 0 12px 4px;font-size:13px;font-weight:700;letter-spacing:0.5px;
+                      color:#6B7280;text-transform:uppercase;">What's happening</p>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              {theme_cards}
+            </table>
+
+            <p style="margin:8px 0 12px 4px;font-size:13px;font-weight:700;letter-spacing:0.5px;
+                      color:#6B7280;text-transform:uppercase;">Content ideas for social media</p>
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              {idea_cards}
+            </table>
+
+            <p style="margin:16px 4px 0 4px;font-size:12px;color:#9CA3AF;text-align:center;">
+              Generated automatically from your inbox.
+            </p>
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>
+  </body>
+</html>
+"""
+
+
 def save_report(markdown: str) -> Path:
     REPORTS_DIR.mkdir(exist_ok=True)
     path = REPORTS_DIR / f"{datetime.now(timezone.utc):%Y-%m-%d}-digest.md"
@@ -254,11 +390,16 @@ def save_report(markdown: str) -> Path:
     return path
 
 
-def send_email(markdown: str) -> None:
-    msg = MIMEText(markdown, "plain", "utf-8")
+def send_email(data: dict, digest_date: str) -> None:
+    msg = MIMEMultipart("alternative")
     msg["Subject"] = f"Your marketing digest - {datetime.now(timezone.utc):%b %d, %Y}"
     msg["From"] = GMAIL_ADDRESS
     msg["To"] = DIGEST_RECIPIENT
+
+    # Ordered least- to most-preferred: clients that can't render HTML
+    # fall back to the plain-text part.
+    msg.attach(MIMEText(render_markdown(data), "plain", "utf-8"))
+    msg.attach(MIMEText(render_html(data, digest_date), "html", "utf-8"))
 
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.starttls()
@@ -273,12 +414,13 @@ def main() -> None:
         return
 
     print(f"Found {len(emails)} matching emails. Summarizing...")
-    digest = summarize(emails)
+    data = generate_digest(emails)
+    digest_date = f"{datetime.now(timezone.utc):%B %d, %Y}"
 
-    path = save_report(digest)
+    path = save_report(render_markdown(data))
     print(f"Saved report to {path}")
 
-    send_email(digest)
+    send_email(data, digest_date)
     print(f"Emailed digest to {DIGEST_RECIPIENT}")
 
 
