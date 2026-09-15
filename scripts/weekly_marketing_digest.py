@@ -119,6 +119,11 @@ def extract_body(msg: "email.message.Message") -> str:
     return text if msg.get_content_type() == "text/plain" else strip_html(text)
 
 
+def imap_quoted(value: str) -> str:
+    escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+    return f'"{escaped}"'
+
+
 def fetch_marketing_emails() -> list[dict]:
     query = build_gmail_query(load_keywords())
 
@@ -129,7 +134,9 @@ def fetch_marketing_emails() -> list[dict]:
     # X-GM-RAW is a Gmail IMAP extension that accepts the same query
     # syntax as the Gmail search box, so this reuses one query across
     # every label/folder instead of re-implementing Gmail's search.
-    status, data = imap.uid("search", "X-GM-RAW", f'"{query}"')
+    # The query itself contains quoted phrases (e.g. "social media"), so
+    # it must be escaped, not just wrapped, when quoted for IMAP itself.
+    status, data = imap.uid("search", "X-GM-RAW", imap_quoted(query))
     if status != "OK":
         raise RuntimeError(f"Gmail search failed: {data}")
 
