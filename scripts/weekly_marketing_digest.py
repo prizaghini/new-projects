@@ -43,22 +43,36 @@ GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]
 DIGEST_RECIPIENT = os.environ.get("DIGEST_RECIPIENT") or GMAIL_ADDRESS
 LOOKBACK_DAYS = int(os.environ.get("LOOKBACK_DAYS", "7"))
 MAX_EMAILS = int(os.environ.get("MAX_EMAILS", "40"))
-SNIPPET_CHARS = 600
+# Newsletters that round up several short stories into one email can run
+# long; 600 chars was cutting most of them off after the first item.
+SNIPPET_CHARS = 8000
 
 DIGEST_PROMPT = """You are a digital marketing analyst helping a marketing \
 professional stay on top of their inbox. Below are emails from the last \
 {days} days related to digital marketing, social media, PPC, SEO, and \
 advertising - newsletters, industry updates, platform announcements, etc.
 
+Some of these emails are themselves roundup newsletters bundling several \
+distinct short stories into one email (e.g. "PPC News Feed" or "Summary \
+of the Internet" style digests). Read the full body of each email \
+carefully and treat EACH distinct story/headline as its own separate \
+theme - do not collapse a multi-story newsletter into one vague summary. \
+A single email can and should produce multiple themes if it covers \
+multiple stories.
+
 Analyze them and return two things:
 
-1. "themes" - the key trends/news from these emails (platform changes, \
-industry shifts, notable campaigns, tools, data points). Skip pure noise \
-(receipts, unrelated promos). For each theme give a short title and a \
-1-2 sentence summary. Only when the source email included a \
-"Source link(s)" line, also include source_label (the newsletter/sender \
-name) and source_url (the first of those URLs). Omit source_label and \
-source_url entirely rather than guessing a URL that wasn't given.
+1. "themes" - one entry per distinct news item/trend found (platform \
+changes, industry shifts, notable campaigns, tools, data points). Skip \
+pure noise (receipts, unrelated promos, ads, sponsor blurbs). For each \
+theme give a short title and a 1-2 sentence summary in your own words \
+(don't just copy the newsletter's headline verbatim). Each email below \
+may include a "Links found in this email" list of (link text -> URL) \
+pairs - when one of those link texts corresponds to this story, include \
+the newsletter/sender name as source_label and that exact URL as \
+source_url. Only ever use a URL that's actually listed for that email; \
+never invent or guess one, and omit source_label/source_url entirely if \
+nothing in the list matches.
 
 2. "content_ideas" - 6-8 concrete social media post ideas based on those \
 themes. For each: a short punchy headline, the format (e.g. Carousel, \
@@ -129,25 +143,36 @@ def strip_html(raw: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-LINK_RE = re.compile(r'href=["\']([^"\']+)["\']', re.IGNORECASE)
-SKIP_LINK_PATTERNS = ("unsubscribe", "mailto:", "list-manage", "optout")
+LINK_RE = re.compile(
+    r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', re.IGNORECASE | re.DOTALL
+)
+SKIP_LINK_PATTERNS = ("unsubscribe", "mailto:", "list-manage", "optout", "preferences")
 
 
-def extract_links(raw_html: str, limit: int = 3) -> list[str]:
+def extract_links(raw_html: str, limit: int = 15) -> list[tuple[str, str]]:
+    """Pull (visible link text, url) pairs, so each story in a multi-story
+    newsletter can be matched to its own correct link rather than just
+    grabbing the first few URLs found anywhere in the email."""
     links = []
-    for url in LINK_RE.findall(raw_html):
+    seen = set()
+    for url, inner_html in LINK_RE.findall(raw_html):
         if not url.startswith(("http://", "https://")):
             continue
         if any(p in url.lower() for p in SKIP_LINK_PATTERNS):
             continue
-        if url not in links:
-            links.append(url)
+        text = strip_html(inner_html)
+        if len(text) < 3 or url in seen:
+            continue
+        seen.add(url)
+        links.append((text, url))
         if len(links) >= limit:
             break
     return links
 
 
-def extract_body_and_links(msg: "email.message.Message") -> tuple[str, list[str]]:
+def extract_body_and_links(
+    msg: "email.message.Message",
+) -> tuple[str, list[tuple[str, str]]]:
     if msg.is_multipart():
         plain, htm = "", ""
         for part in msg.walk():
@@ -226,7 +251,9 @@ def format_emails_for_prompt(emails: list[dict]) -> str:
             f"Subject: {e['subject']}\n{e['snippet']}\n"
         )
         if e.get("links"):
-            block += "Source link(s): " + ", ".join(e["links"]) + "\n"
+            block += "Links found in this email (link text -> URL):\n"
+            block += "\n".join(f'- "{text}" -> {url}' for text, url in e["links"])
+            block += "\n"
         blocks.append(block)
     return "\n".join(blocks)
 
