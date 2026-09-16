@@ -319,7 +319,8 @@ async function loadSiteSettings(supabase) {
     setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position, s.hero_photo_fit);
   }
 
-  for (const n of [1, 2]) {
+  const defaultBadgePositions = { 1: "top-right", 2: "bottom-left", 3: "middle-right" };
+  for (const n of [1, 2, 3]) {
     const badge = document.getElementById(`hero-badge-${n}`);
     if (!badge) continue;
     const enabled = s[`hero_badge_${n}_enabled`] === "true" && s[`hero_badge_${n}_title`];
@@ -327,7 +328,7 @@ async function loadSiteSettings(supabase) {
     if (!enabled) continue;
     document.getElementById(`hero-badge-${n}-title`).textContent = s[`hero_badge_${n}_title`];
     document.getElementById(`hero-badge-${n}-subtitle`).textContent = s[`hero_badge_${n}_subtitle`] || "";
-    badge.className = "hero-badge pos-" + (s[`hero_badge_${n}_position`] || (n === 1 ? "top-right" : "bottom-left"));
+    badge.className = "hero-badge float-" + n + " pos-" + (s[`hero_badge_${n}_position`] || defaultBadgePositions[n]);
   }
 
   const root = document.documentElement.style;
