@@ -155,7 +155,7 @@ header.site-header {
   mix-blend-mode: multiply;
   transition: opacity 0.2s ease;
 }
-body.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
+html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 

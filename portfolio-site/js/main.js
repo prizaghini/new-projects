@@ -419,7 +419,7 @@ async function loadSiteSettings(supabase) {
     if (s.marquee_text_color) marqueeEl.style.color = s.marquee_text_color;
   }
 
-  document.body.classList.toggle("grain-on", s.texture_enabled === "true");
+  document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");
   if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);
 
   const sectionToggles = {
@@ -439,6 +439,30 @@ async function loadSiteSettings(supabase) {
       if (el) el.style.display = "none";
     }
   }
+
+  cacheTheme(root);
+}
+
+// Caches the theme-driving CSS variables so a repeat visit can apply them
+// instantly (before the Supabase fetch resolves), instead of flashing the
+// site's default look first.
+const THEME_CACHE_KEY = "portfolio_theme_cache";
+const CACHED_CSS_VARS = [
+  "--bg", "--bg-alt", "--ink", "--accent", "--btn-bg", "--btn-ink", "--btn-radius",
+  "--hero-overlay-opacity", "--text-scale", "--display", "--body",
+  "--hero-bg", "--hero-bg-position", "--grain-opacity",
+];
+function cacheTheme(root) {
+  try {
+    const vars = {};
+    CACHED_CSS_VARS.forEach(name => {
+      const val = root.getPropertyValue(name);
+      if (val) vars[name] = val;
+    });
+    localStorage.setItem(THEME_CACHE_KEY, JSON.stringify({
+      vars, grainOn: document.documentElement.classList.contains("grain-on"),
+    }));
+  } catch (e) { /* localStorage unavailable — skip caching, no functional impact */ }
 }
 
 // ---------- contact form ----------
