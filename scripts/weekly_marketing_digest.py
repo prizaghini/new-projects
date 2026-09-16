@@ -157,7 +157,10 @@ def load_keywords() -> list[str]:
 
 def build_gmail_query(keywords: list[str]) -> str:
     terms = " OR ".join(f'"{k}"' if " " in k else k for k in keywords)
-    return f"newer_than:{LOOKBACK_DAYS}d ({terms})"
+    # -in:sent excludes the digest's own previously-sent emails, which are
+    # full of marketing keywords and would otherwise get re-ingested as
+    # if they were fresh source material on every run.
+    return f"newer_than:{LOOKBACK_DAYS}d -in:sent ({terms})"
 
 
 def decode_mime_words(value: str) -> str:
@@ -224,7 +227,13 @@ def extract_body_and_links(
                 plain = text
             elif ctype == "text/html" and not htm:
                 htm = text
-        body = plain.strip() or strip_html(htm)
+        # Prefer the HTML part's stripped text over the raw plain-text
+        # part: some senders (e.g. LinkedIn) pad their plain-text
+        # alternative with long inline tracking URLs after every link,
+        # which can eat most of SNIPPET_CHARS before real content even
+        # starts. strip_html() already removes URLs (extract_links()
+        # captures them separately), so it stays dense with substance.
+        body = strip_html(htm) if htm else plain.strip()
         return body, (extract_links(htm) if htm else [])
 
     payload = msg.get_payload(decode=True) or b""
