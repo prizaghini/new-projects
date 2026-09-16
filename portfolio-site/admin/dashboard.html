@@ -29,6 +29,7 @@
       <h2>Site Settings</h2>
       <p class="hint">Everything here fills in the public site's identity, headline, photos and contact info — no code needed. Save, then refresh your site to see it.</p>
       <form class="add-form" id="form-settings">
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:0">Identity</p>
         <div class="field"><label>Your name</label><input name="display_name" placeholder="Your Name"></div>
         <div class="field"><label>Name text color (header/footer logo text)</label><input name="name_text_color" type="color"></div>
         <div class="field full">
@@ -40,6 +41,7 @@
         </div>
         <div class="field"><label>Tagline</label><input name="tagline" placeholder="e.g. UGC Creator &amp; Content Strategist"></div>
         <div class="field"><label>Availability badge</label><input name="availability" placeholder="e.g. Available 2026"></div>
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Hero</p>
         <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
         <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
         <div class="field full"><label>Hero stats line</label><input name="hero_stats_line" placeholder="e.g. +500 videos · +200 brand partners · 100M+ views"></div>
@@ -94,12 +96,14 @@
           <input name="hero_overlay_opacity" type="range" min="0" max="90" step="5">
         </div>
 
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Animated stats</p>
         <div class="field"><label>Stat: videos</label><input name="stat_videos" type="number"></div>
         <div class="field"><label>Stat: partners</label><input name="stat_partners" type="number"></div>
         <div class="field"><label>Stat: views</label><input name="stat_views" type="number"></div>
         <div class="field"><label>Views suffix</label><input name="stat_views_suffix" placeholder="e.g. M+"></div>
         <div class="field"><label>Stat: years</label><input name="stat_years" type="number"></div>
 
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">About</p>
         <div class="field full"><label>About bio</label><textarea name="about_bio" rows="3"></textarea></div>
         <div class="field"><label>About bio text color</label><input name="about_text_color" type="color"></div>
         <div class="field"><label>Location</label><input name="about_location" placeholder="City · Country"></div>
@@ -132,9 +136,11 @@
         <div class="field full"><label>About stat 4</label><input name="about_stat_4"></div>
         <div class="field"><label>About stats color</label><input name="about_stats_color" type="color"></div>
 
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Contact</p>
         <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
         <div class="field"><label>Instagram handle</label><input name="instagram_handle" placeholder="@yourhandle"></div>
 
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Site-wide theme colors</p>
         <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>
         <div class="field"><label>Panel background</label><input name="bg_alt_color" type="color"></div>
         <div class="field"><label>Text color</label><input name="ink_color" type="color"></div>
