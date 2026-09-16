@@ -1,4 +1,4 @@
-const CATEGORIES = [
+let CATEGORIES = [
   { key: "ai", label: "AI" },
   { key: "beauty", label: "Beauty" },
   { key: "home-deco", label: "Home & Decor" },
@@ -10,6 +10,13 @@ const CATEGORIES = [
   { key: "fashion", label: "Fashion" },
   { key: "travel", label: "Travel" },
 ];
+
+function parseCategories(str) {
+  return str.split("|").map(pair => {
+    const [key, label] = pair.split(":");
+    return { key: (key || "").trim(), label: (label || key || "").trim() };
+  }).filter(c => c.key);
+}
 
 const SERVICE_WORDS = [
   "Conversion UGC", "High-Performance Creatives", "Strategic Scripts",
@@ -291,6 +298,15 @@ async function loadSiteSettings(supabase) {
   if (s.bg_alt_color) root.setProperty("--bg-alt", s.bg_alt_color);
   if (s.ink_color) root.setProperty("--ink", s.ink_color);
   if (s.accent_color) root.setProperty("--accent", s.accent_color);
+  if (s.button_bg_color) root.setProperty("--btn-bg", s.button_bg_color);
+  if (s.button_text_color) root.setProperty("--btn-ink", s.button_text_color);
+  if (s.button_radius) root.setProperty("--btn-radius", `${s.button_radius}px`);
+
+  if (s.hero_bg_url) {
+    const heroEl = document.querySelector(".hero");
+    heroEl.style.backgroundImage = `url("${s.hero_bg_url}")`;
+    heroEl.classList.add("has-bg-image");
+  }
 
   setStat("stat-videos", s.stat_videos);
   setStat("stat-partners", s.stat_partners);
@@ -299,8 +315,14 @@ async function loadSiteSettings(supabase) {
 
   if (s.display_name) document.getElementById("about-heading").textContent = `Hey, I'm ${s.display_name}`;
   if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
+  if (s.about_text_color) document.getElementById("about-bio").style.color = s.about_text_color;
   if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
   setPhoto("about-photo", s.about_photo_url, s.display_name);
+
+  if (s.categories) {
+    const parsed = parseCategories(s.categories);
+    if (parsed.length) CATEGORIES = parsed;
+  }
 
   if (s.tagline) document.getElementById("footer-tagline").textContent = s.tagline;
   if (s.contact_email) {

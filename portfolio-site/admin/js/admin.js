@@ -29,15 +29,36 @@ async function uploadToSiteMedia(file, folder) {
   return supabase.storage.from("site-media").getPublicUrl(path).data.publicUrl;
 }
 
-function refreshMediaNote(el, url, setMsg, unsetMsg) {
-  el.textContent = url ? setMsg : unsetMsg;
+// Fields that upload into a hidden URL field, with a note + optional "remove" checkbox.
+// (hero photo / about photo / thumbnails use a *visible* url field instead — see below.)
+const HIDDEN_MEDIA_FIELDS = [
+  { file: "hero_video_file", url: "hero_video_url", remove: null, folder: "hero", noteId: "hero-video-note",
+    setMsg: "A hero video is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No hero video set — the hero photo above is used instead." },
+  { file: "logo_file", url: "logo_url", remove: "remove_logo", folder: "branding", noteId: "logo-note",
+    setMsg: "A logo image is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No logo set — the text name is shown instead." },
+  { file: "hero_bg_file", url: "hero_bg_url", remove: "remove_hero_bg", folder: "hero-bg", noteId: "hero-bg-note",
+    setMsg: "A hero background image is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No hero background image set." },
+];
+
+// Fields with a plain visible text/URL input — uploading just fills that input.
+const VISIBLE_MEDIA_FIELDS = [
+  { file: "hero_photo_file", url: "hero_photo_url", folder: "hero" },
+  { file: "about_photo_file", url: "about_photo_url", folder: "about" },
+];
+
+function refreshAllMediaNotes(form) {
+  HIDDEN_MEDIA_FIELDS.forEach(f => {
+    const note = document.getElementById(f.noteId);
+    note.textContent = form.elements[f.url].value ? f.setMsg : f.unsetMsg;
+  });
 }
 
 async function setupSettings() {
   const form = document.getElementById("form-settings");
   const msg = document.getElementById("settings-msg");
-  const heroVideoNote = document.getElementById("hero-video-note");
-  const logoNote = document.getElementById("logo-note");
 
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
@@ -46,45 +67,31 @@ async function setupSettings() {
     if (el.type === "checkbox") el.checked = row.value === "true";
     else el.value = row.value;
   });
-  refreshMediaNote(heroVideoNote, form.elements.hero_video_url.value,
-    "A hero video is currently set. Uploading a new one replaces it.",
-    "No hero video set — the hero photo above is used instead.");
-  refreshMediaNote(logoNote, form.elements.logo_url.value,
-    "A logo image is currently set. Uploading a new one replaces it.",
-    "No logo set — the text name is shown instead.");
+  refreshAllMediaNotes(form);
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
     msg.textContent = "";
 
-    const heroVideoFile = form.elements.hero_video_file.files[0];
-    if (heroVideoFile) {
-      try {
-        form.elements.hero_video_url.value = await uploadToSiteMedia(heroVideoFile, "hero");
-      } catch (err) {
-        msg.textContent = "Hero video upload failed — " + err.message;
-        msg.className = "msg err";
-        return;
+    try {
+      for (const f of HIDDEN_MEDIA_FIELDS) {
+        if (f.remove && form.elements[f.remove].checked) form.elements[f.url].value = "";
+        const file = form.elements[f.file].files[0];
+        if (file) form.elements[f.url].value = await uploadToSiteMedia(file, f.folder);
       }
-    }
-
-    if (form.elements.remove_logo.checked) {
-      form.elements.logo_url.value = "";
-    }
-
-    const logoFile = form.elements.logo_file.files[0];
-    if (logoFile) {
-      try {
-        form.elements.logo_url.value = await uploadToSiteMedia(logoFile, "branding");
-      } catch (err) {
-        msg.textContent = "Logo upload failed — " + err.message;
-        msg.className = "msg err";
-        return;
+      for (const f of VISIBLE_MEDIA_FIELDS) {
+        const file = form.elements[f.file].files[0];
+        if (file) form.elements[f.url].value = await uploadToSiteMedia(file, f.folder);
       }
+    } catch (err) {
+      msg.textContent = "Upload failed — " + err.message;
+      msg.className = "msg err";
+      return;
     }
 
+    const skipNames = new Set(HIDDEN_MEDIA_FIELDS.map(f => f.remove).filter(Boolean));
     const rows = Array.from(form.elements)
-      .filter(el => el.name && el.type !== "file" && el.name !== "remove_logo")
+      .filter(el => el.name && el.type !== "file" && !skipNames.has(el.name))
       .map(el => ({ key: el.name, value: el.type === "checkbox" ? String(el.checked) : el.value }));
 
     const { error } = await supabase.from("site_settings").upsert(rows);
@@ -94,19 +101,31 @@ async function setupSettings() {
     } else {
       msg.textContent = "Saved. Refresh your public site to see the changes.";
       msg.className = "msg ok";
-      form.elements.hero_video_file.value = "";
-      form.elements.logo_file.value = "";
-      form.elements.remove_logo.checked = false;
-      refreshMediaNote(heroVideoNote, form.elements.hero_video_url.value,
-        "A hero video is currently set. Uploading a new one replaces it.",
-        "No hero video set — the hero photo above is used instead.");
-      refreshMediaNote(logoNote, form.elements.logo_url.value,
-        "A logo image is currently set. Uploading a new one replaces it.",
-        "No logo set — the text name is shown instead.");
+      [...HIDDEN_MEDIA_FIELDS, ...VISIBLE_MEDIA_FIELDS].forEach(f => { form.elements[f.file].value = ""; });
+      HIDDEN_MEDIA_FIELDS.forEach(f => { if (f.remove) form.elements[f.remove].checked = false; });
+      refreshAllMediaNotes(form);
     }
   });
 }
 setupSettings();
+
+// ---------- dynamic portfolio categories ----------
+async function setupCategoryOptions() {
+  const { data } = await supabase.from("site_settings").select("value").eq("key", "categories").maybeSingle();
+  if (!data || !data.value) return;
+  const categories = data.value.split("|").map(pair => {
+    const [key, label] = pair.split(":");
+    return { key: (key || "").trim(), label: (label || key || "").trim() };
+  }).filter(c => c.key);
+  if (!categories.length) return;
+
+  document.querySelectorAll("select[name=category]").forEach(select => {
+    const current = select.value;
+    select.innerHTML = categories.map(c => `<option value="${esc(c.key)}">${esc(c.label)}</option>`).join("");
+    if (categories.some(c => c.key === current)) select.value = current;
+  });
+}
+setupCategoryOptions();
 
 function esc(str) {
   return String(str ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -206,12 +225,19 @@ setupCrudSection({
       : "No video uploaded — using the link above instead.";
   },
   beforeSubmit: async form => {
-    const file = form.elements.video_file.files[0];
-    if (!file) return {};
-    const path = `portfolio/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
-    const { error } = await supabase.storage.from("site-media").upload(path, file);
-    if (error) throw error;
-    return { video_file_path: path };
+    const extra = {};
+    const videoFile = form.elements.video_file.files[0];
+    if (videoFile) {
+      const path = `portfolio/${Date.now()}-${videoFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const { error } = await supabase.storage.from("site-media").upload(path, videoFile);
+      if (error) throw error;
+      extra.video_file_path = path;
+    }
+    const thumbFile = form.elements.thumbnail_file.files[0];
+    if (thumbFile) {
+      extra.thumbnail_url = await uploadToSiteMedia(thumbFile, "portfolio-thumbs");
+    }
+    return extra;
   },
 });
 

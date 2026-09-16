@@ -117,7 +117,13 @@ insert into site_settings (key, value) values
   ('show_portfolio', 'true'),
   ('show_services', 'true'),
   ('show_testimonials', 'true'),
-  ('show_contact', 'true')
+  ('show_contact', 'true'),
+  ('hero_bg_url', ''),
+  ('button_bg_color', ''),
+  ('button_text_color', ''),
+  ('button_radius', '6'),
+  ('about_text_color', ''),
+  ('categories', 'ai:AI|beauty:Beauty|home-deco:Home & Decor|tech:Tech & Apps|finance:Finance|food:Food|drinks:Drinks & Desserts|fitness:Health & Fitness|fashion:Fashion|travel:Travel')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.

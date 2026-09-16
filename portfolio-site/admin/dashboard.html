@@ -42,12 +42,23 @@
         <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
         <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
         <div class="field full"><label>Hero stats line</label><input name="hero_stats_line" placeholder="e.g. +500 videos · +200 brand partners · 100M+ views"></div>
-        <div class="field full"><label>Hero photo URL</label><input name="hero_photo_url" placeholder="https://..."></div>
+        <div class="field full">
+          <label>Hero photo (upload a file, or paste a URL below)</label>
+          <input type="file" name="hero_photo_file" accept="image/*">
+          <input name="hero_photo_url" placeholder="https://..." style="margin-top:6px">
+        </div>
         <div class="field full">
           <label>Hero video (optional — replaces the hero photo with an autoplaying looped video)</label>
           <input type="file" name="hero_video_file" accept="video/*">
           <input type="hidden" name="hero_video_url">
           <p id="hero-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field full">
+          <label>Hero section background image (behind the whole hero, not just the photo box)</label>
+          <input type="file" name="hero_bg_file" accept="image/*">
+          <input type="hidden" name="hero_bg_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_hero_bg" style="width:auto"> Remove background image</label>
+          <p id="hero-bg-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
         </div>
 
         <div class="field"><label>Stat: videos</label><input name="stat_videos" type="number"></div>
@@ -57,8 +68,13 @@
         <div class="field"><label>Stat: years</label><input name="stat_years" type="number"></div>
 
         <div class="field full"><label>About bio</label><textarea name="about_bio" rows="3"></textarea></div>
+        <div class="field"><label>About bio text color</label><input name="about_text_color" type="color"></div>
         <div class="field"><label>Location</label><input name="about_location" placeholder="City · Country"></div>
-        <div class="field full"><label>About photo URL</label><input name="about_photo_url" placeholder="https://..."></div>
+        <div class="field full">
+          <label>About photo (upload a file, or paste a URL below)</label>
+          <input type="file" name="about_photo_file" accept="image/*">
+          <input name="about_photo_url" placeholder="https://..." style="margin-top:6px">
+        </div>
 
         <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
         <div class="field"><label>Instagram handle</label><input name="instagram_handle" placeholder="@yourhandle"></div>
@@ -66,8 +82,28 @@
         <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>
         <div class="field"><label>Panel/section background</label><input name="bg_alt_color" type="color"></div>
         <div class="field"><label>Text color</label><input name="ink_color" type="color"></div>
-        <div class="field"><label>Accent color (buttons, links, icons)</label><input name="accent_color" type="color"></div>
+        <div class="field"><label>Accent color (links, icons)</label><input name="accent_color" type="color"></div>
         <div class="field"><label><input type="checkbox" name="texture_enabled" style="width:auto"> Grain/texture overlay</label></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Buttons</p>
+        <div class="field"><label>Button background color</label><input name="button_bg_color" type="color"></div>
+        <div class="field"><label>Button text color</label><input name="button_text_color" type="color"></div>
+        <div class="field">
+          <label>Button shape</label>
+          <select name="button_radius">
+            <option value="0">Sharp corners</option>
+            <option value="6">Slightly rounded</option>
+            <option value="16">Rounded</option>
+            <option value="999">Pill</option>
+          </select>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Portfolio categories</p>
+        <div class="field full">
+          <label>Categories (format: key:Label, separated by |)</label>
+          <input name="categories" placeholder="ai:AI|beauty:Beauty">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">Add, remove, rename, or reorder categories by editing this list. Removing one doesn't delete portfolio items already in it — they just won't show until you re-add that category.</p>
+        </div>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Scrolling banner</p>
         <div class="field full"><label>Banner text (separate phrases with |)</label><input name="marquee_text" placeholder="Phrase one|Phrase two|Phrase three"></div>
@@ -120,7 +156,11 @@
           </select>
         </div>
         <div class="field full"><label>Video/post link (used if you don't upload a file below)</label><input name="link_url" placeholder="https://tiktok.com/@... or https://youtube.com/watch?v=..."></div>
-        <div class="field full"><label>Thumbnail image URL (required for TikTok/Instagram — auto-filled for YouTube if left blank)</label><input name="thumbnail_url" placeholder="https://..."></div>
+        <div class="field full">
+          <label>Thumbnail (upload a file, or paste a URL — required for TikTok/Instagram, auto-filled for YouTube if left blank)</label>
+          <input type="file" name="thumbnail_file" accept="image/*">
+          <input name="thumbnail_url" placeholder="https://..." style="margin-top:6px">
+        </div>
         <div class="field full">
           <label>Upload video instead of linking out (optional — lets you set a start time)</label>
           <input type="file" name="video_file" accept="video/*">
