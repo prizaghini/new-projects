@@ -290,6 +290,13 @@ async function loadSiteSettings(supabase) {
     labelEl.textContent = [s.tagline, s.availability].filter(Boolean).join(" · ");
   }
   if (labelEl && s.hero_label_color) labelEl.style.color = s.hero_label_color;
+  const heroTextEl = document.getElementById("hero-text");
+  if (heroTextEl) {
+    heroTextEl.classList.remove("align-left", "align-center", "align-right");
+    if (s.hero_text_align && s.hero_text_align !== "left") heroTextEl.classList.add(`align-${s.hero_text_align}`);
+    heroTextEl.classList.remove("valign-top", "valign-center", "valign-bottom");
+    if (s.hero_text_valign && s.hero_text_valign !== "center") heroTextEl.classList.add(`valign-${s.hero_text_valign}`);
+  }
   if (s.hero_headline) document.getElementById("hero-headline").innerHTML = s.hero_headline.replace(/\\n|\n/g, "<br>");
   if (s.hero_subcopy) document.getElementById("hero-subcopy").textContent = s.hero_subcopy;
   if (s.hero_stats_line) document.getElementById("hero-stats-line").textContent = s.hero_stats_line;
@@ -322,6 +329,7 @@ async function loadSiteSettings(supabase) {
   if (s.button_radius) root.setProperty("--btn-radius", `${s.button_radius}px`);
 
   if (s.hero_overlay_opacity) root.setProperty("--hero-overlay-opacity", parseInt(s.hero_overlay_opacity, 10) / 100);
+  if (s.text_scale) root.setProperty("--text-scale", parseInt(s.text_scale, 10) / 100);
 
   const fontPairing = FONT_PAIRINGS[s.font_pairing];
   if (fontPairing) {
