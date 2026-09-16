@@ -66,7 +66,16 @@ Analyze them and return two things:
 
 1. "themes" - one entry per distinct, independently-reported news item \
 or trend (a platform change, industry shift, notable campaign, tool, or \
-data point that actually happened). Exclude anything that is really an \
+data point that actually happened) that is actually about digital \
+marketing, social media, advertising, PPC, SEO, or marketing tech. The \
+search that produced these emails matches broadly (e.g. any email \
+containing the word "advertising" or "newsletter" anywhere), so some of \
+them will be general news/current-events roundups that only glancingly \
+qualified - politics, sports, entertainment, health, geopolitics, \
+markets, etc. Skip every story on a topic like that entirely, even if \
+it sits in the same email as genuine marketing stories and even if it's \
+well-reported - only pull out the stories that a digital marketer would \
+actually care about professionally. Exclude anything that is really an \
 ad or vendor pitch for a product/service, even when it isn't explicitly \
 labeled "sponsored" or "partner spotlight" - watch for the telltale \
 signs: a company or product name paired with a claim about its OWN \
