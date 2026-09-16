@@ -29,18 +29,26 @@ async function uploadToSiteMedia(file, folder) {
   return supabase.storage.from("site-media").getPublicUrl(path).data.publicUrl;
 }
 
+function refreshMediaNote(el, url, setMsg, unsetMsg) {
+  el.textContent = url ? setMsg : unsetMsg;
+}
+
 async function setupSettings() {
   const form = document.getElementById("form-settings");
   const msg = document.getElementById("settings-msg");
   const heroVideoNote = document.getElementById("hero-video-note");
+  const logoNote = document.getElementById("logo-note");
 
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
     if (form.elements[row.key]) form.elements[row.key].value = row.value;
   });
-  heroVideoNote.textContent = form.elements.hero_video_url.value
-    ? "A hero video is currently set. Uploading a new one replaces it."
-    : "No hero video set — the hero photo above is used instead.";
+  refreshMediaNote(heroVideoNote, form.elements.hero_video_url.value,
+    "A hero video is currently set. Uploading a new one replaces it.",
+    "No hero video set — the hero photo above is used instead.");
+  refreshMediaNote(logoNote, form.elements.logo_url.value,
+    "A logo image is currently set. Uploading a new one replaces it.",
+    "No logo set — the text name is shown instead.");
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
@@ -52,6 +60,17 @@ async function setupSettings() {
         form.elements.hero_video_url.value = await uploadToSiteMedia(heroVideoFile, "hero");
       } catch (err) {
         msg.textContent = "Hero video upload failed — " + err.message;
+        msg.className = "msg err";
+        return;
+      }
+    }
+
+    const logoFile = form.elements.logo_file.files[0];
+    if (logoFile) {
+      try {
+        form.elements.logo_url.value = await uploadToSiteMedia(logoFile, "branding");
+      } catch (err) {
+        msg.textContent = "Logo upload failed — " + err.message;
         msg.className = "msg err";
         return;
       }
@@ -69,9 +88,13 @@ async function setupSettings() {
       msg.textContent = "Saved. Refresh your public site to see the changes.";
       msg.className = "msg ok";
       form.elements.hero_video_file.value = "";
-      heroVideoNote.textContent = form.elements.hero_video_url.value
-        ? "A hero video is currently set. Uploading a new one replaces it."
-        : "No hero video set — the hero photo above is used instead.";
+      form.elements.logo_file.value = "";
+      refreshMediaNote(heroVideoNote, form.elements.hero_video_url.value,
+        "A hero video is currently set. Uploading a new one replaces it.",
+        "No hero video set — the hero photo above is used instead.");
+      refreshMediaNote(logoNote, form.elements.logo_url.value,
+        "A logo image is currently set. Uploading a new one replaces it.",
+        "No logo set — the text name is shown instead.");
     }
   });
 }

@@ -253,7 +253,15 @@ async function loadSiteSettings(supabase) {
   data.forEach(row => { s[row.key] = row.value; });
 
   if (s.display_name) {
-    document.querySelectorAll(".site-name").forEach(el => { el.textContent = s.display_name; });
+    document.querySelectorAll(".site-name-text").forEach(el => { el.textContent = s.display_name; });
+  }
+  if (s.logo_url) {
+    document.querySelectorAll(".logo-img").forEach(img => {
+      img.src = s.logo_url;
+      img.alt = s.display_name || "";
+      img.style.display = "block";
+    });
+    document.querySelectorAll(".logo-text").forEach(el => { el.style.display = "none"; });
   }
   const labelEl = document.getElementById("hero-label");
   if (labelEl && (s.tagline || s.availability)) {

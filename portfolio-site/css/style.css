@@ -61,7 +61,8 @@ header.site-header {
   backdrop-filter: blur(6px); border-bottom: 1px solid var(--line);
 }
 .header-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
-.logo { font-family: var(--display); font-weight: 700; font-size: 17px; text-decoration: none; }
+.logo { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 17px; text-decoration: none; }
+.logo-img { display: none; height: 32px; width: auto; border-radius: 0; }
 .header-nav { display: flex; align-items: center; gap: 20px; }
 .header-nav a.navlink { font-size: 14px; color: var(--ink-soft); text-decoration: none; display: none; }
 @media (min-width: 720px) { .header-nav a.navlink { display: inline; } }
@@ -186,7 +187,7 @@ form.contact-form { display: grid; gap: 14px; }
 
 /* ---------- footer ---------- */
 footer.site-footer { text-align: center; padding: clamp(40px, 8vw, 64px) 0; border-top: 1px solid var(--line); }
-footer.site-footer .logo { display: inline-block; margin-bottom: 6px; }
+footer.site-footer .logo { display: inline-flex; margin-bottom: 6px; }
 footer.site-footer p { color: var(--ink-soft); font-size: 14px; }
 footer.site-footer .links { display: flex; justify-content: center; gap: 16px; margin-top: 12px; font-size: 14px; }
 

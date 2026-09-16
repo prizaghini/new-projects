@@ -103,7 +103,8 @@ insert into site_settings (key, value) values
   ('bg_alt_color', '#EFEBE2'),
   ('ink_color', '#16160F'),
   ('accent_color', '#2F6F5E'),
-  ('hero_video_url', '')
+  ('hero_video_url', ''),
+  ('logo_url', '')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.

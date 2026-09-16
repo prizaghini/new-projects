@@ -30,6 +30,12 @@
       <p class="hint">Everything here fills in the public site's identity, headline, photos and contact info — no code needed. Save, then refresh your site to see it.</p>
       <form class="add-form" id="form-settings">
         <div class="field"><label>Your name</label><input name="display_name" placeholder="Your Name"></div>
+        <div class="field full">
+          <label>Logo image (optional — replaces the text name in the header/footer)</label>
+          <input type="file" name="logo_file" accept="image/*">
+          <input type="hidden" name="logo_url">
+          <p id="logo-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
         <div class="field"><label>Tagline</label><input name="tagline" placeholder="e.g. UGC Creator &amp; Content Strategist"></div>
         <div class="field"><label>Availability badge</label><input name="availability" placeholder="e.g. Available 2026"></div>
         <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
