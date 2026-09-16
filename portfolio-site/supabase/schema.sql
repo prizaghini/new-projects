@@ -109,6 +109,7 @@ insert into site_settings (key, value) values
   ('marquee_bg_color', ''),
   ('marquee_text_color', ''),
   ('texture_enabled', 'false'),
+  ('texture_intensity', '45'),
   ('show_marquee', 'true'),
   ('show_stats', 'true'),
   ('show_about', 'true'),
@@ -123,7 +124,15 @@ insert into site_settings (key, value) values
   ('button_text_color', ''),
   ('button_radius', '6'),
   ('about_text_color', ''),
-  ('categories', 'ai:AI|beauty:Beauty|home-deco:Home & Decor|tech:Tech & Apps|finance:Finance|food:Food|drinks:Drinks & Desserts|fitness:Health & Fitness|fashion:Fashion|travel:Travel')
+  ('categories', 'ai:AI|beauty:Beauty|home-deco:Home & Decor|tech:Tech & Apps|finance:Finance|food:Food|drinks:Drinks & Desserts|fitness:Health & Fitness|fashion:Fashion|travel:Travel'),
+  ('hero_text_color', ''),
+  ('hero_photo_position', 'center'),
+  ('about_photo_position', 'center'),
+  ('about_stat_1', '140M+ campaign views'),
+  ('about_stat_2', 'Meta CTR record'),
+  ('about_stat_3', 'CPA reduced up to 38%'),
+  ('about_stat_4', 'ROAS 2.4x'),
+  ('about_stats_color', '')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.

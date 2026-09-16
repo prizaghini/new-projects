@@ -1,4 +1,30 @@
-import { supabase } from "../../js/supabase-client.js";
+// ---------- tabs (no backend dependency — must always work) ----------
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(`panel-${btn.dataset.tab}`).classList.add("active");
+  });
+});
+
+let supabase;
+try {
+  ({ supabase } = await import("../../js/supabase-client.js"));
+} catch (err) {
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+  const main = document.querySelector(".main");
+  if (main) {
+    const notice = document.createElement("div");
+    notice.className = "notice";
+    notice.style.color = "#B3261E";
+    notice.textContent = "Couldn't connect to the backend, so nothing here will load or save right now. Check your connection and refresh.";
+    main.prepend(notice);
+  }
+  throw err;
+}
 
 // ---------- auth guard ----------
 const { data: { session } } = await supabase.auth.getSession();
@@ -9,16 +35,6 @@ if (!session) {
 document.getElementById("logout-btn").addEventListener("click", async () => {
   await supabase.auth.signOut();
   window.location.href = "index.html";
-});
-
-// ---------- tabs ----------
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(`panel-${btn.dataset.tab}`).classList.add("active");
-  });
 });
 
 // ---------- site settings ----------

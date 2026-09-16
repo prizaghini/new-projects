@@ -42,10 +42,21 @@
         <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
         <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
         <div class="field full"><label>Hero stats line</label><input name="hero_stats_line" placeholder="e.g. +500 videos · +200 brand partners · 100M+ views"></div>
+        <div class="field"><label>Hero text color (headline, subcopy, stats line)</label><input name="hero_text_color" type="color"></div>
         <div class="field full">
           <label>Hero photo (upload a file, or paste a URL below)</label>
           <input type="file" name="hero_photo_file" accept="image/*">
           <input name="hero_photo_url" placeholder="https://..." style="margin-top:6px">
+        </div>
+        <div class="field">
+          <label>Hero photo position</label>
+          <select name="hero_photo_position">
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
         </div>
         <div class="field full">
           <label>Hero video (optional — replaces the hero photo with an autoplaying looped video)</label>
@@ -75,15 +86,31 @@
           <input type="file" name="about_photo_file" accept="image/*">
           <input name="about_photo_url" placeholder="https://..." style="margin-top:6px">
         </div>
+        <div class="field">
+          <label>About photo position</label>
+          <select name="about_photo_position">
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="field full"><label>About stat 1</label><input name="about_stat_1"></div>
+        <div class="field full"><label>About stat 2</label><input name="about_stat_2"></div>
+        <div class="field full"><label>About stat 3</label><input name="about_stat_3"></div>
+        <div class="field full"><label>About stat 4</label><input name="about_stat_4"></div>
+        <div class="field"><label>About stats color</label><input name="about_stats_color" type="color"></div>
 
         <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
         <div class="field"><label>Instagram handle</label><input name="instagram_handle" placeholder="@yourhandle"></div>
 
         <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>
-        <div class="field"><label>Panel/section background</label><input name="bg_alt_color" type="color"></div>
+        <div class="field"><label>Panel background</label><input name="bg_alt_color" type="color"></div>
         <div class="field"><label>Text color</label><input name="ink_color" type="color"></div>
         <div class="field"><label>Accent color (links, icons)</label><input name="accent_color" type="color"></div>
         <div class="field"><label><input type="checkbox" name="texture_enabled" style="width:auto"> Grain/texture overlay</label></div>
+        <div class="field"><label>Texture intensity</label><input name="texture_intensity" type="range" min="5" max="80" step="5"></div>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Buttons</p>
         <div class="field"><label>Button background color</label><input name="button_bg_color" type="color"></div>

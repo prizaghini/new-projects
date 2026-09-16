@@ -238,7 +238,7 @@ function setStat(id, value, suffix) {
   if (suffix) el.dataset.suffix = suffix;
 }
 
-function setPhoto(containerId, url, altText) {
+function setPhoto(containerId, url, altText, objectPosition) {
   if (!url) return;
   const el = document.getElementById(containerId);
   if (!el) return;
@@ -249,8 +249,10 @@ function setPhoto(containerId, url, altText) {
   img.style.width = "100%";
   img.style.height = "100%";
   img.style.objectFit = "cover";
+  img.style.objectPosition = objectPosition || "center";
   img.style.borderRadius = "16px";
   el.replaceChildren(img);
+  el.classList.add("has-media");
 }
 
 async function loadSiteSettings(supabase) {
@@ -289,8 +291,9 @@ async function loadSiteSettings(supabase) {
     video.style.height = "100%";
     video.style.objectFit = "cover";
     el.replaceChildren(video);
+    el.classList.add("has-media");
   } else {
-    setPhoto("hero-photo", s.hero_photo_url, s.display_name);
+    setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position);
   }
 
   const root = document.documentElement.style;
@@ -317,7 +320,20 @@ async function loadSiteSettings(supabase) {
   if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
   if (s.about_text_color) document.getElementById("about-bio").style.color = s.about_text_color;
   if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
-  setPhoto("about-photo", s.about_photo_url, s.display_name);
+  setPhoto("about-photo", s.about_photo_url, s.display_name, s.about_photo_position);
+
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`about-stat-${i}`);
+    if (el && s[`about_stat_${i}`]) el.textContent = s[`about_stat_${i}`];
+    if (el && s.about_stats_color) el.style.color = s.about_stats_color;
+  }
+
+  if (s.hero_text_color) {
+    ["hero-headline", "hero-subcopy", "hero-stats-line"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.color = s.hero_text_color;
+    });
+  }
 
   if (s.categories) {
     const parsed = parseCategories(s.categories);
@@ -344,6 +360,7 @@ async function loadSiteSettings(supabase) {
   }
 
   document.body.classList.toggle("grain-on", s.texture_enabled === "true");
+  if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);
 
   const sectionToggles = {
     show_marquee: "section-marquee",

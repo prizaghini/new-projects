@@ -17,11 +17,17 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--b
 .login-card h1 { font-family: var(--display); font-size: 20px; margin: 0 0 4px; }
 .login-card p.sub { color: var(--ink-soft); font-size: 13.5px; margin: 0 0 22px; }
 .field { display: grid; gap: 6px; margin-bottom: 14px; }
-.field label { font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
+.field label {
+  font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--ink-soft); min-height: 2.6em; display: flex; align-items: flex-end;
+}
 .field input, .field select, .field textarea {
-  font-family: var(--body); font-size: 14.5px; padding: 10px 12px; border-radius: 6px;
+  width: 100%; font-family: var(--body); font-size: 14.5px; padding: 10px 12px; border-radius: 6px;
   border: 1px solid var(--line); background: #fff; color: var(--ink);
 }
+.field input[type=color] { height: 42px; padding: 4px; cursor: pointer; }
+.field input[type=checkbox] { width: auto; }
+.field label:has(input[type=checkbox]) { min-height: 0; display: inline-flex; align-items: center; gap: 6px; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 11px 18px; border-radius: 6px; border: 0; cursor: pointer;
