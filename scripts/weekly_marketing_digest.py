@@ -31,6 +31,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
 
+import httpx
 from google import genai
 from google.genai import errors as genai_errors
 
@@ -343,7 +344,12 @@ def generate_digest(emails: list[dict]) -> dict:
                     model=model, contents=prompt, config=config
                 )
                 return json.loads(response.text)
-            except genai_errors.ServerError as e:
+            except (genai_errors.ServerError, httpx.TransportError) as e:
+                # httpx.TransportError covers dropped/reset connections
+                # (e.g. "Server disconnected without sending a response"),
+                # which happen occasionally and are worth retrying just
+                # like a 503 - they aren't google.genai's own error type
+                # since they happen below the HTTP response layer.
                 last_error = e
             except genai_errors.ClientError as e:
                 last_error = e
