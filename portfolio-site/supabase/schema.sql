@@ -120,6 +120,7 @@ insert into site_settings (key, value) values
   ('show_testimonials', 'true'),
   ('show_contact', 'true'),
   ('hero_bg_url', ''),
+  ('hero_bg_video_url', ''),
   ('button_bg_color', ''),
   ('button_text_color', ''),
   ('button_radius', '6'),

@@ -322,7 +322,18 @@ async function loadSiteSettings(supabase) {
     root.setProperty("--body", fontPairing.body);
   }
 
-  if (s.hero_bg_url) {
+  if (s.hero_bg_video_url) {
+    const heroEl = document.querySelector(".hero");
+    const bgVideo = document.createElement("video");
+    bgVideo.src = s.hero_bg_video_url;
+    bgVideo.autoplay = true;
+    bgVideo.muted = true;
+    bgVideo.loop = true;
+    bgVideo.playsInline = true;
+    bgVideo.className = "hero-bg-video";
+    heroEl.prepend(bgVideo);
+    heroEl.classList.add("has-bg-image");
+  } else if (s.hero_bg_url) {
     const heroEl = document.querySelector(".hero");
     heroEl.style.backgroundImage = `url("${s.hero_bg_url}")`;
     heroEl.classList.add("has-bg-image");

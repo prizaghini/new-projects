@@ -57,6 +57,9 @@ const HIDDEN_MEDIA_FIELDS = [
   { file: "hero_bg_file", url: "hero_bg_url", remove: "remove_hero_bg", folder: "hero-bg", noteId: "hero-bg-note",
     setMsg: "A hero background image is currently set. Uploading a new one replaces it.",
     unsetMsg: "No hero background image set." },
+  { file: "hero_bg_video_file", url: "hero_bg_video_url", remove: "remove_hero_bg", folder: "hero-bg", noteId: "hero-bg-video-note",
+    setMsg: "A hero background video is currently set — it plays instead of the background image. Uploading a new one replaces it.",
+    unsetMsg: "No hero background video set." },
 ];
 
 // Fields with a plain visible text/URL input — uploading just fills that input.
