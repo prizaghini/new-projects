@@ -7,12 +7,17 @@ create table if not exists portfolio_items (
   brand text not null,
   title text not null,
   platform text not null default 'other', -- 'youtube' | 'tiktok' | 'instagram' | 'other'
-  link_url text,                    -- full video/post URL on that platform
+  link_url text,                    -- full video/post URL on that platform (used when not self-hosting the file)
   thumbnail_url text,               -- manual thumbnail image; optional for YouTube (auto-derived from link_url if omitted), required for TikTok/Instagram
+  video_file_path text,             -- path in the 'site-media' storage bucket, when you upload the video instead of linking out
+  start_seconds numeric not null default 0, -- playback start time, only applies to uploaded video_file_path
   featured_ad boolean not null default false, -- shows in the "YouTube Ads" spotlight section
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
+-- Safe to re-run against a table created by an older version of this file:
+alter table portfolio_items add column if not exists video_file_path text;
+alter table portfolio_items add column if not exists start_seconds numeric not null default 0;
 
 create table if not exists case_studies (
   id uuid primary key default gen_random_uuid(),
@@ -93,8 +98,18 @@ insert into site_settings (key, value) values
   ('about_location', '[Your City] · [Your Country]'),
   ('about_photo_url', ''),
   ('contact_email', 'you@example.com'),
-  ('instagram_handle', '@yourhandle')
+  ('instagram_handle', '@yourhandle'),
+  ('bg_color', '#F7F5F0'),
+  ('bg_alt_color', '#EFEBE2'),
+  ('ink_color', '#16160F'),
+  ('accent_color', '#2F6F5E'),
+  ('hero_video_url', '')
 on conflict (key) do nothing;
+
+-- Storage bucket for uploaded portfolio videos and the hero video.
+insert into storage.buckets (id, name, public)
+values ('site-media', 'site-media', true)
+on conflict (id) do nothing;
 
 -- Row Level Security: public site can read published content and submit leads,
 -- only the logged-in admin (you) can write/manage anything.
@@ -121,3 +136,8 @@ create policy "admin manages calendar_events" on calendar_events for all using (
 create policy "admin manages campaigns" on campaigns for all using (auth.role() = 'authenticated');
 create policy "admin manages checklist_notes" on checklist_notes for all using (auth.role() = 'authenticated');
 create policy "admin manages site_settings" on site_settings for all using (auth.role() = 'authenticated');
+
+create policy "public can read site-media" on storage.objects
+  for select using (bucket_id = 'site-media');
+create policy "admin manages site-media" on storage.objects
+  for all using (bucket_id = 'site-media' and auth.role() = 'authenticated');

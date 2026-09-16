@@ -111,8 +111,37 @@ async function loadCaseStudies(supabase) {
   `).join("");
 }
 
+// ---------- video lightbox (used by self-hosted portfolio videos) ----------
+function setupVideoLightbox() {
+  const box = document.getElementById("video-lightbox");
+  const video = document.getElementById("lightbox-video");
+
+  function close() {
+    box.classList.remove("open");
+    video.pause();
+    video.removeAttribute("src");
+  }
+  box.querySelector(".lightbox-close").addEventListener("click", close);
+  box.addEventListener("click", e => { if (e.target === box) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+  return {
+    open(url, startSeconds) {
+      video.src = url;
+      box.classList.add("open");
+      const onMeta = () => {
+        video.currentTime = startSeconds || 0;
+        video.play().catch(() => {});
+        video.removeEventListener("loadedmetadata", onMeta);
+      };
+      video.addEventListener("loadedmetadata", onMeta);
+    },
+  };
+}
+
 // ---------- portfolio ----------
 let allPortfolioItems = [];
+let videoLightbox = null;
 
 function renderPortfolio(category) {
   const track = document.getElementById("portfolio-track");
@@ -124,17 +153,27 @@ function renderPortfolio(category) {
   track.innerHTML = items.map(item => {
     const thumb = resolveThumb(item);
     const platformLabel = PLATFORM_LABELS[item.platform] || "";
+    const isVideo = !!item.videoUrl;
     return `
-    <a class="portfolio-card" href="${item.link_url || "#"}" target="_blank" rel="noopener">
+    <a class="portfolio-card" href="${item.link_url || "#"}"
+       ${isVideo ? `data-video-url="${item.videoUrl}" data-start="${item.start_seconds || 0}"` : `target="_blank" rel="noopener"`}>
       <div class="portfolio-thumb">
         ${thumb
           ? `<img src="${thumb}" alt="${item.title}" loading="lazy">`
           : `<div class="portfolio-thumb-placeholder">${platformLabel || "View"}</div>`}
+        ${isVideo ? `<span class="play-badge" aria-hidden="true">▶</span>` : ""}
       </div>
       <div class="meta"><b>${item.brand}</b><span>${item.title}${platformLabel ? ` · ${platformLabel}` : ""}</span></div>
     </a>
   `;
   }).join("");
+
+  track.querySelectorAll("[data-video-url]").forEach(card => {
+    card.addEventListener("click", e => {
+      e.preventDefault();
+      videoLightbox.open(card.dataset.videoUrl, parseFloat(card.dataset.start) || 0);
+    });
+  });
 }
 
 async function loadPortfolio(supabase) {
@@ -144,7 +183,12 @@ async function loadPortfolio(supabase) {
   ).join("");
 
   const { data } = await supabase.from("portfolio_items").select("*").order("sort_order", { ascending: true });
-  allPortfolioItems = data || [];
+  allPortfolioItems = (data || []).map(item => ({
+    ...item,
+    videoUrl: item.video_file_path
+      ? supabase.storage.from("site-media").getPublicUrl(item.video_file_path).data.publicUrl
+      : null,
+  }));
 
   navContainer.querySelectorAll(".cat-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -218,7 +262,27 @@ async function loadSiteSettings(supabase) {
   if (s.hero_headline) document.getElementById("hero-headline").innerHTML = s.hero_headline.replace(/\n/g, "<br>");
   if (s.hero_subcopy) document.getElementById("hero-subcopy").textContent = s.hero_subcopy;
   if (s.hero_stats_line) document.getElementById("hero-stats-line").textContent = s.hero_stats_line;
-  setPhoto("hero-photo", s.hero_photo_url, s.display_name);
+  if (s.hero_video_url) {
+    const el = document.getElementById("hero-photo");
+    const video = document.createElement("video");
+    video.src = s.hero_video_url;
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.style.width = "100%";
+    video.style.height = "100%";
+    video.style.objectFit = "cover";
+    el.replaceChildren(video);
+  } else {
+    setPhoto("hero-photo", s.hero_photo_url, s.display_name);
+  }
+
+  const root = document.documentElement.style;
+  if (s.bg_color) root.setProperty("--bg", s.bg_color);
+  if (s.bg_alt_color) root.setProperty("--bg-alt", s.bg_alt_color);
+  if (s.ink_color) root.setProperty("--ink", s.ink_color);
+  if (s.accent_color) root.setProperty("--accent", s.accent_color);
 
   setStat("stat-videos", s.stat_videos);
   setStat("stat-partners", s.stat_partners);
@@ -297,6 +361,7 @@ document.getElementById("logo-marquee").innerHTML =
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 setupReveal();
+videoLightbox = setupVideoLightbox();
 
 // Data-backed sections (settings, portfolio, case studies, testimonials,
 // contact form) need Supabase — loaded separately so a CDN hiccup degrades

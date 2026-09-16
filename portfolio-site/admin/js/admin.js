@@ -22,20 +22,43 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
 });
 
 // ---------- site settings ----------
+async function uploadToSiteMedia(file, folder) {
+  const path = `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const { error } = await supabase.storage.from("site-media").upload(path, file);
+  if (error) throw error;
+  return supabase.storage.from("site-media").getPublicUrl(path).data.publicUrl;
+}
+
 async function setupSettings() {
   const form = document.getElementById("form-settings");
   const msg = document.getElementById("settings-msg");
+  const heroVideoNote = document.getElementById("hero-video-note");
 
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
     if (form.elements[row.key]) form.elements[row.key].value = row.value;
   });
+  heroVideoNote.textContent = form.elements.hero_video_url.value
+    ? "A hero video is currently set. Uploading a new one replaces it."
+    : "No hero video set — the hero photo above is used instead.";
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
     msg.textContent = "";
+
+    const heroVideoFile = form.elements.hero_video_file.files[0];
+    if (heroVideoFile) {
+      try {
+        form.elements.hero_video_url.value = await uploadToSiteMedia(heroVideoFile, "hero");
+      } catch (err) {
+        msg.textContent = "Hero video upload failed — " + err.message;
+        msg.className = "msg err";
+        return;
+      }
+    }
+
     const rows = Array.from(form.elements)
-      .filter(el => el.name)
+      .filter(el => el.name && el.type !== "file")
       .map(el => ({ key: el.name, value: el.value }));
 
     const { error } = await supabase.from("site_settings").upsert(rows);
@@ -45,6 +68,10 @@ async function setupSettings() {
     } else {
       msg.textContent = "Saved. Refresh your public site to see the changes.";
       msg.className = "msg ok";
+      form.elements.hero_video_file.value = "";
+      heroVideoNote.textContent = form.elements.hero_video_url.value
+        ? "A hero video is currently set. Uploading a new one replaces it."
+        : "No hero video set — the hero photo above is used instead.";
     }
   });
 }
@@ -55,7 +82,7 @@ function esc(str) {
 }
 
 // ---------- generic CRUD section (add / list / edit / delete) ----------
-function setupCrudSection({ table, formId, tbodyId, orderCol, renderRow, mapRowToForm }) {
+function setupCrudSection({ table, formId, tbodyId, orderCol, renderRow, mapRowToForm, beforeSubmit }) {
   const form = document.getElementById(formId);
   const tbody = document.getElementById(tbodyId);
   let editingId = null;
@@ -90,10 +117,22 @@ function setupCrudSection({ table, formId, tbodyId, orderCol, renderRow, mapRowT
     const formData = new FormData(form);
     const payload = {};
     for (const [key, value] of formData.entries()) {
+      if (value instanceof File) continue; // file inputs are handled by beforeSubmit, not stored directly
       payload[key] = form.elements[key].type === "checkbox" ? form.elements[key].checked : value;
     }
     // unchecked checkboxes are omitted by FormData — fill them in as false
     form.querySelectorAll('input[type=checkbox]').forEach(cb => { payload[cb.name] = cb.checked; });
+
+    if (beforeSubmit) {
+      let extra;
+      try {
+        extra = await beforeSubmit(form);
+      } catch (err) {
+        alert("Upload failed — " + err.message);
+        return;
+      }
+      Object.assign(payload, extra);
+    }
 
     if (editingId) {
       await supabase.from(table).update(payload).eq("id", editingId);
@@ -118,6 +157,7 @@ setupCrudSection({
   renderRow: row => `<tr>
     <td>${esc(row.category)}</td><td>${esc(row.brand)}</td><td>${esc(row.title)}</td>
     <td>${esc(row.platform)}</td>
+    <td>${row.video_file_path ? "Yes" : ""}</td>
     <td>${row.featured_ad ? "Yes" : ""}</td>
     <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
   </tr>`,
@@ -128,7 +168,19 @@ setupCrudSection({
     form.platform.value = row.platform || "other";
     form.link_url.value = row.link_url || "";
     form.thumbnail_url.value = row.thumbnail_url || "";
+    form.start_seconds.value = row.start_seconds || 0;
     form.featured_ad.checked = !!row.featured_ad;
+    document.getElementById("portfolio-video-note").textContent = row.video_file_path
+      ? `Video already uploaded: ${row.video_file_path} — choose a file above to replace it.`
+      : "No video uploaded — using the link above instead.";
+  },
+  beforeSubmit: async form => {
+    const file = form.elements.video_file.files[0];
+    if (!file) return {};
+    const path = `portfolio/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+    const { error } = await supabase.storage.from("site-media").upload(path, file);
+    if (error) throw error;
+    return { video_file_path: path };
   },
 });
 

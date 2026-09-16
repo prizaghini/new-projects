@@ -36,6 +36,12 @@
         <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
         <div class="field full"><label>Hero stats line</label><input name="hero_stats_line" placeholder="e.g. +500 videos · +200 brand partners · 100M+ views"></div>
         <div class="field full"><label>Hero photo URL</label><input name="hero_photo_url" placeholder="https://..."></div>
+        <div class="field full">
+          <label>Hero video (optional — replaces the hero photo with an autoplaying looped video)</label>
+          <input type="file" name="hero_video_file" accept="video/*">
+          <input type="hidden" name="hero_video_url">
+          <p id="hero-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
 
         <div class="field"><label>Stat: videos</label><input name="stat_videos" type="number"></div>
         <div class="field"><label>Stat: partners</label><input name="stat_partners" type="number"></div>
@@ -49,6 +55,11 @@
 
         <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
         <div class="field"><label>Instagram handle</label><input name="instagram_handle" placeholder="@yourhandle"></div>
+
+        <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>
+        <div class="field"><label>Panel/section background</label><input name="bg_alt_color" type="color"></div>
+        <div class="field"><label>Text color</label><input name="ink_color" type="color"></div>
+        <div class="field"><label>Accent color (buttons, links, icons)</label><input name="accent_color" type="color"></div>
 
         <div class="actions"><button class="btn" type="submit">Save settings</button></div>
         <p class="msg" id="settings-msg"></p>
@@ -84,12 +95,18 @@
             <option value="other">Other</option>
           </select>
         </div>
-        <div class="field full"><label>Video/post link</label><input name="link_url" placeholder="https://tiktok.com/@... or https://youtube.com/watch?v=..."></div>
+        <div class="field full"><label>Video/post link (used if you don't upload a file below)</label><input name="link_url" placeholder="https://tiktok.com/@... or https://youtube.com/watch?v=..."></div>
         <div class="field full"><label>Thumbnail image URL (required for TikTok/Instagram — auto-filled for YouTube if left blank)</label><input name="thumbnail_url" placeholder="https://..."></div>
+        <div class="field full">
+          <label>Upload video instead of linking out (optional — lets you set a start time)</label>
+          <input type="file" name="video_file" accept="video/*">
+          <p id="portfolio-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field"><label>Start at (seconds, uploaded video only)</label><input name="start_seconds" type="number" min="0" step="0.5" value="0"></div>
         <div class="field"><label><input type="checkbox" name="featured_ad" style="width:auto"> Featured item</label></div>
         <div class="actions"><button class="btn" type="submit">Add item</button></div>
       </form>
-      <table><thead><tr><th>Category</th><th>Brand</th><th>Title</th><th>Platform</th><th>Featured?</th><th></th></tr></thead>
+      <table><thead><tr><th>Category</th><th>Brand</th><th>Title</th><th>Platform</th><th>Video?</th><th>Featured?</th><th></th></tr></thead>
         <tbody id="table-portfolio"></tbody></table>
     </section>
 
