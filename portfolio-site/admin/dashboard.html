@@ -76,11 +76,20 @@
         </div>
         <div class="field"><label>Brand</label><input name="brand" required></div>
         <div class="field"><label>Title</label><input name="title" required></div>
-        <div class="field"><label>YouTube video ID</label><input name="youtube_id" placeholder="e.g. dQw4w9WgXcQ"></div>
-        <div class="field"><label><input type="checkbox" name="featured_ad" style="width:auto"> Featured YouTube ad</label></div>
+        <div class="field"><label>Platform</label>
+          <select name="platform">
+            <option value="youtube">YouTube</option>
+            <option value="tiktok">TikTok</option>
+            <option value="instagram">Instagram</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field full"><label>Video/post link</label><input name="link_url" placeholder="https://tiktok.com/@... or https://youtube.com/watch?v=..."></div>
+        <div class="field full"><label>Thumbnail image URL (required for TikTok/Instagram — auto-filled for YouTube if left blank)</label><input name="thumbnail_url" placeholder="https://..."></div>
+        <div class="field"><label><input type="checkbox" name="featured_ad" style="width:auto"> Featured item</label></div>
         <div class="actions"><button class="btn" type="submit">Add item</button></div>
       </form>
-      <table><thead><tr><th>Category</th><th>Brand</th><th>Title</th><th>Ad?</th><th></th></tr></thead>
+      <table><thead><tr><th>Category</th><th>Brand</th><th>Title</th><th>Platform</th><th>Featured?</th><th></th></tr></thead>
         <tbody id="table-portfolio"></tbody></table>
     </section>
 

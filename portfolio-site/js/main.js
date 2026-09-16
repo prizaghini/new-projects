@@ -23,8 +23,21 @@ function fillMarquee(el, words) {
   el.innerHTML = doubled.map(w => `<span>${w} ◆</span>`).join("");
 }
 
-function youtubeThumb(id) {
-  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+const PLATFORM_LABELS = { youtube: "YouTube", tiktok: "TikTok", instagram: "Instagram", other: "" };
+
+function extractYoutubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([\w-]{11})/);
+  return match ? match[1] : null;
+}
+
+function resolveThumb(item) {
+  if (item.thumbnail_url) return item.thumbnail_url;
+  if (item.platform === "youtube") {
+    const id = extractYoutubeId(item.link_url);
+    if (id) return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+  }
+  return null;
 }
 
 // ---------- animated stat counters ----------
@@ -108,14 +121,20 @@ function renderPortfolio(category) {
     track.innerHTML = `<div class="empty-note">No items in this category yet — add some from the admin dashboard.</div>`;
     return;
   }
-  track.innerHTML = items.map(item => `
-    <a class="portfolio-card" href="${item.youtube_id ? `https://youtube.com/watch?v=${item.youtube_id}` : "#"}" target="_blank" rel="noopener">
+  track.innerHTML = items.map(item => {
+    const thumb = resolveThumb(item);
+    const platformLabel = PLATFORM_LABELS[item.platform] || "";
+    return `
+    <a class="portfolio-card" href="${item.link_url || "#"}" target="_blank" rel="noopener">
       <div class="portfolio-thumb">
-        ${item.youtube_id ? `<img src="${youtubeThumb(item.youtube_id)}" alt="${item.title}" loading="lazy">` : ""}
+        ${thumb
+          ? `<img src="${thumb}" alt="${item.title}" loading="lazy">`
+          : `<div class="portfolio-thumb-placeholder">${platformLabel || "View"}</div>`}
       </div>
-      <div class="meta"><b>${item.brand}</b><span>${item.title}</span></div>
+      <div class="meta"><b>${item.brand}</b><span>${item.title}${platformLabel ? ` · ${platformLabel}` : ""}</span></div>
     </a>
-  `).join("");
+  `;
+  }).join("");
 }
 
 async function loadPortfolio(supabase) {

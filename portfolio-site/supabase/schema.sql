@@ -6,7 +6,9 @@ create table if not exists portfolio_items (
   category text not null,           -- e.g. 'ai', 'beauty', 'home-deco', 'tech', 'finance', 'food', 'drinks', 'fitness', 'fashion', 'travel'
   brand text not null,
   title text not null,
-  youtube_id text,                  -- YouTube video id, thumbnail is derived from it
+  platform text not null default 'other', -- 'youtube' | 'tiktok' | 'instagram' | 'other'
+  link_url text,                    -- full video/post URL on that platform
+  thumbnail_url text,               -- manual thumbnail image; optional for YouTube (auto-derived from link_url if omitted), required for TikTok/Instagram
   featured_ad boolean not null default false, -- shows in the "YouTube Ads" spotlight section
   sort_order int not null default 0,
   created_at timestamptz not null default now()

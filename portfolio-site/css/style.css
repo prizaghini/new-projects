@@ -128,6 +128,10 @@ header.site-header {
 .portfolio-card { flex: 0 0 240px; scroll-snap-align: start; text-decoration: none; }
 .portfolio-thumb { aspect-ratio: 9/16; border-radius: 10px; background: var(--bg-alt); border: 1px solid var(--line); overflow: hidden; }
 .portfolio-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.portfolio-thumb-placeholder {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft);
+}
 .portfolio-card .meta { padding: 10px 2px; }
 .portfolio-card .meta b { display: block; font-size: 14px; }
 .portfolio-card .meta span { font-family: var(--mono); font-size: 11px; text-transform: uppercase; color: var(--ink-soft); }

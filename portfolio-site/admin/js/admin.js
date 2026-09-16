@@ -117,6 +117,7 @@ setupCrudSection({
   orderCol: "created_at",
   renderRow: row => `<tr>
     <td>${esc(row.category)}</td><td>${esc(row.brand)}</td><td>${esc(row.title)}</td>
+    <td>${esc(row.platform)}</td>
     <td>${row.featured_ad ? "Yes" : ""}</td>
     <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
   </tr>`,
@@ -124,7 +125,9 @@ setupCrudSection({
     form.category.value = row.category;
     form.brand.value = row.brand;
     form.title.value = row.title;
-    form.youtube_id.value = row.youtube_id || "";
+    form.platform.value = row.platform || "other";
+    form.link_url.value = row.link_url || "";
+    form.thumbnail_url.value = row.thumbnail_url || "";
     form.featured_ad.checked = !!row.featured_ad;
   },
 });
