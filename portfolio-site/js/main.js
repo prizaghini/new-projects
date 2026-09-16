@@ -328,6 +328,8 @@ async function loadSiteSettings(supabase) {
     root.setProperty("--body", fontPairing.body);
   }
 
+  if (s.hero_bg_color) root.setProperty("--hero-bg", s.hero_bg_color);
+
   if (s.hero_bg_video_url) {
     const heroEl = document.querySelector(".hero");
     const bgVideo = document.createElement("video");

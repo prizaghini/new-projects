@@ -119,6 +119,7 @@ insert into site_settings (key, value) values
   ('show_services', 'true'),
   ('show_testimonials', 'true'),
   ('show_contact', 'true'),
+  ('hero_bg_color', ''),
   ('hero_bg_url', ''),
   ('hero_bg_video_url', ''),
   ('hero_overlay_opacity', '62'),
