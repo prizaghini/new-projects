@@ -17,6 +17,18 @@
     Object.keys(cached.vars || {}).forEach(function (name) { root.setProperty(name, cached.vars[name]); });
     if (cached.grainOn) document.documentElement.classList.add("grain-on");
     window.__themeCacheHit = true;
+    if (cached.heroPhotoUrl) {
+      // Kick off the hero photo fetch right now, in parallel with everything
+      // else loading, instead of waiting for the settings fetch to tell us
+      // the URL — by the time main.js sets the real <img> src, this has
+      // likely already finished (or is well underway).
+      var preload = document.createElement("link");
+      preload.rel = "preload";
+      preload.as = "image";
+      preload.href = cached.heroPhotoUrl;
+      preload.fetchPriority = "high";
+      document.head.appendChild(preload);
+    }
   } catch (e) { /* ignore — worst case is one flash */ }
 })();
 </script>

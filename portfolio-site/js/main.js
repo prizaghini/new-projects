@@ -459,19 +459,20 @@ async function loadSiteSettings(supabase) {
     }
   }
 
-  cacheTheme(root);
+  cacheTheme(root, s);
 }
 
-// Caches the theme-driving CSS variables so a repeat visit can apply them
-// instantly (before the Supabase fetch resolves), instead of flashing the
-// site's default look first.
+// Caches the theme-driving CSS variables (and the hero photo URL) so a
+// repeat visit can apply them instantly and start fetching the hero photo
+// before the Supabase settings fetch even resolves — see the early preload
+// script in index.html's <head>.
 const THEME_CACHE_KEY = "portfolio_theme_cache";
 const CACHED_CSS_VARS = [
   "--bg", "--bg-alt", "--ink", "--accent", "--btn-bg", "--btn-ink", "--btn-radius",
   "--hero-overlay-opacity", "--text-scale", "--display", "--body",
   "--hero-bg", "--hero-bg-position", "--grain-opacity",
 ];
-function cacheTheme(root) {
+function cacheTheme(root, s) {
   try {
     const vars = {};
     CACHED_CSS_VARS.forEach(name => {
@@ -480,6 +481,7 @@ function cacheTheme(root) {
     });
     localStorage.setItem(THEME_CACHE_KEY, JSON.stringify({
       vars, grainOn: document.documentElement.classList.contains("grain-on"),
+      heroPhotoUrl: s.hero_video_url ? "" : (s.hero_photo_url || ""),
     }));
   } catch (e) { /* localStorage unavailable — skip caching, no functional impact */ }
 }
