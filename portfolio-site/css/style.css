@@ -73,7 +73,8 @@ header.site-header {
 .hero { position: relative; overflow: hidden; padding-top: clamp(48px, 8vw, 80px); background-size: cover; background-position: center; }
 .hero.has-bg-image::before {
   content: ""; position: absolute; inset: 0; z-index: 0;
-  background: color-mix(in srgb, var(--bg) 62%, transparent);
+  background: var(--bg);
+  opacity: var(--hero-overlay-opacity, 0.62);
 }
 .hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
 .hero .hero-grid { position: relative; z-index: 1; }

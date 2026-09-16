@@ -316,6 +316,8 @@ async function loadSiteSettings(supabase) {
   if (s.button_text_color) root.setProperty("--btn-ink", s.button_text_color);
   if (s.button_radius) root.setProperty("--btn-radius", `${s.button_radius}px`);
 
+  if (s.hero_overlay_opacity) root.setProperty("--hero-overlay-opacity", parseInt(s.hero_overlay_opacity, 10) / 100);
+
   const fontPairing = FONT_PAIRINGS[s.font_pairing];
   if (fontPairing) {
     root.setProperty("--display", fontPairing.display);
