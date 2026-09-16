@@ -300,6 +300,8 @@ async function loadSiteSettings(supabase) {
   if (s.hero_headline) document.getElementById("hero-headline").innerHTML = s.hero_headline.replace(/\\n|\n/g, "<br>");
   if (s.hero_subcopy) document.getElementById("hero-subcopy").textContent = s.hero_subcopy;
   if (s.hero_stats_line) document.getElementById("hero-stats-line").textContent = s.hero_stats_line;
+  if (s.hero_btn_primary_text) document.getElementById("hero-btn-primary").textContent = s.hero_btn_primary_text;
+  if (s.hero_btn_secondary_text) document.getElementById("hero-btn-secondary").textContent = s.hero_btn_secondary_text;
   if (s.hero_video_url) {
     const el = document.getElementById("hero-photo");
     const video = document.createElement("video");
