@@ -289,6 +289,7 @@ async function loadSiteSettings(supabase) {
   if (labelEl && (s.tagline || s.availability)) {
     labelEl.textContent = [s.tagline, s.availability].filter(Boolean).join(" · ");
   }
+  if (labelEl && s.hero_label_color) labelEl.style.color = s.hero_label_color;
   if (s.hero_headline) document.getElementById("hero-headline").innerHTML = s.hero_headline.replace(/\\n|\n/g, "<br>");
   if (s.hero_subcopy) document.getElementById("hero-subcopy").textContent = s.hero_subcopy;
   if (s.hero_stats_line) document.getElementById("hero-stats-line").textContent = s.hero_stats_line;

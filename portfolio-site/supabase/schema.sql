@@ -129,6 +129,7 @@ insert into site_settings (key, value) values
   ('about_text_color', ''),
   ('categories', 'ai:AI|beauty:Beauty|home-deco:Home & Decor|tech:Tech & Apps|finance:Finance|food:Food|drinks:Drinks & Desserts|fitness:Health & Fitness|fashion:Fashion|travel:Travel'),
   ('hero_text_color', ''),
+  ('hero_label_color', ''),
   ('hero_photo_position', 'center'),
   ('about_photo_position', 'center'),
   ('about_stat_1', '140M+ campaign views'),
