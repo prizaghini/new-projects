@@ -253,6 +253,8 @@ function setPhoto(containerId, url, altText, objectPosition, fit) {
   img.src = url;
   img.alt = altText || "";
   img.loading = "lazy";
+  img.style.position = "absolute";
+  img.style.inset = "0";
   img.style.width = "100%";
   img.style.height = "100%";
   img.style.objectFit = fit === "contain" ? "contain" : "cover";
@@ -298,6 +300,8 @@ async function loadSiteSettings(supabase) {
     video.muted = true;
     video.loop = true;
     video.playsInline = true;
+    video.style.position = "absolute";
+    video.style.inset = "0";
     video.style.width = "100%";
     video.style.height = "100%";
     video.style.objectFit = "cover";
