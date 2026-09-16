@@ -68,6 +68,10 @@ async function setupSettings() {
       }
     }
 
+    if (form.elements.remove_logo.checked) {
+      form.elements.logo_url.value = "";
+    }
+
     const logoFile = form.elements.logo_file.files[0];
     if (logoFile) {
       try {
@@ -80,7 +84,7 @@ async function setupSettings() {
     }
 
     const rows = Array.from(form.elements)
-      .filter(el => el.name && el.type !== "file")
+      .filter(el => el.name && el.type !== "file" && el.name !== "remove_logo")
       .map(el => ({ key: el.name, value: el.type === "checkbox" ? String(el.checked) : el.value }));
 
     const { error } = await supabase.from("site_settings").upsert(rows);
@@ -92,6 +96,7 @@ async function setupSettings() {
       msg.className = "msg ok";
       form.elements.hero_video_file.value = "";
       form.elements.logo_file.value = "";
+      form.elements.remove_logo.checked = false;
       refreshMediaNote(heroVideoNote, form.elements.hero_video_url.value,
         "A hero video is currently set. Uploading a new one replaces it.",
         "No hero video set — the hero photo above is used instead.");
