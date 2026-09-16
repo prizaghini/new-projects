@@ -39,7 +39,9 @@ In your Supabase project: **SQL Editor → New query**, paste the contents of
 items, case studies, testimonials, leads, calendar events, campaigns,
 checklist notes) with Row Level Security so the public site can read
 published content and submit the contact form, while only you (logged in)
-can add/edit/delete anything.
+can add/edit/delete anything. It also creates a public `site-media` Storage
+bucket, used when you upload portfolio videos or a hero video instead of
+linking out.
 
 ### 3. Create your admin login
 
@@ -97,7 +99,19 @@ Visit `http://localhost:8080` for the public site and
 - **Portfolio items, case studies, testimonials, calendar, campaigns,
   checklist notes**: also in `/admin/`, their own tabs. The public site
   pulls all of this live from Supabase.
-- **Colors/fonts**: CSS variables at the top of `css/style.css`.
+- **Colors**: `/admin/` → **Site Settings** → background, panel, text and
+  accent color pickers. Applies live across the whole site (buttons, links,
+  icons, active states all derive from the accent color) — no code needed.
+  Fonts still require editing the `--display`/`--body`/`--mono` variables
+  at the top of `css/style.css`.
+- **Hero video**: `/admin/` → **Site Settings** → upload a video file and
+  it autoplays (muted, looped) in place of the hero photo.
+- **Portfolio item videos**: `/admin/` → **Portfolio** → either paste a
+  link (YouTube/TikTok/Instagram/anything) or upload the video file
+  itself. Uploading gives you a "start at N seconds" field and opens in an
+  on-page player; TikTok/Instagram links can't support a start time since
+  neither platform allows deep-linking to a timestamp — only a self-hosted
+  upload can do that.
 - **Categories**: edit the `CATEGORIES` array in `js/main.js` (and the
   `<select>` options in `admin/dashboard.html`) if you want different
   niches than AI/Beauty/Home & Decor/Tech/Finance/Food/Drinks/Fitness/
