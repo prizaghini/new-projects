@@ -21,6 +21,35 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
   });
 });
 
+// ---------- site settings ----------
+async function setupSettings() {
+  const form = document.getElementById("form-settings");
+  const msg = document.getElementById("settings-msg");
+
+  const { data } = await supabase.from("site_settings").select("*");
+  (data || []).forEach(row => {
+    if (form.elements[row.key]) form.elements[row.key].value = row.value;
+  });
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    msg.textContent = "";
+    const rows = Array.from(form.elements)
+      .filter(el => el.name)
+      .map(el => ({ key: el.name, value: el.value }));
+
+    const { error } = await supabase.from("site_settings").upsert(rows);
+    if (error) {
+      msg.textContent = "Something went wrong — " + error.message;
+      msg.className = "msg err";
+    } else {
+      msg.textContent = "Saved. Refresh your public site to see the changes.";
+      msg.className = "msg ok";
+    }
+  });
+}
+setupSettings();
+
 function esc(str) {
   return String(str ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }

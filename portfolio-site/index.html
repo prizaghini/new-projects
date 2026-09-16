@@ -14,7 +14,7 @@
 
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="logo" href="#top">[YOUR NAME].</a>
+    <a class="logo site-name" href="#top">[YOUR NAME].</a>
     <nav class="header-nav">
       <a class="navlink" href="#portfolio">Portfolio</a>
       <a class="navlink" href="#services">Services</a>
@@ -28,22 +28,16 @@
 <section class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <span class="label">UGC Creator &amp; Content Strategist · Available 2026</span>
-      <h1>Creating content<br>that converts</h1>
-      <p class="lead">From hook to CTA, every second designed to perform.</p>
-      <p class="hero-stats">
-        <span><b>+500</b> videos</span>
-        <span>·</span>
-        <span><b>+200</b> brand partners</span>
-        <span>·</span>
-        <span><b>100M+</b> views</span>
-      </p>
+      <span class="label" id="hero-label">UGC Creator &amp; Content Strategist · Available 2026</span>
+      <h1 id="hero-headline">Creating content<br>that converts</h1>
+      <p class="lead" id="hero-subcopy">From hook to CTA, every second designed to perform.</p>
+      <p class="hero-stats" id="hero-stats-line">+500 videos · +200 brand partners · 100M+ views</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#contact">Let's create together</a>
         <a class="btn btn-ghost" href="#about">Learn more →</a>
       </div>
     </div>
-    <div class="hero-photo">[ Replace with your photo — img/hero.jpg ]</div>
+    <div class="hero-photo" id="hero-photo">[ Add your photo URL in admin → Settings ]</div>
   </div>
 </section>
 
@@ -56,10 +50,10 @@
 <section id="stats">
   <div class="wrap">
     <div class="stat-grid">
-      <div class="stat-card reveal"><b data-count="500">0</b><span>Videos recorded</span></div>
-      <div class="stat-card reveal"><b data-count="200">0</b><span>Brand partners</span></div>
-      <div class="stat-card reveal"><b data-count="100" data-suffix="M+">0</b><span>Cumulative views</span></div>
-      <div class="stat-card reveal"><b data-count="3">0</b><span>Years experience</span></div>
+      <div class="stat-card reveal"><b id="stat-videos" data-count="500">0</b><span>Videos recorded</span></div>
+      <div class="stat-card reveal"><b id="stat-partners" data-count="200">0</b><span>Brand partners</span></div>
+      <div class="stat-card reveal"><b id="stat-views" data-count="100" data-suffix="M+">0</b><span>Cumulative views</span></div>
+      <div class="stat-card reveal"><b id="stat-years" data-count="3">0</b><span>Years experience</span></div>
     </div>
   </div>
 </section>
@@ -67,18 +61,18 @@
 <!-- ABOUT -->
 <section class="alt" id="about">
   <div class="wrap about-grid">
-    <div class="about-photo"></div>
+    <div class="about-photo" id="about-photo"></div>
     <div>
       <span class="label">About</span>
-      <h2>Hey, I'm [Your Name]</h2>
-      <p class="lead">[Replace with your real bio — 2-4 sentences on your background, niche, and what makes your content work.]</p>
+      <h2 id="about-heading">Hey, I'm [Your Name]</h2>
+      <p class="lead" id="about-bio">[Replace with your real bio — 2-4 sentences on your background, niche, and what makes your content work.]</p>
       <ul class="about-stats">
         <li><b>[Stat]</b><br>e.g. 140M+ campaign views</li>
         <li><b>[Stat]</b><br>e.g. Meta CTR record</li>
         <li><b>[Stat]</b><br>e.g. CPA reduced up to 38%</li>
         <li><b>[Stat]</b><br>e.g. ROAS 2.4x</li>
       </ul>
-      <p style="font-family:var(--mono);font-size:13px;color:var(--ink-soft)">[Your City] · [Your Country]</p>
+      <p style="font-family:var(--mono);font-size:13px;color:var(--ink-soft)" id="about-location">[Your City] · [Your Country]</p>
     </div>
   </div>
 </section>
@@ -166,13 +160,13 @@
 
 <footer class="site-footer">
   <div class="wrap">
-    <a class="logo" href="#top">[YOUR NAME].</a>
-    <p>UGC Creator &amp; Content Strategist</p>
+    <a class="logo site-name" href="#top">[YOUR NAME].</a>
+    <p id="footer-tagline">UGC Creator &amp; Content Strategist</p>
     <div class="links">
-      <a href="mailto:you@example.com">you@example.com</a>
-      <a href="https://instagram.com/yourhandle" target="_blank" rel="noopener">Instagram</a>
+      <a id="footer-email" href="mailto:you@example.com">you@example.com</a>
+      <a id="footer-instagram" href="https://instagram.com/yourhandle" target="_blank" rel="noopener">Instagram</a>
     </div>
-    <p style="margin-top:16px;font-size:12.5px">© 2026 [Your Name]</p>
+    <p style="margin-top:16px;font-size:12.5px">© <span id="footer-year">2026</span> <span class="site-name">[Your Name]</span></p>
   </div>
 </footer>
 

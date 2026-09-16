@@ -160,6 +160,68 @@ async function loadTestimonials(supabase) {
   `).join("");
 }
 
+// ---------- site settings (identity/copy editable from admin) ----------
+function setStat(id, value, suffix) {
+  const el = document.getElementById(id);
+  if (!el || !value) return;
+  el.dataset.count = parseInt(value, 10) || 0;
+  if (suffix) el.dataset.suffix = suffix;
+}
+
+function setPhoto(containerId, url, altText) {
+  if (!url) return;
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const img = document.createElement("img");
+  img.src = url;
+  img.alt = altText || "";
+  img.loading = "lazy";
+  img.style.width = "100%";
+  img.style.height = "100%";
+  img.style.objectFit = "cover";
+  img.style.borderRadius = "16px";
+  el.replaceChildren(img);
+}
+
+async function loadSiteSettings(supabase) {
+  const { data, error } = await supabase.from("site_settings").select("*");
+  if (error || !data) return;
+  const s = {};
+  data.forEach(row => { s[row.key] = row.value; });
+
+  if (s.display_name) {
+    document.querySelectorAll(".site-name").forEach(el => { el.textContent = s.display_name; });
+  }
+  const labelEl = document.getElementById("hero-label");
+  if (labelEl && (s.tagline || s.availability)) {
+    labelEl.textContent = [s.tagline, s.availability].filter(Boolean).join(" · ");
+  }
+  if (s.hero_headline) document.getElementById("hero-headline").innerHTML = s.hero_headline.replace(/\n/g, "<br>");
+  if (s.hero_subcopy) document.getElementById("hero-subcopy").textContent = s.hero_subcopy;
+  if (s.hero_stats_line) document.getElementById("hero-stats-line").textContent = s.hero_stats_line;
+  setPhoto("hero-photo", s.hero_photo_url, s.display_name);
+
+  setStat("stat-videos", s.stat_videos);
+  setStat("stat-partners", s.stat_partners);
+  setStat("stat-views", s.stat_views, s.stat_views_suffix);
+  setStat("stat-years", s.stat_years);
+
+  if (s.display_name) document.getElementById("about-heading").textContent = `Hey, I'm ${s.display_name}`;
+  if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
+  if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
+  setPhoto("about-photo", s.about_photo_url, s.display_name);
+
+  if (s.tagline) document.getElementById("footer-tagline").textContent = s.tagline;
+  if (s.contact_email) {
+    const el = document.getElementById("footer-email");
+    el.textContent = s.contact_email;
+    el.href = `mailto:${s.contact_email}`;
+  }
+  if (s.instagram_handle) {
+    document.getElementById("footer-instagram").href = `https://instagram.com/${s.instagram_handle.replace("@", "")}`;
+  }
+}
+
 // ---------- contact form ----------
 function setupContactForm(supabase) {
   const form = document.getElementById("contact-form");
@@ -213,20 +275,24 @@ fillMarquee(document.getElementById("marquee-1"), SERVICE_WORDS);
 document.getElementById("logo-marquee").innerHTML =
   [...BRAND_LOGO_PLACEHOLDERS, ...BRAND_LOGO_PLACEHOLDERS]
     .map(() => `<span class="logo-chip">[Brand logo]</span>`).join("");
+document.getElementById("footer-year").textContent = new Date().getFullYear();
 
-setupCounters();
 setupReveal();
 
-// Data-backed sections (portfolio, case studies, testimonials, contact form)
-// need Supabase — loaded separately so a CDN hiccup degrades gracefully
-// instead of breaking the whole page.
+// Data-backed sections (settings, portfolio, case studies, testimonials,
+// contact form) need Supabase — loaded separately so a CDN hiccup degrades
+// gracefully instead of breaking the whole page. Counters are started only
+// after settings load, so they animate to the real numbers, not defaults.
 try {
   const { supabase } = await import("./supabase-client.js");
+  await loadSiteSettings(supabase);
+  setupCounters();
   setupContactForm(supabase);
   loadCaseStudies(supabase);
   loadPortfolio(supabase);
   loadTestimonials(supabase);
 } catch (err) {
+  setupCounters(); // still animate using the placeholder numbers already in the markup
   console.error("Failed to load Supabase client:", err);
   disableContactForm("Contact form is temporarily unavailable — please email me directly instead.");
   showUnavailable("case-studies", "Content temporarily unavailable — please refresh or try again shortly.");

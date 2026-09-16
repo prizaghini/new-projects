@@ -90,9 +90,13 @@ Visit `http://localhost:8080` for the public site and
 
 - **Site copy/photos**: edit `index.html` directly — every placeholder is
   marked with `[brackets]`.
+- **Your name, tagline, hero headline/subcopy, stat numbers, photos, bio,
+  location, contact email, Instagram handle**: log into `/admin/` →
+  **Site Settings** tab, edit, and save. This is the WordPress-style
+  "edit the whole page without touching code" tab.
 - **Portfolio items, case studies, testimonials, calendar, campaigns,
-  checklist notes**: don't edit HTML for these — log into `/admin/` and
-  manage them there. The public site pulls them live from Supabase.
+  checklist notes**: also in `/admin/`, their own tabs. The public site
+  pulls all of this live from Supabase.
 - **Colors/fonts**: CSS variables at the top of `css/style.css`.
 - **Categories**: edit the `CATEGORIES` array in `js/main.js` (and the
   `<select>` options in `admin/dashboard.html`) if you want different

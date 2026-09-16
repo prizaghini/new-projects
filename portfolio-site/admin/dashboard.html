@@ -11,6 +11,7 @@
 <div class="dash">
   <aside class="sidebar">
     <p class="brand">[Your Name].</p>
+    <button class="tab-btn" data-tab="settings">Site Settings</button>
     <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
     <button class="tab-btn" data-tab="checklist">Checklist (bonus)</button>
     <button class="tab-btn" data-tab="calendar">Calendar</button>
@@ -22,6 +23,37 @@
   </aside>
 
   <main class="main">
+
+    <!-- SITE SETTINGS -->
+    <section class="panel" id="panel-settings">
+      <h2>Site Settings</h2>
+      <p class="hint">Everything here fills in the public site's identity, headline, photos and contact info — no code needed. Save, then refresh your site to see it.</p>
+      <form class="add-form" id="form-settings">
+        <div class="field"><label>Your name</label><input name="display_name" placeholder="Your Name"></div>
+        <div class="field"><label>Tagline</label><input name="tagline" placeholder="e.g. UGC Creator &amp; Content Strategist"></div>
+        <div class="field"><label>Availability badge</label><input name="availability" placeholder="e.g. Available 2026"></div>
+        <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
+        <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
+        <div class="field full"><label>Hero stats line</label><input name="hero_stats_line" placeholder="e.g. +500 videos · +200 brand partners · 100M+ views"></div>
+        <div class="field full"><label>Hero photo URL</label><input name="hero_photo_url" placeholder="https://..."></div>
+
+        <div class="field"><label>Stat: videos</label><input name="stat_videos" type="number"></div>
+        <div class="field"><label>Stat: partners</label><input name="stat_partners" type="number"></div>
+        <div class="field"><label>Stat: views</label><input name="stat_views" type="number"></div>
+        <div class="field"><label>Views suffix</label><input name="stat_views_suffix" placeholder="e.g. M+"></div>
+        <div class="field"><label>Stat: years</label><input name="stat_years" type="number"></div>
+
+        <div class="field full"><label>About bio</label><textarea name="about_bio" rows="3"></textarea></div>
+        <div class="field"><label>Location</label><input name="about_location" placeholder="City · Country"></div>
+        <div class="field full"><label>About photo URL</label><input name="about_photo_url" placeholder="https://..."></div>
+
+        <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
+        <div class="field"><label>Instagram handle</label><input name="instagram_handle" placeholder="@yourhandle"></div>
+
+        <div class="actions"><button class="btn" type="submit">Save settings</button></div>
+        <p class="msg" id="settings-msg"></p>
+      </form>
+    </section>
 
     <!-- PORTFOLIO -->
     <section class="panel active" id="panel-portfolio">
