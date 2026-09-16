@@ -338,6 +338,7 @@ async function loadSiteSettings(supabase) {
   }
 
   if (s.hero_bg_color) root.setProperty("--hero-bg", s.hero_bg_color);
+  if (s.hero_bg_position) root.setProperty("--hero-bg-position", s.hero_bg_position.replace("-", " "));
 
   if (s.hero_bg_video_url) {
     const heroEl = document.querySelector(".hero");

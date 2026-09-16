@@ -72,14 +72,14 @@ header.site-header {
 /* ---------- hero ---------- */
 .hero {
   position: relative; overflow: hidden; padding-top: clamp(48px, 8vw, 80px); padding-bottom: 0;
-  background-color: var(--hero-bg, transparent); background-size: cover; background-position: center;
+  background-color: var(--hero-bg, transparent); background-size: cover; background-position: var(--hero-bg-position, center);
 }
 .hero.has-bg-image::before {
   content: ""; position: absolute; inset: 0; z-index: 0;
   background: var(--bg);
   opacity: var(--hero-overlay-opacity, 0.62);
 }
-.hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+.hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--hero-bg-position, center); z-index: -1; }
 .hero .hero-grid { position: relative; z-index: 1; }
 .hero-grid { display: grid; gap: clamp(28px, 5vw, 48px); align-items: center; }
 @media (min-width: 860px) {
