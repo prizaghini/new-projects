@@ -101,6 +101,7 @@ insert into site_settings (key, value) values
   ('instagram_handle', '@yourhandle'),
   ('bg_color', '#F7F5F0'),
   ('bg_alt_color', '#EFEBE2'),
+  ('alt_text_color', ''),
   ('ink_color', '#16160F'),
   ('accent_color', '#2F6F5E'),
   ('hero_video_url', ''),

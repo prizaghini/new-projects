@@ -1,5 +1,4 @@
 let CATEGORIES = [
-  { key: "ai", label: "AI" },
   { key: "beauty", label: "Beauty" },
   { key: "home-deco", label: "Home & Decor" },
   { key: "tech", label: "Tech & Apps" },
@@ -356,6 +355,7 @@ async function loadSiteSettings(supabase) {
   if (s.bg_color) root.setProperty("--bg", s.bg_color);
   if (s.bg_alt_color) root.setProperty("--bg-alt", s.bg_alt_color);
   if (s.ink_color) root.setProperty("--ink", s.ink_color);
+  if (s.alt_text_color) root.setProperty("--ink-alt", s.alt_text_color);
   if (s.accent_color) root.setProperty("--accent", s.accent_color);
   if (s.button_bg_color) root.setProperty("--btn-bg", s.button_bg_color);
   if (s.button_text_color) root.setProperty("--btn-ink", s.button_text_color);
@@ -397,7 +397,10 @@ async function loadSiteSettings(supabase) {
 
   if (s.display_name) document.getElementById("about-heading").textContent = `Hey, I'm ${s.display_name}`;
   if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
-  if (s.about_text_color) document.getElementById("about-bio").style.color = s.about_text_color;
+  if (s.about_text_color) {
+    document.getElementById("about-bio").style.color = s.about_text_color;
+    document.getElementById("about-location").style.color = s.about_text_color;
+  }
   if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
   setPhoto("about-photo", s.about_photo_url, s.display_name, s.about_photo_position, s.about_photo_fit);
 
