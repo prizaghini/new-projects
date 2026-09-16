@@ -530,12 +530,14 @@ videoLightbox = setupVideoLightbox();
 try {
   const { supabase } = await import("./supabase-client.js");
   await loadSiteSettings(supabase);
+  document.body.classList.add("ready"); // theme is correct now — safe to reveal
   setupCounters();
   setupContactForm(supabase);
   loadCaseStudies(supabase);
   loadPortfolio(supabase);
   loadTestimonials(supabase);
 } catch (err) {
+  document.body.classList.add("ready"); // reveal with defaults rather than staying blank
   setupCounters(); // still animate using the placeholder numbers already in the markup
   console.error("Failed to load Supabase client:", err);
   disableContactForm("Contact form is temporarily unavailable — please email me directly instead.");
