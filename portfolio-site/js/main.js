@@ -319,6 +319,17 @@ async function loadSiteSettings(supabase) {
     setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position, s.hero_photo_fit);
   }
 
+  for (const n of [1, 2]) {
+    const badge = document.getElementById(`hero-badge-${n}`);
+    if (!badge) continue;
+    const enabled = s[`hero_badge_${n}_enabled`] === "true" && s[`hero_badge_${n}_title`];
+    badge.hidden = !enabled;
+    if (!enabled) continue;
+    document.getElementById(`hero-badge-${n}-title`).textContent = s[`hero_badge_${n}_title`];
+    document.getElementById(`hero-badge-${n}-subtitle`).textContent = s[`hero_badge_${n}_subtitle`] || "";
+    badge.className = "hero-badge pos-" + (s[`hero_badge_${n}_position`] || (n === 1 ? "top-right" : "bottom-left"));
+  }
+
   const root = document.documentElement.style;
   if (s.bg_color) root.setProperty("--bg", s.bg_color);
   if (s.bg_alt_color) root.setProperty("--bg-alt", s.bg_alt_color);
