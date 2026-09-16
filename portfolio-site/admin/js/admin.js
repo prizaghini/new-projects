@@ -41,7 +41,10 @@ async function setupSettings() {
 
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
-    if (form.elements[row.key]) form.elements[row.key].value = row.value;
+    const el = form.elements[row.key];
+    if (!el) return;
+    if (el.type === "checkbox") el.checked = row.value === "true";
+    else el.value = row.value;
   });
   refreshMediaNote(heroVideoNote, form.elements.hero_video_url.value,
     "A hero video is currently set. Uploading a new one replaces it.",
@@ -78,7 +81,7 @@ async function setupSettings() {
 
     const rows = Array.from(form.elements)
       .filter(el => el.name && el.type !== "file")
-      .map(el => ({ key: el.name, value: el.value }));
+      .map(el => ({ key: el.name, value: el.type === "checkbox" ? String(el.checked) : el.value }));
 
     const { error } = await supabase.from("site_settings").upsert(rows);
     if (error) {

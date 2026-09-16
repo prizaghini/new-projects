@@ -104,7 +104,20 @@ insert into site_settings (key, value) values
   ('ink_color', '#16160F'),
   ('accent_color', '#2F6F5E'),
   ('hero_video_url', ''),
-  ('logo_url', '')
+  ('logo_url', ''),
+  ('marquee_text', 'Conversion UGC|High-Performance Creatives|Strategic Scripts|Lifestyle Photos|E-commerce Content|UGC Consulting|Sponsored Posts'),
+  ('marquee_bg_color', ''),
+  ('marquee_text_color', ''),
+  ('texture_enabled', 'false'),
+  ('show_marquee', 'true'),
+  ('show_stats', 'true'),
+  ('show_about', 'true'),
+  ('show_logos', 'true'),
+  ('show_case_studies', 'true'),
+  ('show_portfolio', 'true'),
+  ('show_services', 'true'),
+  ('show_testimonials', 'true'),
+  ('show_contact', 'true')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.

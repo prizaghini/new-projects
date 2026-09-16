@@ -311,6 +311,35 @@ async function loadSiteSettings(supabase) {
   if (s.instagram_handle) {
     document.getElementById("footer-instagram").href = `https://instagram.com/${s.instagram_handle.replace("@", "")}`;
   }
+
+  if (s.marquee_text) {
+    fillMarquee(document.getElementById("marquee-1"), s.marquee_text.split("|").map(w => w.trim()).filter(Boolean));
+  }
+  const marqueeEl = document.getElementById("section-marquee");
+  if (marqueeEl) {
+    if (s.marquee_bg_color) marqueeEl.style.background = s.marquee_bg_color;
+    if (s.marquee_text_color) marqueeEl.style.color = s.marquee_text_color;
+  }
+
+  document.body.classList.toggle("grain-on", s.texture_enabled === "true");
+
+  const sectionToggles = {
+    show_marquee: "section-marquee",
+    show_stats: "stats",
+    show_about: "about",
+    show_logos: "section-logos",
+    show_case_studies: "section-case-studies",
+    show_portfolio: "portfolio",
+    show_services: "services",
+    show_testimonials: "testimonials",
+    show_contact: "contact",
+  };
+  for (const [key, id] of Object.entries(sectionToggles)) {
+    if (s[key] === "false") {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    }
+  }
 }
 
 // ---------- contact form ----------

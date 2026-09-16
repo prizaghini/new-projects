@@ -82,10 +82,20 @@ header.site-header {
 }
 
 /* ---------- marquee ---------- */
-.marquee { overflow: hidden; background: var(--accent); padding: 13px 0; }
+.marquee { overflow: hidden; background: var(--accent); color: var(--accent-ink); padding: 13px 0; }
 .marquee-track { display: flex; gap: 20px; width: max-content; animation: scroll-left 30s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
-.marquee-track span { font-family: var(--display); font-weight: 600; font-size: 14px; color: var(--accent-ink); white-space: nowrap; }
+.marquee-track span { font-family: var(--display); font-weight: 600; font-size: 14px; color: inherit; white-space: nowrap; }
+
+/* ---------- grain/texture overlay ---------- */
+.grain-overlay {
+  position: fixed; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: multiply;
+  transition: opacity 0.2s ease;
+}
+body.grain-on .grain-overlay { opacity: 0.15; }
 @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
 
