@@ -32,21 +32,12 @@
   } catch (e) { /* ignore — worst case is one flash */ }
 })();
 </script>
-<noscript><style>body { opacity: 1 !important; }</style></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:wght@500;600;700&family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<script>
-// Reveal immediately if we already applied a cached theme above (repeat
-// visit — no flash risk). Otherwise stay hidden until main.js finishes
-// loading the real settings, with a safety timeout so the page never
-// stays blank if something goes wrong (offline, slow network, etc).
-if (window.__themeCacheHit) document.body.classList.add("ready");
-setTimeout(function () { document.body.classList.add("ready"); }, 2500);
-</script>
 
 <header class="site-header">
   <div class="wrap header-row">

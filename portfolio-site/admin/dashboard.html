@@ -285,6 +285,12 @@
         <div class="actions"><button class="btn" type="submit">Save settings</button></div>
         <p class="msg" id="settings-msg"></p>
       </form>
+
+      <div class="notice">
+        <p style="margin:0 0 10px"><b>Export current settings</b> — click below, then copy the text and send it to your developer/assistant when asked for your current design values.</p>
+        <button class="btn secondary" type="button" id="export-settings-btn">Generate export</button>
+        <textarea id="export-settings-output" readonly style="width:100%;margin-top:10px;min-height:120px;font-family:var(--mono);font-size:11.5px;display:none"></textarea>
+      </div>
     </section>
 
     <!-- PORTFOLIO -->

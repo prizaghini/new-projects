@@ -128,6 +128,21 @@ async function setupSettings() {
 }
 setupSettings();
 
+function setupExport() {
+  const btn = document.getElementById("export-settings-btn");
+  const output = document.getElementById("export-settings-output");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const { data } = await supabase.from("site_settings").select("*");
+    const obj = {};
+    (data || []).forEach(row => { obj[row.key] = row.value; });
+    output.value = JSON.stringify(obj, null, 2);
+    output.style.display = "block";
+    output.select();
+  });
+}
+setupExport();
+
 // ---------- dynamic portfolio categories ----------
 async function setupCategoryOptions() {
   const { data } = await supabase.from("site_settings").select("value").eq("key", "categories").maybeSingle();

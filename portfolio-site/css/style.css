@@ -24,9 +24,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  opacity: 0;
 }
-body.ready { opacity: 1; transition: opacity 0.2s ease; }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 24px; }
