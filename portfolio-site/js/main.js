@@ -245,14 +245,18 @@ function setStat(id, value, suffix) {
   if (suffix) el.dataset.suffix = suffix;
 }
 
-function setPhoto(containerId, url, altText, objectPosition, fit) {
+function setPhoto(containerId, url, altText, objectPosition, fit, priority) {
   if (!url) return;
   const el = document.getElementById(containerId);
   if (!el) return;
   const img = document.createElement("img");
-  img.src = url;
   img.alt = altText || "";
-  img.loading = "lazy";
+  if (priority) {
+    img.loading = "eager";
+    img.fetchPriority = "high";
+  } else {
+    img.loading = "lazy";
+  }
   img.style.position = "absolute";
   img.style.inset = "0";
   img.style.width = "100%";
@@ -260,9 +264,17 @@ function setPhoto(containerId, url, altText, objectPosition, fit) {
   img.style.objectFit = fit === "contain" ? "contain" : "cover";
   img.style.objectPosition = objectPosition || "center";
   img.style.borderRadius = "16px";
+  img.style.opacity = "0";
+  img.style.transition = "opacity 0.25s ease";
+  const reveal = () => {
+    el.classList.add("has-media");
+    el.classList.toggle("fit-contain", fit === "contain");
+    requestAnimationFrame(() => { img.style.opacity = "1"; });
+  };
+  img.addEventListener("load", reveal, { once: true });
+  img.addEventListener("error", reveal, { once: true });
   el.replaceChildren(img);
-  el.classList.add("has-media");
-  el.classList.toggle("fit-contain", fit === "contain");
+  img.src = url; // set src last so the load/error listeners are already attached
 }
 
 async function loadSiteSettings(supabase) {
@@ -305,7 +317,6 @@ async function loadSiteSettings(supabase) {
   if (s.hero_video_url) {
     const el = document.getElementById("hero-photo");
     const video = document.createElement("video");
-    video.src = s.hero_video_url;
     video.autoplay = true;
     video.muted = true;
     video.loop = true;
@@ -315,10 +326,18 @@ async function loadSiteSettings(supabase) {
     video.style.width = "100%";
     video.style.height = "100%";
     video.style.objectFit = "cover";
+    video.style.opacity = "0";
+    video.style.transition = "opacity 0.25s ease";
+    const reveal = () => {
+      el.classList.add("has-media");
+      requestAnimationFrame(() => { video.style.opacity = "1"; });
+    };
+    video.addEventListener("loadeddata", reveal, { once: true });
+    video.addEventListener("error", reveal, { once: true });
     el.replaceChildren(video);
-    el.classList.add("has-media");
+    video.src = s.hero_video_url;
   } else {
-    setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position, s.hero_photo_fit);
+    setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position, s.hero_photo_fit, true);
   }
 
   const defaultBadgePositions = { 1: "top-right", 2: "bottom-left", 3: "middle-right" };
