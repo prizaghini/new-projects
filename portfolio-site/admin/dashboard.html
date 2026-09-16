@@ -30,6 +30,7 @@
       <p class="hint">Everything here fills in the public site's identity, headline, photos and contact info — no code needed. Save, then refresh your site to see it.</p>
       <form class="add-form" id="form-settings">
         <div class="field"><label>Your name</label><input name="display_name" placeholder="Your Name"></div>
+        <div class="field"><label>Name text color (header/footer logo text)</label><input name="name_text_color" type="color"></div>
         <div class="field full">
           <label>Logo image (optional — replaces the text name in the header/footer)</label>
           <input type="file" name="logo_file" accept="image/*">
@@ -47,6 +48,7 @@
           <label>Hero photo (upload a file, or paste a URL below)</label>
           <input type="file" name="hero_photo_file" accept="image/*">
           <input name="hero_photo_url" placeholder="https://..." style="margin-top:6px">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">This frame is portrait-shaped (4:5). Use "Fill frame" below with a photo already close to that shape, or "Show whole photo" to never crop it.</p>
         </div>
         <div class="field">
           <label>Hero photo position</label>
@@ -56,6 +58,13 @@
             <option value="bottom">Bottom</option>
             <option value="left">Left</option>
             <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hero photo fit</label>
+          <select name="hero_photo_fit">
+            <option value="cover">Fill frame (crop to fit)</option>
+            <option value="contain">Show whole photo (may add padding)</option>
           </select>
         </div>
         <div class="field full">
@@ -85,6 +94,7 @@
           <label>About photo (upload a file, or paste a URL below)</label>
           <input type="file" name="about_photo_file" accept="image/*">
           <input name="about_photo_url" placeholder="https://..." style="margin-top:6px">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">This frame is square (1:1). Use "Fill frame" below with a photo already close to that shape, or "Show whole photo" to never crop it.</p>
         </div>
         <div class="field">
           <label>About photo position</label>
@@ -94,6 +104,13 @@
             <option value="bottom">Bottom</option>
             <option value="left">Left</option>
             <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>About photo fit</label>
+          <select name="about_photo_fit">
+            <option value="cover">Fill frame (crop to fit)</option>
+            <option value="contain">Show whole photo (may add padding)</option>
           </select>
         </div>
         <div class="field full"><label>About stat 1</label><input name="about_stat_1"></div>
@@ -122,6 +139,17 @@
             <option value="6">Slightly rounded</option>
             <option value="16">Rounded</option>
             <option value="999">Pill</option>
+          </select>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Fonts</p>
+        <div class="field full">
+          <label>Font pairing (headings / body text)</label>
+          <select name="font_pairing">
+            <option value="grotesk">Modern — Space Grotesk / Inter</option>
+            <option value="fraunces">Editorial Serif — Fraunces / Inter</option>
+            <option value="playfair">Classic Serif — Playfair Display / Source Sans</option>
+            <option value="manrope">Clean Geometric — Manrope</option>
           </select>
         </div>
 

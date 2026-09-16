@@ -32,6 +32,13 @@ function fillMarquee(el, words) {
 
 const PLATFORM_LABELS = { youtube: "YouTube", tiktok: "TikTok", instagram: "Instagram", other: "" };
 
+const FONT_PAIRINGS = {
+  grotesk: { display: "'Space Grotesk', system-ui, sans-serif", body: "'Inter', system-ui, sans-serif" },
+  fraunces: { display: "'Fraunces', Georgia, serif", body: "'Inter', system-ui, sans-serif" },
+  playfair: { display: "'Playfair Display', Georgia, serif", body: "'Source Sans 3', system-ui, sans-serif" },
+  manrope: { display: "'Manrope', system-ui, sans-serif", body: "'Manrope', system-ui, sans-serif" },
+};
+
 function extractYoutubeId(url) {
   if (!url) return null;
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/))([\w-]{11})/);
@@ -238,7 +245,7 @@ function setStat(id, value, suffix) {
   if (suffix) el.dataset.suffix = suffix;
 }
 
-function setPhoto(containerId, url, altText, objectPosition) {
+function setPhoto(containerId, url, altText, objectPosition, fit) {
   if (!url) return;
   const el = document.getElementById(containerId);
   if (!el) return;
@@ -248,11 +255,12 @@ function setPhoto(containerId, url, altText, objectPosition) {
   img.loading = "lazy";
   img.style.width = "100%";
   img.style.height = "100%";
-  img.style.objectFit = "cover";
+  img.style.objectFit = fit === "contain" ? "contain" : "cover";
   img.style.objectPosition = objectPosition || "center";
   img.style.borderRadius = "16px";
   el.replaceChildren(img);
   el.classList.add("has-media");
+  el.classList.toggle("fit-contain", fit === "contain");
 }
 
 async function loadSiteSettings(supabase) {
@@ -263,6 +271,9 @@ async function loadSiteSettings(supabase) {
 
   if (s.display_name) {
     document.querySelectorAll(".site-name-text").forEach(el => { el.textContent = s.display_name; });
+  }
+  if (s.name_text_color) {
+    document.querySelectorAll(".site-name-text").forEach(el => { el.style.color = s.name_text_color; });
   }
   if (s.logo_url) {
     document.querySelectorAll(".logo-img").forEach(img => {
@@ -293,7 +304,7 @@ async function loadSiteSettings(supabase) {
     el.replaceChildren(video);
     el.classList.add("has-media");
   } else {
-    setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position);
+    setPhoto("hero-photo", s.hero_photo_url, s.display_name, s.hero_photo_position, s.hero_photo_fit);
   }
 
   const root = document.documentElement.style;
@@ -304,6 +315,12 @@ async function loadSiteSettings(supabase) {
   if (s.button_bg_color) root.setProperty("--btn-bg", s.button_bg_color);
   if (s.button_text_color) root.setProperty("--btn-ink", s.button_text_color);
   if (s.button_radius) root.setProperty("--btn-radius", `${s.button_radius}px`);
+
+  const fontPairing = FONT_PAIRINGS[s.font_pairing];
+  if (fontPairing) {
+    root.setProperty("--display", fontPairing.display);
+    root.setProperty("--body", fontPairing.body);
+  }
 
   if (s.hero_bg_url) {
     const heroEl = document.querySelector(".hero");
@@ -320,7 +337,7 @@ async function loadSiteSettings(supabase) {
   if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
   if (s.about_text_color) document.getElementById("about-bio").style.color = s.about_text_color;
   if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
-  setPhoto("about-photo", s.about_photo_url, s.display_name, s.about_photo_position);
+  setPhoto("about-photo", s.about_photo_url, s.display_name, s.about_photo_position, s.about_photo_fit);
 
   for (let i = 1; i <= 4; i++) {
     const el = document.getElementById(`about-stat-${i}`);

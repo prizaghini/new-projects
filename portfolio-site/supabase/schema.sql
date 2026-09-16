@@ -132,7 +132,11 @@ insert into site_settings (key, value) values
   ('about_stat_2', 'Meta CTR record'),
   ('about_stat_3', 'CPA reduced up to 38%'),
   ('about_stat_4', 'ROAS 2.4x'),
-  ('about_stats_color', '')
+  ('about_stats_color', ''),
+  ('name_text_color', ''),
+  ('hero_photo_fit', 'cover'),
+  ('about_photo_fit', 'cover'),
+  ('font_pairing', 'grotesk')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.
