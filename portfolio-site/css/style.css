@@ -304,6 +304,8 @@ form.contact-form { display: grid; gap: 14px; }
 }
 .contact-info-icon svg { width: 20px; height: 20px; }
 .contact-info-icon-whatsapp { background: #25D366; color: #fff; }
+.contact-info-icon-linkedin { background: #0A66C2; color: #fff; }
+.contact-info-icon-email { background: #fff; color: #111; }
 .form-msg { font-size: 0.875rem; margin-top: 6px; }
 .form-msg.ok { color: var(--accent); }
 .form-msg.err { color: #B3261E; }
