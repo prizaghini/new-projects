@@ -13,6 +13,7 @@
   --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
   --max: 1120px;
   --hero-bg: #000000;
+  --hero-bg-url: url('https://cizkzrxsnhfcorafmbbo.supabase.co/storage/v1/object/public/site-media/hero-bg/1789597679137-hero_cilla_portfolio_13__2_.png');
   --hero-bg-position: top left;
   --hero-overlay-opacity: 0;
   --grain-opacity: 0.8;
@@ -79,6 +80,7 @@ header.site-header {
   position: relative; overflow: hidden; padding-top: clamp(48px, 8vw, 80px); padding-bottom: 0;
   background-color: var(--hero-bg, transparent); background-size: cover; background-position: var(--hero-bg-position, center); background-repeat: no-repeat;
 }
+.hero.has-bg-image { background-image: var(--hero-bg-url, none); }
 .hero.has-bg-image::before {
   content: ""; position: absolute; inset: 0; z-index: 0;
   background: var(--bg);
@@ -89,9 +91,10 @@ header.site-header {
   /* A background image/video positioned for the wide desktop hero shape
      crops very differently on a tall, narrow mobile hero — a "cover" crop
      can hide a logo entirely depending on where it sits in the image, and
-     guessing the right focal point blind isn't reliable. Show the whole
-     image instead (no cropping) so nothing in it can go missing; any
-     leftover space is filled by the hero background color. */
+     "contain" can shrink a small logo into illegibility. Use a separate
+     mobile-specific image when one is uploaded (falling back to the
+     desktop image otherwise), sized to fit without cropping. */
+  .hero.has-bg-image { background-image: var(--hero-bg-url-mobile, var(--hero-bg-url, none)) !important; }
   .hero { background-size: contain !important; background-position: var(--hero-bg-position-mobile, center) !important; }
   .hero-bg-video { object-fit: contain; object-position: var(--hero-bg-position-mobile, center); }
 }

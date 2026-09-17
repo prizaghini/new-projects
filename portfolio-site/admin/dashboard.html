@@ -146,6 +146,12 @@
           <input type="hidden" name="hero_bg_url">
           <p id="hero-bg-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
         </div>
+        <div class="field full">
+          <label>Hero background image for mobile (optional — use a separate image if the desktop one doesn't work well on phones, e.g. crop it tighter so a logo stays legible when shrunk down)</label>
+          <input type="file" name="hero_bg_file_mobile" accept="image/*">
+          <input type="hidden" name="hero_bg_url_mobile">
+          <p id="hero-bg-mobile-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
         <div class="field">
           <label>Hero background image/video focal point (which part stays visible when cropped)</label>
           <select name="hero_bg_position">
@@ -181,7 +187,7 @@
           <p id="hero-bg-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
         </div>
         <div class="field full">
-          <label style="display:block"><input type="checkbox" name="remove_hero_bg" style="width:auto"> Remove background image/video (use plain color background instead)</label>
+          <label style="display:block"><input type="checkbox" name="remove_hero_bg" style="width:auto"> Remove background image/video, including the mobile version (use plain color background instead)</label>
         </div>
         <div class="field">
           <label>Background dimming (lower = see your image/video more clearly)</label>

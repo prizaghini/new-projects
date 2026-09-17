@@ -387,7 +387,8 @@ async function loadSiteSettings(supabase) {
     heroEl.classList.add("has-bg-image");
   } else if (s.hero_bg_url) {
     const heroEl = document.querySelector(".hero");
-    heroEl.style.backgroundImage = `url("${s.hero_bg_url}")`;
+    root.setProperty("--hero-bg-url", `url("${s.hero_bg_url}")`);
+    if (s.hero_bg_url_mobile) root.setProperty("--hero-bg-url-mobile", `url("${s.hero_bg_url_mobile}")`);
     heroEl.classList.add("has-bg-image");
   }
 
