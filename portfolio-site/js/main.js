@@ -222,15 +222,22 @@ async function loadBrandLogos(supabase) {
 
   if (error || !data || data.length === 0) {
     track.innerHTML = "";
+    track.classList.remove("no-scroll");
     return;
   }
-  const chips = data.map(logo => {
+  const cards = data.map(logo => {
     const img = `<img src="${logo.image_url}" alt="${logo.brand_name || "Brand logo"}" loading="lazy" class="brand-logo-img">`;
-    return logo.link_url
+    const inner = logo.link_url
       ? `<a href="${logo.link_url}" target="_blank" rel="noopener">${img}</a>`
       : img;
+    return `<div class="logo-card">${inner}</div>`;
   });
-  track.innerHTML = [...chips, ...chips].join("");
+  // Duplicating the list is what makes the scroll loop seamless, but with
+  // few logos the duplicate is visible at rest instead of off-screen — so
+  // only duplicate (and animate) once there are enough to fill the row.
+  const enoughToScroll = cards.length > 5;
+  track.classList.toggle("no-scroll", !enoughToScroll);
+  track.innerHTML = (enoughToScroll ? [...cards, ...cards] : cards).join("");
 }
 
 // ---------- testimonials ----------
