@@ -390,6 +390,14 @@ async function loadSiteSettings(supabase) {
     heroEl.classList.add("has-bg-image");
   }
 
+  const logoBadge = document.getElementById("hero-logo-badge");
+  if (logoBadge && s.hero_logo_url) {
+    logoBadge.src = s.hero_logo_url;
+    logoBadge.hidden = false;
+    logoBadge.className = "hero-logo-badge pos-" + (s.hero_logo_position || "top-left");
+    if (s.hero_logo_size) root.setProperty("--hero-logo-size", `${s.hero_logo_size}px`);
+  }
+
   setStat("stat-videos", s.stat_videos);
   setStat("stat-partners", s.stat_partners);
   setStat("stat-views", s.stat_views, s.stat_views_suffix);
