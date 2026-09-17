@@ -85,6 +85,14 @@ header.site-header {
   opacity: var(--hero-overlay-opacity, 0.62);
 }
 .hero-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--hero-bg-position, center); z-index: -1; }
+@media (max-width: 640px) {
+  /* A background image/video positioned for the wide desktop hero shape
+     crops very differently on a tall, narrow mobile hero — often landing
+     a logo or focal point right on top of the text. Fall back to the
+     plain background color on small screens instead. */
+  .hero { background-image: none !important; }
+  .hero-bg-video { display: none; }
+}
 .hero .hero-grid { position: relative; z-index: 1; }
 .hero-grid { display: grid; gap: clamp(28px, 5vw, 48px); align-items: center; }
 @media (min-width: 860px) {
@@ -141,9 +149,16 @@ header.site-header {
 .hero-badge.pos-middle-left { top: 50%; left: -20px; transform: translateY(-50%); }
 .hero-badge.pos-middle-right { top: 50%; right: -20px; transform: translateY(-50%); }
 @media (max-width: 640px) {
-  .hero-badge { max-width: 180px; }
-  .hero-badge-inner { padding: 8px 12px 8px 8px; }
-  .hero-badge.pos-top-left, .hero-badge.pos-top-right, .hero-badge.pos-middle-left, .hero-badge.pos-middle-right, .hero-badge.pos-bottom-left, .hero-badge.pos-bottom-right { left: 10px; right: 10px; }
+  /* Keep badges small enough that they read as corner accents rather
+     than covering the photo — a badge sized for a wide desktop photo
+     is often half the width of a narrow mobile one. */
+  .hero-badge { max-width: 46%; }
+  .hero-badge-inner { padding: 6px 9px 6px 6px; gap: 6px; }
+  .hero-badge-icon { width: 18px; height: 18px; font-size: 0.5625rem; }
+  .hero-badge-text b { font-size: 0.625rem; }
+  .hero-badge-text span { font-size: 0.5625rem; }
+  .hero-badge.pos-top-left, .hero-badge.pos-middle-left, .hero-badge.pos-bottom-left { left: 8px; right: auto; }
+  .hero-badge.pos-top-right, .hero-badge.pos-middle-right, .hero-badge.pos-bottom-right { right: 8px; left: auto; }
 }
 
 /* ---------- marquee ---------- */
