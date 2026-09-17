@@ -95,6 +95,7 @@ header.site-header {
 .hero-logo-badge.pos-top-right { top: 20px; right: 20px; }
 .hero-logo-badge.pos-bottom-left { bottom: 20px; left: 20px; }
 .hero-logo-badge.pos-bottom-right { bottom: 20px; right: 20px; }
+.hero-text.has-top-logo-badge { padding-top: calc(20px + var(--hero-logo-size, 48px) + 16px); }
 .hero .hero-grid { position: relative; z-index: 1; }
 .hero-grid { display: grid; gap: clamp(28px, 5vw, 48px); align-items: center; }
 @media (min-width: 860px) {

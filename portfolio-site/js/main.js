@@ -392,10 +392,16 @@ async function loadSiteSettings(supabase) {
 
   const logoBadge = document.getElementById("hero-logo-badge");
   if (logoBadge && s.hero_logo_url) {
+    const position = s.hero_logo_position || "top-left";
     logoBadge.src = s.hero_logo_url;
     logoBadge.hidden = false;
-    logoBadge.className = "hero-logo-badge pos-" + (s.hero_logo_position || "top-left");
+    logoBadge.className = "hero-logo-badge pos-" + position;
     if (s.hero_logo_size) root.setProperty("--hero-logo-size", `${s.hero_logo_size}px`);
+    // Give the tagline clearance from the badge when it sits at the top,
+    // so it doesn't land on top of the text (sized to match the badge's
+    // own fixed footprint, not guessed against an image crop).
+    const heroTextEl = document.getElementById("hero-text");
+    if (heroTextEl) heroTextEl.classList.toggle("has-top-logo-badge", position === "top-left" || position === "top-right");
   }
 
   setStat("stat-videos", s.stat_videos);
