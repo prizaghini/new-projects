@@ -542,6 +542,11 @@ async function loadSiteSettings(supabase) {
       contactWhatsappEl.href = w.startsWith("http") ? w : `https://wa.me/${w.replace(/[^\d]/g, "")}`;
     }
   }
+  if (s.contact_info_text_color) {
+    [contactEmailEl, contactLinkedinEl, contactWhatsappEl].forEach(el => {
+      if (el) el.style.color = s.contact_info_text_color;
+    });
+  }
   const contactFormEl = document.getElementById("contact-form");
   if (contactFormEl) contactFormEl.hidden = s.show_contact_form === "false";
   const contactMediaEl = document.getElementById("contact-media");
