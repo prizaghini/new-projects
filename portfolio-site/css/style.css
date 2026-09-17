@@ -207,7 +207,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 
 /* ---------- logo marquee ---------- */
 .logo-track { display: flex; gap: 40px; width: max-content; animation: scroll-left 24s linear infinite; align-items: center; }
-.logo-img { height: 32px; width: auto; max-width: 140px; object-fit: contain; }
+.brand-logo-img { height: 32px; width: auto; max-width: 140px; object-fit: contain; }
 
 /* ---------- case studies ---------- */
 .case-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }

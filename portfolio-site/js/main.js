@@ -225,7 +225,7 @@ async function loadBrandLogos(supabase) {
     return;
   }
   const chips = data.map(logo => {
-    const img = `<img src="${logo.image_url}" alt="${logo.brand_name || "Brand logo"}" loading="lazy" class="logo-img">`;
+    const img = `<img src="${logo.image_url}" alt="${logo.brand_name || "Brand logo"}" loading="lazy" class="brand-logo-img">`;
     return logo.link_url
       ? `<a href="${logo.link_url}" target="_blank" rel="noopener">${img}</a>`
       : img;
