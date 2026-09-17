@@ -372,7 +372,6 @@ async function loadSiteSettings(supabase) {
 
   if (s.hero_bg_color) root.setProperty("--hero-bg", s.hero_bg_color);
   if (s.hero_bg_position) root.setProperty("--hero-bg-position", s.hero_bg_position.replace("-", " "));
-  if (s.hero_bg_position_mobile) root.setProperty("--hero-bg-position-mobile", s.hero_bg_position_mobile.replace("-", " "));
 
   if (s.hero_bg_video_url) {
     const heroEl = document.querySelector(".hero");
@@ -388,7 +387,6 @@ async function loadSiteSettings(supabase) {
   } else if (s.hero_bg_url) {
     const heroEl = document.querySelector(".hero");
     root.setProperty("--hero-bg-url", `url("${s.hero_bg_url}")`);
-    if (s.hero_bg_url_mobile) root.setProperty("--hero-bg-url-mobile", `url("${s.hero_bg_url_mobile}")`);
     heroEl.classList.add("has-bg-image");
   }
 
