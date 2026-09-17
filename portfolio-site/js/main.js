@@ -115,6 +115,7 @@ async function loadCaseStudies(supabase) {
   }
   container.innerHTML = data.map(cs => `
     <div class="case-card">
+      ${cs.image_url ? `<img class="case-card-img" src="${cs.image_url}" alt="" loading="lazy">` : ""}
       <span class="brand">${cs.brand}</span>
       <b>${cs.headline_stat}</b>
       <p>${cs.description}</p>
@@ -504,6 +505,13 @@ async function loadSiteSettings(supabase) {
 
   if (s.logos_heading) document.getElementById("logos-heading").textContent = s.logos_heading;
   if (s.logos_heading_color) document.getElementById("logos-heading").style.color = s.logos_heading_color;
+
+  if (s.case_studies_heading) document.getElementById("case-studies-heading").textContent = s.case_studies_heading;
+  if (s.case_studies_subheading) document.getElementById("case-studies-subheading").textContent = s.case_studies_subheading;
+  if (s.case_studies_text_color) {
+    document.getElementById("case-studies-heading").style.color = s.case_studies_text_color;
+    document.getElementById("case-studies-subheading").style.color = s.case_studies_text_color;
+  }
 
   document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");
   if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);

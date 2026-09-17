@@ -24,9 +24,11 @@ create table if not exists case_studies (
   brand text not null,
   headline_stat text not null,      -- e.g. '+100M views'
   description text not null,        -- e.g. 'on TikTok alone'
+  image_url text,                   -- optional screenshot/thumbnail for the card
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
+alter table case_studies add column if not exists image_url text;
 
 create table if not exists testimonials (
   id uuid primary key default gen_random_uuid(),
@@ -183,6 +185,9 @@ insert into site_settings (key, value) values
   ('linkedin_handle', ''),
   ('logos_heading', 'Brands I''ve worked with'),
   ('logos_heading_color', ''),
+  ('case_studies_heading', 'Content that performed'),
+  ('case_studies_subheading', 'A few highlights — replace with your own real numbers.'),
+  ('case_studies_text_color', ''),
   ('show_about_stat_1', 'true'),
   ('show_about_stat_2', 'true'),
   ('show_about_stat_3', 'true'),
