@@ -181,7 +181,12 @@ insert into site_settings (key, value) values
   ('stat_years_suffix', ''),
   ('about_heading', ''),
   ('linkedin_handle', ''),
-  ('logos_heading', 'Brands I''ve worked with')
+  ('logos_heading', 'Brands I''ve worked with'),
+  ('logos_heading_color', ''),
+  ('show_about_stat_1', 'true'),
+  ('show_about_stat_2', 'true'),
+  ('show_about_stat_3', 'true'),
+  ('show_about_stat_4', 'true')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.

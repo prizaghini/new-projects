@@ -458,6 +458,8 @@ async function loadSiteSettings(supabase) {
 
   for (let i = 1; i <= 4; i++) {
     const el = document.getElementById(`about-stat-${i}`);
+    const item = document.getElementById(`about-stat-${i}-item`);
+    if (item) item.hidden = s[`show_about_stat_${i}`] === "false";
     if (el && s[`about_stat_${i}`]) el.textContent = s[`about_stat_${i}`];
     if (el && s.about_stats_color) el.style.color = s.about_stats_color;
   }
@@ -494,6 +496,7 @@ async function loadSiteSettings(supabase) {
   }
 
   if (s.logos_heading) document.getElementById("logos-heading").textContent = s.logos_heading;
+  if (s.logos_heading_color) document.getElementById("logos-heading").style.color = s.logos_heading_color;
 
   document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");
   if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);
