@@ -199,6 +199,9 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .about-photo { position: relative; aspect-ratio: 1; border-radius: 16px; background: var(--bg-alt); border: 1px dashed var(--line); overflow: hidden; }
 .about-photo.has-media { border: 0; }
 .about-photo.has-media:not(.fit-contain) { background: none; }
+#about-heading { margin-bottom: 14px; }
+#about-bio p { margin: 0 0 14px; }
+#about-bio p:last-child { margin-bottom: 0; }
 .about-stats { list-style: none; margin: 20px 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .about-stats li { border-left: 2px solid var(--accent); padding-left: 12px; font-size: 0.875rem; color: var(--ink-soft); }
 

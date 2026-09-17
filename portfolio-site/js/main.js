@@ -256,6 +256,16 @@ async function loadTestimonials(supabase) {
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
+// Splits on blank lines into <p> paragraphs (for spacing), and turns any
+// remaining single line break into <br> within a paragraph.
+function textToParagraphs(text) {
+  return text
+    .replace(/\\n/g, "\n")
+    .split(/\n\s*\n/)
+    .map(p => `<p>${p.trim().replace(/\n/g, "<br>")}</p>`)
+    .join("");
+}
+
 function setStat(id, value, suffix) {
   const el = document.getElementById(id);
   if (!el || !value) return;
@@ -437,7 +447,7 @@ async function loadSiteSettings(supabase) {
   } else if (s.display_name) {
     document.getElementById("about-heading").textContent = `Hey, I'm ${s.display_name}`;
   }
-  if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
+  if (s.about_bio) document.getElementById("about-bio").innerHTML = textToParagraphs(s.about_bio);
   if (s.about_text_color) {
     document.getElementById("about-heading").style.color = s.about_text_color;
     document.getElementById("about-bio").style.color = s.about_text_color;
