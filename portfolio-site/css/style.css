@@ -151,7 +151,7 @@ header.site-header {
 .marquee-track { display: flex; gap: 20px; width: max-content; animation: scroll-left 30s linear infinite; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-track span { font-family: var(--display); font-weight: 600; font-size: 0.875rem; color: inherit; white-space: nowrap; }
-.marquee-dot { font-family: system-ui, sans-serif; font-size: 1em; vertical-align: middle; line-height: 1; opacity: 0.8; }
+.marquee-dot { font-family: system-ui, sans-serif; font-size: 1.4em; vertical-align: middle; line-height: 1; opacity: 0.9; }
 
 /* ---------- grain/texture overlay ---------- */
 .grain-overlay {
