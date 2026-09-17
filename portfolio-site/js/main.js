@@ -26,7 +26,7 @@ const BRAND_LOGO_PLACEHOLDERS = ["Brand", "Brand", "Brand", "Brand", "Brand", "B
 
 function fillMarquee(el, words) {
   const doubled = [...words, ...words];
-  el.innerHTML = doubled.map(w => `<span>${w} ◆</span>`).join("");
+  el.innerHTML = doubled.map(w => `<span>${w} <span class="marquee-dot">◆</span></span>`).join("");
 }
 
 const PLATFORM_LABELS = { youtube: "YouTube", tiktok: "TikTok", instagram: "Instagram", other: "" };
