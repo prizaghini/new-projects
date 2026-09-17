@@ -12,10 +12,6 @@
   --body: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
   --max: 1120px;
-  --hero-bg: #000000;
-  --hero-bg-url: url('https://cizkzrxsnhfcorafmbbo.supabase.co/storage/v1/object/public/site-media/hero-bg/1789597679137-hero_cilla_portfolio_13__2_.png');
-  --hero-bg-position: top left;
-  --hero-overlay-opacity: 0;
   --grain-opacity: 0.8;
   --ink-alt: #FFFFFF;
 }
