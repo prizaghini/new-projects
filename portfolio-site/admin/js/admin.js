@@ -278,6 +278,31 @@ setupCrudSection({
   },
 });
 
+// ---------- brand logos ----------
+setupCrudSection({
+  table: "brand_logos",
+  formId: "form-logos",
+  tbodyId: "table-logos",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td><img src="${esc(row.image_url)}" alt="" style="height:28px;width:auto;max-width:90px;object-fit:contain"></td>
+    <td>${esc(row.brand_name)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.image_url.value = row.image_url;
+    form.brand_name.value = row.brand_name || "";
+    form.link_url.value = row.link_url || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+  beforeSubmit: async form => {
+    const file = form.elements.image_file.files[0];
+    if (file) return { image_url: await uploadToSiteMedia(file, "brand-logos") };
+    if (!form.elements.image_url.value) throw new Error("Please choose a logo image.");
+    return {};
+  },
+});
+
 // ---------- checklist notes ----------
 setupCrudSection({
   table: "checklist_notes",

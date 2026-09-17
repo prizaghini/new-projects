@@ -13,6 +13,7 @@
     <p class="brand">[Your Name].</p>
     <button class="tab-btn" data-tab="settings">Site Settings</button>
     <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
+    <button class="tab-btn" data-tab="logos">Brand logos</button>
     <button class="tab-btn" data-tab="checklist">Checklist (bonus)</button>
     <button class="tab-btn" data-tab="calendar">Calendar</button>
     <button class="tab-btn" data-tab="campaigns">Campaigns</button>
@@ -198,14 +199,19 @@
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Animated stats</p>
         <div class="field"><label>Stat: videos</label><input name="stat_videos" type="number"></div>
+        <div class="field"><label>Videos label</label><input name="stat_videos_label" placeholder="e.g. Videos recorded"></div>
         <div class="field"><label>Stat: partners</label><input name="stat_partners" type="number"></div>
+        <div class="field"><label>Partners label</label><input name="stat_partners_label" placeholder="e.g. Brand partners"></div>
         <div class="field"><label>Stat: views</label><input name="stat_views" type="number"></div>
         <div class="field"><label>Views suffix</label><input name="stat_views_suffix" placeholder="e.g. M+"></div>
+        <div class="field"><label>Views label</label><input name="stat_views_label" placeholder="e.g. Cumulative views"></div>
         <div class="field"><label>Stat: years</label><input name="stat_years" type="number"></div>
+        <div class="field"><label>Years label</label><input name="stat_years_label" placeholder="e.g. Years experience"></div>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">About</p>
+        <div class="field full"><label>About heading (leave blank to use "Hey, I'm [Your name]")</label><input name="about_heading" placeholder="e.g. Hey, I'm Priscila Zaghini"></div>
         <div class="field full"><label>About bio</label><textarea name="about_bio" rows="3"></textarea></div>
-        <div class="field"><label>About bio text color</label><input name="about_text_color" type="color"></div>
+        <div class="field"><label>About text color (heading, bio, location)</label><input name="about_text_color" type="color"></div>
         <div class="field"><label>Location</label><input name="about_location" placeholder="City · Country"></div>
         <div class="field full">
           <label>About photo (upload a file, or paste a URL below)</label>
@@ -238,7 +244,7 @@
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Contact</p>
         <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
-        <div class="field"><label>Instagram handle</label><input name="instagram_handle" placeholder="@yourhandle"></div>
+        <div class="field"><label>LinkedIn handle</label><input name="linkedin_handle" placeholder="e.g. priscila-zaghini (from linkedin.com/in/priscila-zaghini)"></div>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Site-wide theme colors</p>
         <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>
@@ -293,6 +299,10 @@
         <div class="field full"><label>Banner text (separate phrases with |)</label><input name="marquee_text" placeholder="Phrase one|Phrase two|Phrase three"></div>
         <div class="field"><label>Banner background color</label><input name="marquee_bg_color" type="color"></div>
         <div class="field"><label>Banner text color</label><input name="marquee_text_color" type="color"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Brand logos banner</p>
+        <div class="field full"><label>Heading text (shown above the logos)</label><input name="logos_heading" placeholder="e.g. Brands I've worked with"></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or remove the actual logo images from the "Brand logos" tab in the sidebar.</p>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Sections (uncheck to hide from the public site)</p>
         <div class="field"><label><input type="checkbox" name="show_marquee" style="width:auto"> Scrolling banner</label></div>
@@ -362,6 +372,25 @@
       </form>
       <table><thead><tr><th>Category</th><th>Brand</th><th>Title</th><th>Platform</th><th>Video?</th><th>Featured?</th><th></th></tr></thead>
         <tbody id="table-portfolio"></tbody></table>
+    </section>
+
+    <!-- BRAND LOGOS -->
+    <section class="panel" id="panel-logos">
+      <h2>Brand logos</h2>
+      <p class="hint">These logos scroll in the banner between the animated stats and case studies. Drag order isn't supported yet — use "Order" to control left-to-right position (lower shows first).</p>
+      <form class="add-form" id="form-logos">
+        <div class="field full">
+          <label>Logo image</label>
+          <input type="file" name="image_file" accept="image/*">
+          <input type="hidden" name="image_url">
+        </div>
+        <div class="field"><label>Brand name (alt text)</label><input name="brand_name" placeholder="e.g. Brand Name"></div>
+        <div class="field"><label>Link (optional — opens when clicked)</label><input name="link_url" placeholder="https://..."></div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add logo</button></div>
+      </form>
+      <table><thead><tr><th>Logo</th><th>Brand</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-logos"></tbody></table>
     </section>
 
     <!-- CHECKLIST / notes for advanced-checklist bonus tab -->

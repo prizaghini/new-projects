@@ -38,6 +38,15 @@ create table if not exists testimonials (
   created_at timestamptz not null default now()
 );
 
+create table if not exists brand_logos (
+  id uuid primary key default gen_random_uuid(),
+  image_url text not null,
+  brand_name text,             -- used as the image alt text
+  link_url text,                -- optional, opens the brand's site when clicked
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists checklist_notes (
   id uuid primary key default gen_random_uuid(),
   category text not null,
@@ -162,7 +171,14 @@ insert into site_settings (key, value) values
   ('name_text_color', ''),
   ('hero_photo_fit', 'cover'),
   ('about_photo_fit', 'cover'),
-  ('font_pairing', 'grotesk')
+  ('font_pairing', 'grotesk'),
+  ('stat_videos_label', 'Videos recorded'),
+  ('stat_partners_label', 'Brand partners'),
+  ('stat_views_label', 'Cumulative views'),
+  ('stat_years_label', 'Years experience'),
+  ('about_heading', ''),
+  ('linkedin_handle', ''),
+  ('logos_heading', 'Brands I''ve worked with')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.
@@ -180,17 +196,20 @@ alter table calendar_events enable row level security;
 alter table campaigns enable row level security;
 alter table checklist_notes enable row level security;
 alter table site_settings enable row level security;
+alter table brand_logos enable row level security;
 
 create policy "public can read portfolio_items" on portfolio_items for select using (true);
 create policy "public can read case_studies" on case_studies for select using (true);
 create policy "public can read testimonials" on testimonials for select using (true);
 create policy "public can read site_settings" on site_settings for select using (true);
+create policy "public can read brand_logos" on brand_logos for select using (true);
 create policy "public can submit leads" on leads for insert with check (true);
 
 create policy "admin manages portfolio_items" on portfolio_items for all using (auth.role() = 'authenticated');
 create policy "admin manages case_studies" on case_studies for all using (auth.role() = 'authenticated');
 create policy "admin manages testimonials" on testimonials for all using (auth.role() = 'authenticated');
 create policy "admin manages leads" on leads for all using (auth.role() = 'authenticated');
+create policy "admin manages brand_logos" on brand_logos for all using (auth.role() = 'authenticated');
 create policy "admin manages calendar_events" on calendar_events for all using (auth.role() = 'authenticated');
 create policy "admin manages campaigns" on campaigns for all using (auth.role() = 'authenticated');
 create policy "admin manages checklist_notes" on checklist_notes for all using (auth.role() = 'authenticated');

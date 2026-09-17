@@ -22,8 +22,6 @@ const SERVICE_WORDS = [
   "Lifestyle Photos", "E-commerce Content", "UGC Consulting", "Sponsored Posts",
 ];
 
-const BRAND_LOGO_PLACEHOLDERS = ["Brand", "Brand", "Brand", "Brand", "Brand", "Brand"];
-
 function fillMarquee(el, words) {
   const doubled = [...words, ...words];
   el.innerHTML = doubled.map(w => `<span>${w}</span><span class="marquee-dot">◆</span>`).join("");
@@ -212,6 +210,27 @@ async function loadPortfolio(supabase) {
   });
 
   renderPortfolio(CATEGORIES[0].key);
+}
+
+// ---------- brand logos ----------
+async function loadBrandLogos(supabase) {
+  const track = document.getElementById("logo-marquee");
+  const { data, error } = await supabase
+    .from("brand_logos")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  if (error || !data || data.length === 0) {
+    track.innerHTML = "";
+    return;
+  }
+  const chips = data.map(logo => {
+    const img = `<img src="${logo.image_url}" alt="${logo.brand_name || "Brand logo"}" loading="lazy" class="logo-img">`;
+    return logo.link_url
+      ? `<a href="${logo.link_url}" target="_blank" rel="noopener">${img}</a>`
+      : img;
+  });
+  track.innerHTML = [...chips, ...chips].join("");
 }
 
 // ---------- testimonials ----------
@@ -408,10 +427,19 @@ async function loadSiteSettings(supabase) {
   setStat("stat-partners", s.stat_partners);
   setStat("stat-views", s.stat_views, s.stat_views_suffix);
   setStat("stat-years", s.stat_years);
+  if (s.stat_videos_label) document.getElementById("stat-videos-label").textContent = s.stat_videos_label;
+  if (s.stat_partners_label) document.getElementById("stat-partners-label").textContent = s.stat_partners_label;
+  if (s.stat_views_label) document.getElementById("stat-views-label").textContent = s.stat_views_label;
+  if (s.stat_years_label) document.getElementById("stat-years-label").textContent = s.stat_years_label;
 
-  if (s.display_name) document.getElementById("about-heading").textContent = `Hey, I'm ${s.display_name}`;
+  if (s.about_heading) {
+    document.getElementById("about-heading").textContent = s.about_heading;
+  } else if (s.display_name) {
+    document.getElementById("about-heading").textContent = `Hey, I'm ${s.display_name}`;
+  }
   if (s.about_bio) document.getElementById("about-bio").textContent = s.about_bio;
   if (s.about_text_color) {
+    document.getElementById("about-heading").style.color = s.about_text_color;
     document.getElementById("about-bio").style.color = s.about_text_color;
     document.getElementById("about-location").style.color = s.about_text_color;
   }
@@ -442,8 +470,8 @@ async function loadSiteSettings(supabase) {
     el.textContent = s.contact_email;
     el.href = `mailto:${s.contact_email}`;
   }
-  if (s.instagram_handle) {
-    document.getElementById("footer-instagram").href = `https://instagram.com/${s.instagram_handle.replace("@", "")}`;
+  if (s.linkedin_handle) {
+    document.getElementById("footer-linkedin").href = `https://linkedin.com/in/${s.linkedin_handle.replace("@", "")}`;
   }
 
   if (s.marquee_text) {
@@ -454,6 +482,8 @@ async function loadSiteSettings(supabase) {
     if (s.marquee_bg_color) marqueeEl.style.background = s.marquee_bg_color;
     if (s.marquee_text_color) marqueeEl.style.color = s.marquee_text_color;
   }
+
+  if (s.logos_heading) document.getElementById("logos-heading").textContent = s.logos_heading;
 
   document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");
   if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);
@@ -553,9 +583,6 @@ function showUnavailable(id, note) {
 // UI-only behaviour (marquees, counters, reveal animations) never depends on
 // Supabase loading, so it always runs even if the data layer below fails.
 fillMarquee(document.getElementById("marquee-1"), SERVICE_WORDS);
-document.getElementById("logo-marquee").innerHTML =
-  [...BRAND_LOGO_PLACEHOLDERS, ...BRAND_LOGO_PLACEHOLDERS]
-    .map(() => `<span class="logo-chip">[Brand logo]</span>`).join("");
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 setupReveal();
@@ -573,6 +600,7 @@ try {
   loadCaseStudies(supabase);
   loadPortfolio(supabase);
   loadTestimonials(supabase);
+  loadBrandLogos(supabase);
 } catch (err) {
   setupCounters(); // still animate using the placeholder numbers already in the markup
   console.error("Failed to load Supabase client:", err);
