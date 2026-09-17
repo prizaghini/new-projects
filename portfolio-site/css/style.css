@@ -289,6 +289,17 @@ form.contact-form { display: grid; gap: 14px; }
   border: 1px solid var(--line); background: var(--card); color: var(--ink); resize: vertical;
 }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.contact-info { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0 0; }
+.contact-info-item {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-radius: 999px; text-decoration: none; color: inherit; font-size: 0.875rem;
+}
+.contact-info-icon {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
+  font-size: 0.75rem; font-weight: 700;
+}
 .form-msg { font-size: 0.875rem; margin-top: 6px; }
 .form-msg.ok { color: var(--accent); }
 .form-msg.err { color: #B3261E; }

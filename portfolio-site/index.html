@@ -196,8 +196,19 @@
   <div class="wrap contact-grid">
     <div>
       <span class="label">Contact</span>
-      <h2>Let's work together</h2>
-      <p class="lead">Tell me about your brand and what you need — I'll get back to you within a couple of days.</p>
+      <h2 id="contact-heading">Let's work together</h2>
+      <p class="lead" id="contact-subcopy">Tell me about your brand and what you need — I'll get back to you within a couple of days.</p>
+      <div class="contact-info" id="contact-info">
+        <a class="contact-info-item" id="contact-info-email" href="mailto:you@example.com" hidden>
+          <span class="contact-info-icon">✉</span><span>Email</span>
+        </a>
+        <a class="contact-info-item" id="contact-info-linkedin" href="https://linkedin.com/in/yourhandle" target="_blank" rel="noopener" hidden>
+          <span class="contact-info-icon">in</span><span>LinkedIn</span>
+        </a>
+        <a class="contact-info-item" id="contact-info-whatsapp" href="#" target="_blank" rel="noopener" hidden>
+          <span class="contact-info-icon">☏</span><span>WhatsApp</span>
+        </a>
+      </div>
     </div>
     <form class="contact-form" id="contact-form">
       <div class="field"><label for="name">Name</label><input id="name" name="name" required></div>

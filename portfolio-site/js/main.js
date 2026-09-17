@@ -515,6 +515,31 @@ async function loadSiteSettings(supabase) {
     document.getElementById("footer-linkedin").href = `https://linkedin.com/in/${s.linkedin_handle.replace("@", "")}`;
   }
 
+  if (s.contact_heading) document.getElementById("contact-heading").textContent = s.contact_heading;
+  if (s.contact_subcopy) document.getElementById("contact-subcopy").textContent = s.contact_subcopy;
+  if (s.contact_text_color) {
+    document.getElementById("contact-heading").style.color = s.contact_text_color;
+    document.getElementById("contact-subcopy").style.color = s.contact_text_color;
+  }
+  const contactEmailEl = document.getElementById("contact-info-email");
+  if (contactEmailEl) {
+    contactEmailEl.hidden = s.show_contact_info_email === "false" || !s.contact_email;
+    if (s.contact_email) contactEmailEl.href = `mailto:${s.contact_email}`;
+  }
+  const contactLinkedinEl = document.getElementById("contact-info-linkedin");
+  if (contactLinkedinEl) {
+    contactLinkedinEl.hidden = s.show_contact_info_linkedin === "false" || !s.linkedin_handle;
+    if (s.linkedin_handle) contactLinkedinEl.href = `https://linkedin.com/in/${s.linkedin_handle.replace("@", "")}`;
+  }
+  const contactWhatsappEl = document.getElementById("contact-info-whatsapp");
+  if (contactWhatsappEl) {
+    contactWhatsappEl.hidden = s.show_contact_info_whatsapp === "false" || !s.whatsapp_number;
+    if (s.whatsapp_number) {
+      const w = s.whatsapp_number.trim();
+      contactWhatsappEl.href = w.startsWith("http") ? w : `https://wa.me/${w.replace(/[^\d]/g, "")}`;
+    }
+  }
+
   if (s.marquee_text) {
     fillMarquee(document.getElementById("marquee-1"), s.marquee_text.split("|").map(w => w.trim()).filter(Boolean));
   }
