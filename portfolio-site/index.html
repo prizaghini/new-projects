@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Priscila Zaghini Portfolio</title>
 <meta name="description" content="Digital Marketing and Social Media Executive | Paid Media | Content Strategy | Media Producer.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='black'/%3E%3Ctext x='50' y='53' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPZ%3C/text%3E%3C/svg%3E">
+<link id="favicon-link" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='black'/%3E%3Ctext x='50' y='53' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPZ%3C/text%3E%3C/svg%3E">
 <script>
 // Apply the last-known theme immediately (before CSS/content load) so a
 // returning visitor doesn't see the default look flash before their
@@ -47,10 +47,10 @@
       <span class="site-name-text logo-text" style="color:#000000">Priscila Zaghini.</span>
     </a>
     <nav class="header-nav">
-      <a class="navlink" href="#portfolio">Portfolio</a>
-      <a class="navlink" href="#services">Services</a>
-      <a class="navlink" href="#testimonials">Results</a>
-      <a class="btn btn-primary" href="#contact">Work with me</a>
+      <a class="navlink" id="nav-link-portfolio" href="#portfolio">Portfolio</a>
+      <a class="navlink" id="nav-link-services" href="#services">Services</a>
+      <a class="navlink" id="nav-link-results" href="#testimonials">Results</a>
+      <a class="btn btn-primary" id="header-cta" href="#contact">Work with me</a>
     </nav>
   </div>
 </header>
@@ -210,15 +210,18 @@
         </a>
       </div>
     </div>
-    <form class="contact-form" id="contact-form">
-      <div class="field"><label for="name">Name</label><input id="name" name="name" required></div>
-      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required></div>
-      <div class="field"><label for="company">Brand / Company</label><input id="company" name="company"></div>
-      <div class="field"><label for="budget">Estimated budget</label><input id="budget" name="budget" placeholder="e.g. $1,000 – $5,000"></div>
-      <div class="field"><label for="message">Tell me about the project</label><textarea id="message" name="message" rows="4"></textarea></div>
-      <button class="btn btn-primary" type="submit">Send message</button>
-      <p class="form-msg" id="form-msg"></p>
-    </form>
+    <div>
+      <div class="contact-media" id="contact-media" hidden></div>
+      <form class="contact-form" id="contact-form">
+        <div class="field"><label for="name">Name</label><input id="name" name="name" required></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required></div>
+        <div class="field"><label for="company">Brand / Company</label><input id="company" name="company"></div>
+        <div class="field"><label for="budget">Estimated budget</label><input id="budget" name="budget" placeholder="e.g. $1,000 – $5,000"></div>
+        <div class="field"><label for="message">Tell me about the project</label><textarea id="message" name="message" rows="4"></textarea></div>
+        <button class="btn btn-primary" type="submit">Send message</button>
+        <p class="form-msg" id="form-msg"></p>
+      </form>
+    </div>
   </div>
 </section>
 

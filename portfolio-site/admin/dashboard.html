@@ -35,6 +35,14 @@
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:0">Identity</p>
         <div class="field"><label>Your name</label><input name="display_name" placeholder="Your Name"></div>
         <div class="field"><label>Name text color (header/footer logo text)</label><input name="name_text_color" type="color"></div>
+        <div class="field full"><label>Website title (shown in the browser tab)</label><input name="site_title" placeholder="e.g. Priscila Zaghini Portfolio"></div>
+        <div class="field full">
+          <label>Favicon (the small icon in the browser tab)</label>
+          <input type="file" name="favicon_file" accept="image/*">
+          <input type="hidden" name="favicon_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_favicon" style="width:auto"> Remove favicon (use the default icon instead)</label>
+          <p id="favicon-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
         <div class="field full">
           <label>Logo image (optional — replaces the text name in the header/footer)</label>
           <input type="file" name="logo_file" accept="image/*">
@@ -44,6 +52,14 @@
         </div>
         <div class="field"><label>Tagline</label><input name="tagline" placeholder="e.g. UGC Creator &amp; Content Strategist"></div>
         <div class="field"><label>Availability badge</label><input name="availability" placeholder="e.g. Available 2026"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Header navigation</p>
+        <div class="field"><label>Nav link 1</label><input name="nav_link_1_text" placeholder="e.g. Portfolio"></div>
+        <div class="field"><label>Nav link 2</label><input name="nav_link_2_text" placeholder="e.g. Services"></div>
+        <div class="field"><label>Nav link 3</label><input name="nav_link_3_text" placeholder="e.g. Results"></div>
+        <div class="field"><label>Header button text</label><input name="header_cta_text" placeholder="e.g. Work with me"></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Each nav link automatically hides itself if its matching section (Portfolio, Services, Results/Testimonials) is turned off under "Sections" below.</p>
+
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Hero</p>
         <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
         <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
@@ -261,6 +277,14 @@
         <div class="field"><label><input type="checkbox" name="show_contact_info_email" style="width:auto"> Show email badge</label></div>
         <div class="field"><label><input type="checkbox" name="show_contact_info_linkedin" style="width:auto"> Show LinkedIn badge</label></div>
         <div class="field"><label><input type="checkbox" name="show_contact_info_whatsapp" style="width:auto"> Show WhatsApp badge</label></div>
+        <div class="field"><label><input type="checkbox" name="show_contact_form" style="width:auto"> Show contact form</label></div>
+        <div class="field full">
+          <label>Photo or video next to the form (optional)</label>
+          <input type="file" name="contact_media_file" accept="image/*,video/*">
+          <input type="hidden" name="contact_media_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_contact_media" style="width:auto"> Remove media</label>
+          <p id="contact-media-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Site-wide theme colors</p>
         <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>

@@ -340,6 +340,9 @@ async function loadSiteSettings(supabase) {
   const s = {};
   data.forEach(row => { s[row.key] = row.value; });
 
+  if (s.site_title) document.title = s.site_title;
+  if (s.favicon_url) document.getElementById("favicon-link").href = s.favicon_url;
+
   if (s.display_name) {
     document.querySelectorAll(".site-name-text").forEach(el => { el.textContent = s.display_name; });
   }
@@ -539,6 +542,16 @@ async function loadSiteSettings(supabase) {
       contactWhatsappEl.href = w.startsWith("http") ? w : `https://wa.me/${w.replace(/[^\d]/g, "")}`;
     }
   }
+  const contactFormEl = document.getElementById("contact-form");
+  if (contactFormEl) contactFormEl.hidden = s.show_contact_form === "false";
+  const contactMediaEl = document.getElementById("contact-media");
+  if (contactMediaEl && s.contact_media_url) {
+    const isVideo = /\.(mp4|webm|mov|ogg)$/i.test(s.contact_media_url);
+    contactMediaEl.innerHTML = isVideo
+      ? `<video src="${s.contact_media_url}" autoplay muted loop playsinline></video>`
+      : `<img src="${s.contact_media_url}" alt="" loading="lazy">`;
+    contactMediaEl.hidden = false;
+  }
 
   if (s.marquee_text) {
     fillMarquee(document.getElementById("marquee-1"), s.marquee_text.split("|").map(w => w.trim()).filter(Boolean));
@@ -590,6 +603,19 @@ async function loadSiteSettings(supabase) {
       if (el) el.style.display = "none";
     }
   }
+
+  const navLinks = [
+    { id: "nav-link-portfolio", textKey: "nav_link_1_text", showKey: "show_portfolio" },
+    { id: "nav-link-services", textKey: "nav_link_2_text", showKey: "show_services" },
+    { id: "nav-link-results", textKey: "nav_link_3_text", showKey: "show_testimonials" },
+  ];
+  navLinks.forEach(({ id, textKey, showKey }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (s[textKey]) el.textContent = s[textKey];
+    el.hidden = s[showKey] === "false";
+  });
+  if (s.header_cta_text) document.getElementById("header-cta").textContent = s.header_cta_text;
 
   cacheTheme(root, s);
 }
