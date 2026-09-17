@@ -134,6 +134,7 @@ insert into site_settings (key, value) values
   ('hero_badge_3_position', 'middle-right'),
   ('hero_bg_color', ''),
   ('hero_bg_position', 'center'),
+  ('hero_bg_position_mobile', 'center'),
   ('hero_bg_url', ''),
   ('hero_bg_video_url', ''),
   ('hero_overlay_opacity', '62'),
