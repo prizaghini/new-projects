@@ -289,7 +289,7 @@ form.contact-form { display: grid; gap: 14px; }
   border: 1px solid var(--line); background: var(--card); color: var(--ink); resize: vertical;
 }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.contact-info { display: flex; gap: 16px; flex-wrap: wrap; margin: 20px 0 0; }
+.contact-info { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; grid-column: 1 / -1; }
 .contact-info-item {
   display: inline-flex; align-items: center; gap: 12px; padding: 8px 22px 8px 8px;
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
