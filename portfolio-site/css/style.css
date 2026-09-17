@@ -289,20 +289,20 @@ form.contact-form { display: grid; gap: 14px; }
   border: 1px solid var(--line); background: var(--card); color: var(--ink); resize: vertical;
 }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.contact-info { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; grid-column: 1 / -1; }
+.contact-info { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
 .contact-info-item {
-  display: inline-flex; align-items: center; gap: 12px; padding: 8px 22px 8px 8px;
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px;
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
-  border-radius: 999px; text-decoration: none; color: inherit; font-size: 1rem;
+  border-radius: 999px; text-decoration: none; color: inherit; font-size: 0.875rem;
 }
 .contact-media { width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: var(--bg-alt); }
 .contact-media img, .contact-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .contact-info-icon {
   display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
-  width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
+  width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: var(--accent-ink);
   font-size: 1rem; font-weight: 700;
 }
-.contact-info-icon svg { width: 26px; height: 26px; }
+.contact-info-icon svg { width: 20px; height: 20px; }
 .contact-info-icon-whatsapp { background: #25D366; color: #fff; }
 .form-msg { font-size: 0.875rem; margin-top: 6px; }
 .form-msg.ok { color: var(--accent); }
