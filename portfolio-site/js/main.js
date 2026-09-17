@@ -423,10 +423,10 @@ async function loadSiteSettings(supabase) {
     if (heroTextEl) heroTextEl.classList.toggle("has-top-logo-badge", position === "top-left" || position === "top-right");
   }
 
-  setStat("stat-videos", s.stat_videos);
-  setStat("stat-partners", s.stat_partners);
+  setStat("stat-videos", s.stat_videos, s.stat_videos_suffix);
+  setStat("stat-partners", s.stat_partners, s.stat_partners_suffix);
   setStat("stat-views", s.stat_views, s.stat_views_suffix);
-  setStat("stat-years", s.stat_years);
+  setStat("stat-years", s.stat_years, s.stat_years_suffix);
   if (s.stat_videos_label) document.getElementById("stat-videos-label").textContent = s.stat_videos_label;
   if (s.stat_partners_label) document.getElementById("stat-partners-label").textContent = s.stat_partners_label;
   if (s.stat_views_label) document.getElementById("stat-views-label").textContent = s.stat_views_label;

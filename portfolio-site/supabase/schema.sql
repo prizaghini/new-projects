@@ -173,9 +173,12 @@ insert into site_settings (key, value) values
   ('about_photo_fit', 'cover'),
   ('font_pairing', 'grotesk'),
   ('stat_videos_label', 'Videos recorded'),
+  ('stat_videos_suffix', ''),
   ('stat_partners_label', 'Brand partners'),
+  ('stat_partners_suffix', ''),
   ('stat_views_label', 'Cumulative views'),
   ('stat_years_label', 'Years experience'),
+  ('stat_years_suffix', ''),
   ('about_heading', ''),
   ('linkedin_handle', ''),
   ('logos_heading', 'Brands I''ve worked with')
