@@ -265,6 +265,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .service-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .service-grid { grid-template-columns: repeat(4, 1fr); } }
 .service-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+.service-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 14px; }
 .service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
 
 /* ---------- testimonials ---------- */

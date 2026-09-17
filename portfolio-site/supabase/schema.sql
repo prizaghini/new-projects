@@ -49,6 +49,26 @@ create table if not exists brand_logos (
   created_at timestamptz not null default now()
 );
 
+create table if not exists services (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text not null,
+  image_url text,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+-- One-time seed matching the site's previous hardcoded cards, so upgrading
+-- to the admin-editable version doesn't leave the section empty. Only
+-- inserts if the table is still empty, so it's safe to re-run.
+insert into services (title, description, sort_order)
+select * from (values
+  ('Paid Traffic Creatives', 'Meta / TikTok / YouTube ad-ready content.', 0),
+  ('E-commerce UGC', 'Product videos built to convert on-site and in ads.', 1),
+  ('Sponsored Post', 'Content published through my own profile.', 2),
+  ('Scale Management', 'Multi-creator and campaign management.', 3)
+) as seed(title, description, sort_order)
+where not exists (select 1 from services);
+
 create table if not exists checklist_notes (
   id uuid primary key default gen_random_uuid(),
   category text not null,
@@ -188,6 +208,9 @@ insert into site_settings (key, value) values
   ('case_studies_heading', 'Content that performed'),
   ('case_studies_subheading', 'A few highlights — replace with your own real numbers.'),
   ('case_studies_text_color', ''),
+  ('services_heading', 'What we can create together'),
+  ('services_subheading', ''),
+  ('services_text_color', ''),
   ('show_about_stat_1', 'true'),
   ('show_about_stat_2', 'true'),
   ('show_about_stat_3', 'true'),
@@ -210,12 +233,14 @@ alter table campaigns enable row level security;
 alter table checklist_notes enable row level security;
 alter table site_settings enable row level security;
 alter table brand_logos enable row level security;
+alter table services enable row level security;
 
 create policy "public can read portfolio_items" on portfolio_items for select using (true);
 create policy "public can read case_studies" on case_studies for select using (true);
 create policy "public can read testimonials" on testimonials for select using (true);
 create policy "public can read site_settings" on site_settings for select using (true);
 create policy "public can read brand_logos" on brand_logos for select using (true);
+create policy "public can read services" on services for select using (true);
 create policy "public can submit leads" on leads for insert with check (true);
 
 create policy "admin manages portfolio_items" on portfolio_items for all using (auth.role() = 'authenticated');
@@ -223,6 +248,7 @@ create policy "admin manages case_studies" on case_studies for all using (auth.r
 create policy "admin manages testimonials" on testimonials for all using (auth.role() = 'authenticated');
 create policy "admin manages leads" on leads for all using (auth.role() = 'authenticated');
 create policy "admin manages brand_logos" on brand_logos for all using (auth.role() = 'authenticated');
+create policy "admin manages services" on services for all using (auth.role() = 'authenticated');
 create policy "admin manages calendar_events" on calendar_events for all using (auth.role() = 'authenticated');
 create policy "admin manages campaigns" on campaigns for all using (auth.role() = 'authenticated');
 create policy "admin manages checklist_notes" on checklist_notes for all using (auth.role() = 'authenticated');

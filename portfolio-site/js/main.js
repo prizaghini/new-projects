@@ -123,6 +123,27 @@ async function loadCaseStudies(supabase) {
   `).join("");
 }
 
+// ---------- services ----------
+async function loadServices(supabase) {
+  const container = document.getElementById("services-grid");
+  const { data, error } = await supabase
+    .from("services")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  if (error || !data || data.length === 0) {
+    container.innerHTML = `<div class="empty-note">No services yet — add some from the admin dashboard.</div>`;
+    return;
+  }
+  container.innerHTML = data.map(svc => `
+    <div class="service-card">
+      ${svc.image_url ? `<img class="service-card-img" src="${svc.image_url}" alt="" loading="lazy">` : ""}
+      <h3>${svc.title}</h3>
+      <p>${svc.description}</p>
+    </div>
+  `).join("");
+}
+
 // ---------- video lightbox (used by self-hosted portfolio videos) ----------
 function setupVideoLightbox() {
   const box = document.getElementById("video-lightbox");
@@ -513,6 +534,17 @@ async function loadSiteSettings(supabase) {
     document.getElementById("case-studies-subheading").style.color = s.case_studies_text_color;
   }
 
+  if (s.services_heading) document.getElementById("services-heading").textContent = s.services_heading;
+  if (s.services_subheading) {
+    const el = document.getElementById("services-subheading");
+    el.textContent = s.services_subheading;
+    el.hidden = false;
+  }
+  if (s.services_text_color) {
+    document.getElementById("services-heading").style.color = s.services_text_color;
+    document.getElementById("services-subheading").style.color = s.services_text_color;
+  }
+
   document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");
   if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);
 
@@ -626,6 +658,7 @@ try {
   setupCounters();
   setupContactForm(supabase);
   loadCaseStudies(supabase);
+  loadServices(supabase);
   loadPortfolio(supabase);
   loadTestimonials(supabase);
   loadBrandLogos(supabase);
@@ -634,6 +667,7 @@ try {
   console.error("Failed to load Supabase client:", err);
   disableContactForm("Contact form is temporarily unavailable — please email me directly instead.");
   showUnavailable("case-studies", "Content temporarily unavailable — please refresh or try again shortly.");
+  showUnavailable("services-grid", "Services temporarily unavailable — please refresh or try again shortly.");
   showUnavailable("portfolio-track", "Portfolio temporarily unavailable — please refresh or try again shortly.");
   showUnavailable("testimonial-track", "Testimonials temporarily unavailable — please refresh or try again shortly.");
   document.getElementById("cat-nav").innerHTML = CATEGORIES.map((cat, i) =>

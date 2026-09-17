@@ -15,6 +15,7 @@
     <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
     <button class="tab-btn" data-tab="logos">Brand logos</button>
     <button class="tab-btn" data-tab="case-studies">Case Studies</button>
+    <button class="tab-btn" data-tab="services">Services</button>
     <button class="tab-btn" data-tab="checklist">Checklist (bonus)</button>
     <button class="tab-btn" data-tab="calendar">Calendar</button>
     <button class="tab-btn" data-tab="campaigns">Campaigns</button>
@@ -317,6 +318,12 @@
         <div class="field full"><label>Subheading</label><input name="case_studies_subheading" placeholder="e.g. A few highlights — replace with your own real numbers."></div>
         <div class="field"><label>Heading/subheading text color</label><input name="case_studies_text_color" type="color"></div>
         <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or edit the actual case study cards from the "Case Studies" tab in the sidebar.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Services</p>
+        <div class="field full"><label>Heading</label><input name="services_heading" placeholder="e.g. What we can create together"></div>
+        <div class="field full"><label>Subheading (optional)</label><input name="services_subheading" placeholder="e.g. A quick look at what I offer"></div>
+        <div class="field"><label>Heading/subheading text color</label><input name="services_text_color" type="color"></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or edit the actual service cards from the "Services" tab in the sidebar.</p>
         <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or remove the actual logo images from the "Brand logos" tab in the sidebar.</p>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Sections (uncheck to hide from the public site)</p>
@@ -426,6 +433,25 @@
       </form>
       <table><thead><tr><th>Image</th><th>Brand</th><th>Headline stat</th><th>Order</th><th></th></tr></thead>
         <tbody id="table-case-studies"></tbody></table>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="panel" id="panel-services">
+      <h2>Services</h2>
+      <p class="hint">These power the "What we can create together" cards on your public site.</p>
+      <form class="add-form" id="form-services">
+        <div class="field full"><label>Title</label><input name="title" required></div>
+        <div class="field full"><label>Description</label><input name="description" required></div>
+        <div class="field full">
+          <label>Image (optional)</label>
+          <input type="file" name="image_file" accept="image/*">
+          <input type="hidden" name="image_url">
+        </div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add service</button></div>
+      </form>
+      <table><thead><tr><th>Image</th><th>Title</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-services"></tbody></table>
     </section>
 
     <!-- CHECKLIST / notes for advanced-checklist bonus tab -->

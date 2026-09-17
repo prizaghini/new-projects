@@ -328,6 +328,30 @@ setupCrudSection({
   },
 });
 
+// ---------- services ----------
+setupCrudSection({
+  table: "services",
+  formId: "form-services",
+  tbodyId: "table-services",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${row.image_url ? `<img src="${esc(row.image_url)}" alt="" style="height:28px;width:auto;max-width:90px;object-fit:cover">` : ""}</td>
+    <td>${esc(row.title)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.title.value = row.title;
+    form.description.value = row.description;
+    form.image_url.value = row.image_url || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+  beforeSubmit: async form => {
+    const file = form.elements.image_file.files[0];
+    if (file) return { image_url: await uploadToSiteMedia(file, "services") };
+    return {};
+  },
+});
+
 // ---------- checklist notes ----------
 setupCrudSection({
   table: "checklist_notes",
