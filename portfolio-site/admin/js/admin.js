@@ -227,12 +227,19 @@ function setupCrudSection({ table, formId, tbodyId, orderCol, renderRow, mapRowT
       Object.assign(payload, extra);
     }
 
+    let error;
     if (editingId) {
-      await supabase.from(table).update(payload).eq("id", editingId);
+      ({ error } = await supabase.from(table).update(payload).eq("id", editingId));
+    } else {
+      ({ error } = await supabase.from(table).insert(payload));
+    }
+    if (error) {
+      alert("Save failed — " + error.message);
+      return;
+    }
+    if (editingId) {
       editingId = null;
       form.querySelector("button[type=submit]").textContent = form.dataset.addLabel || "Add";
-    } else {
-      await supabase.from(table).insert(payload);
     }
     form.reset();
     reload();
