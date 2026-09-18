@@ -229,6 +229,8 @@ insert into site_settings (key, value) values
   ('testimonials_heading', 'What brands say'),
   ('testimonials_subheading', ''),
   ('testimonials_text_color', ''),
+  ('testimonials_quote_font_size', ''),
+  ('testimonials_quote_color', ''),
   ('site_title', ''),
   ('favicon_url', ''),
   ('nav_link_1_text', 'Portfolio'),

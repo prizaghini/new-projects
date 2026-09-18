@@ -277,7 +277,10 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* ---------- testimonials ---------- */
 #testimonials .wrap { max-width: 1400px; }
 .testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
-@media (min-width: 720px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 720px) {
+  .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonial-card-quote { grid-column: 1 / -1; }
+}
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line); color: #16160F;
   border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
@@ -297,14 +300,15 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-.testimonial-card-quote { padding: 30px 26px; justify-content: center; }
+.testimonial-card-quote { padding: 22px 28px; justify-content: center; }
 .testimonial-card-quote .quote-mark {
-  display: block; font-family: var(--display); font-size: 3.25rem; line-height: 1;
+  display: block; font-family: var(--display); font-size: 2.5rem; line-height: 1;
   color: var(--accent); opacity: 0.35; margin-bottom: 2px;
 }
 .testimonial-card-quote .quote {
-  font-family: var(--display); font-size: 1.1875rem; font-style: italic; font-weight: 500;
-  color: #16160F; line-height: 1.5; flex: none;
+  font-family: var(--display); font-style: italic; font-weight: 500;
+  font-size: var(--testimonial-quote-size, 1rem); color: var(--testimonial-quote-color, #16160F);
+  line-height: 1.5; flex: none;
 }
 .testimonial-card-quote .byline { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-soft); margin-top: 18px; }
 .byline-row { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
