@@ -272,13 +272,15 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
 
 /* ---------- testimonials ---------- */
-.testimonial-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+#testimonials .wrap { max-width: 1400px; }
+.testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line);
-  border-radius: 12px; padding: 22px; display: flex; flex-direction: column;
+  border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
 }
-.testimonial-card-img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 14px; }
+.testimonial-card-img { width: 100%; height: auto; border-radius: 8px; }
+.testimonial-card-img:not(:only-child) { margin-bottom: 14px; }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
