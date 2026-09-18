@@ -272,11 +272,13 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
 
 /* ---------- testimonials ---------- */
-.testimonial-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+.testimonial-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
 .testimonial-card {
-  flex: 0 0 300px; scroll-snap-align: start; background: var(--card); border: 1px solid var(--line);
+  background: var(--card); border: 1px solid var(--line);
   border-radius: 12px; padding: 22px; display: flex; flex-direction: column;
 }
+.testimonial-card-img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 14px; }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }

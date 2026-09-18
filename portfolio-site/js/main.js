@@ -280,9 +280,10 @@ async function loadTestimonials(supabase) {
   }
   track.innerHTML = data.map(t => `
     <div class="testimonial-card">
-      <span class="handle">${t.brand_handle}</span>
-      <h3>${t.title}</h3>
-      <p class="quote">"${t.quote}"</p>
+      ${t.image_url ? `<img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">` : ""}
+      ${t.brand_handle ? `<span class="handle">${t.brand_handle}</span>` : ""}
+      ${t.title ? `<h3>${t.title}</h3>` : ""}
+      ${t.quote ? `<p class="quote">"${t.quote}"</p>` : ""}
       ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
     </div>
   `).join("");
@@ -593,6 +594,17 @@ async function loadSiteSettings(supabase) {
   if (s.services_text_color) {
     document.getElementById("services-heading").style.color = s.services_text_color;
     document.getElementById("services-subheading").style.color = s.services_text_color;
+  }
+
+  if (s.testimonials_heading) document.getElementById("testimonials-heading").textContent = s.testimonials_heading;
+  if (s.testimonials_subheading) {
+    const el = document.getElementById("testimonials-subheading");
+    el.textContent = s.testimonials_subheading;
+    el.hidden = false;
+  }
+  if (s.testimonials_text_color) {
+    document.getElementById("testimonials-heading").style.color = s.testimonials_text_color;
+    document.getElementById("testimonials-subheading").style.color = s.testimonials_text_color;
   }
 
   document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");

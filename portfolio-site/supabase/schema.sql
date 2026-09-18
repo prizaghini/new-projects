@@ -29,6 +29,7 @@ create table if not exists case_studies (
   created_at timestamptz not null default now()
 );
 alter table case_studies add column if not exists image_url text;
+alter table testimonials add column if not exists image_url text;
 
 create table if not exists testimonials (
   id uuid primary key default gen_random_uuid(),
@@ -36,6 +37,7 @@ create table if not exists testimonials (
   title text not null,              -- e.g. 'Record-breaking Meta video'
   quote text not null,
   result_stat text,                 -- e.g. '50M views on 1 video'
+  image_url text,                   -- optional screenshot (e.g. a LinkedIn recommendation) shown instead of/above the quote
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
@@ -222,6 +224,9 @@ insert into site_settings (key, value) values
   ('contact_media_url', ''),
   ('contact_info_text_color', ''),
   ('show_about_location', 'true'),
+  ('testimonials_heading', 'What brands say'),
+  ('testimonials_subheading', ''),
+  ('testimonials_text_color', ''),
   ('site_title', ''),
   ('favicon_url', ''),
   ('nav_link_1_text', 'Portfolio'),
