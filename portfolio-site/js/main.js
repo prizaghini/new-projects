@@ -1,3 +1,7 @@
+// Set from hero_logo_url once settings load — used as the portfolio thumb
+// hover cursor in place of the default green play icon (see renderPortfolio).
+let portfolioThumbCursor = "";
+
 let CATEGORIES = [
   { key: "beauty", label: "Beauty" },
   { key: "home-deco", label: "Home & Decor" },
@@ -190,7 +194,7 @@ function renderPortfolio(category) {
     return `
     <a class="portfolio-card" href="${item.link_url || "#"}"
        ${isVideo ? `data-video-url="${item.videoUrl}" data-start="${item.start_seconds || 0}"` : `target="_blank" rel="noopener"`}>
-      <div class="portfolio-thumb">
+      <div class="portfolio-thumb" ${portfolioThumbCursor ? `style="cursor:${portfolioThumbCursor}"` : ""}>
         ${thumb
           ? `<img src="${thumb}" alt="${item.title}" loading="lazy">`
           : `<div class="portfolio-thumb-placeholder">${platformLabel || "View"}</div>`}
@@ -450,6 +454,8 @@ async function loadSiteSettings(supabase) {
     root.setProperty("--hero-bg-url", `url("${s.hero_bg_url}")`);
     heroEl.classList.add("has-bg-image");
   }
+
+  if (s.hero_logo_url) portfolioThumbCursor = `url('${s.hero_logo_url}') 24 24, pointer`;
 
   const logoBadge = document.getElementById("hero-logo-badge");
   if (logoBadge && s.hero_logo_url) {
