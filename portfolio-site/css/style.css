@@ -294,6 +294,16 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.testimonial-card-quote { padding: 30px 26px; justify-content: center; }
+.testimonial-card-quote .quote-mark {
+  display: block; font-family: var(--display); font-size: 3.25rem; line-height: 1;
+  color: var(--accent); opacity: 0.35; margin-bottom: 2px;
+}
+.testimonial-card-quote .quote {
+  font-family: var(--display); font-size: 1.1875rem; font-style: italic; font-weight: 500;
+  color: var(--ink); line-height: 1.5; flex: none;
+}
+.testimonial-card-quote .byline { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-soft); margin-top: 18px; }
 
 /* ---------- contact ---------- */
 .contact-grid { display: grid; gap: clamp(28px, 5vw, 48px); }

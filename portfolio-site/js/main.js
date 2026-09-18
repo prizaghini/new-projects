@@ -278,15 +278,27 @@ async function loadTestimonials(supabase) {
     track.innerHTML = `<div class="empty-note">No testimonials yet — add some from the admin dashboard.</div>`;
     return;
   }
-  track.innerHTML = data.map(t => `
-    <div class="testimonial-card">
-      ${t.image_url ? `<img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">` : ""}
-      ${t.brand_handle ? `<span class="handle">${t.brand_handle}</span>` : ""}
-      ${t.title ? `<h3>${t.title}</h3>` : ""}
-      ${t.quote ? `<p class="quote">"${t.quote}"</p>` : ""}
+  track.innerHTML = data.map(t => {
+    if (t.image_url) {
+      return `
+      <div class="testimonial-card">
+        <img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">
+        ${t.brand_handle ? `<span class="handle">${t.brand_handle}</span>` : ""}
+        ${t.title ? `<h3>${t.title}</h3>` : ""}
+        ${t.quote ? `<p class="quote">"${t.quote}"</p>` : ""}
+        ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
+      </div>`;
+    }
+    // No screenshot — style as a letter-style pull quote instead (works for
+    // an emailed recommendation just as well as a typed-in LinkedIn one).
+    const byline = [t.brand_handle, t.title].filter(Boolean).join(", ");
+    return `
+    <div class="testimonial-card testimonial-card-quote">
+      ${t.quote ? `<span class="quote-mark" aria-hidden="true">&ldquo;</span><p class="quote">${t.quote}</p>` : ""}
+      ${byline ? `<p class="byline">— ${byline}</p>` : ""}
       ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
-    </div>
-  `).join("");
+    </div>`;
+  }).join("");
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
