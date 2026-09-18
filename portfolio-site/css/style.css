@@ -218,7 +218,10 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* ---------- case studies ---------- */
 .case-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .case-grid { grid-template-columns: repeat(2, 1fr); } }
-.case-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+/* Cards always sit on a light --card background even inside dark sections
+   or when the sitewide text color is customized to white — so their own
+   text color is fixed here rather than inherited, to always stay legible. */
+.case-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; color: #16160F; }
 .case-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 14px; }
 .case-card b { display: block; font-family: var(--display); font-size: clamp(1.375rem, 4vw, 1.75rem); color: var(--accent); }
 .case-card .brand { font-family: var(--mono); font-size: 0.71875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 8px; display: block; }
@@ -256,7 +259,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .lightbox.open { display: flex; }
 .lightbox video { max-width: min(720px, 100%); max-height: 85vh; border-radius: 8px; background: #000; }
 .lightbox-close {
-  position: absolute; top: 16px; right: 16px; background: var(--card); color: var(--ink); border: 0;
+  position: absolute; top: 16px; right: 16px; background: var(--card); color: #16160F; border: 0;
   border-radius: 6px; padding: 9px 13px; font-family: var(--mono); font-size: 0.75rem; cursor: pointer;
 }
 .portfolio-card .meta { padding: 10px 2px; }
@@ -267,7 +270,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* ---------- services ---------- */
 .service-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .service-grid { grid-template-columns: repeat(4, 1fr); } }
-.service-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+.service-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; color: #16160F; }
 .service-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 14px; }
 .service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
 
@@ -276,7 +279,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
 .testimonial-card {
-  background: var(--card); border: 1px solid var(--line);
+  background: var(--card); border: 1px solid var(--line); color: #16160F;
   border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
   transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center; will-change: transform;
 }
@@ -301,13 +304,13 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 }
 .testimonial-card-quote .quote {
   font-family: var(--display); font-size: 1.1875rem; font-style: italic; font-weight: 500;
-  color: var(--ink); line-height: 1.5; flex: none;
+  color: #16160F; line-height: 1.5; flex: none;
 }
 .testimonial-card-quote .byline { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-soft); margin-top: 18px; }
 .byline-row { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
 .byline-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .byline-text { display: flex; flex-direction: column; line-height: 1.35; }
-.byline-text b { font-family: var(--display); font-size: 0.875rem; font-weight: 600; color: var(--ink); }
+.byline-text b { font-family: var(--display); font-size: 0.875rem; font-weight: 600; color: #16160F; }
 .byline-text span { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); }
 
 /* ---------- contact ---------- */
@@ -318,7 +321,7 @@ form.contact-form { display: grid; gap: 14px; }
 .field label { font-family: var(--mono); font-size: 0.71875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
 .field input, .field textarea {
   font-family: var(--body); font-size: 0.9375rem; padding: 12px 14px; border-radius: 6px;
-  border: 1px solid var(--line); background: var(--card); color: var(--ink); resize: vertical;
+  border: 1px solid var(--line); background: var(--card); color: #16160F; resize: vertical;
 }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .contact-info { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
