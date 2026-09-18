@@ -625,6 +625,7 @@ async function loadSiteSettings(supabase) {
   }
   if (s.testimonials_quote_font_size) root.setProperty("--testimonial-quote-size", `${s.testimonials_quote_font_size}px`);
   if (s.testimonials_quote_color) root.setProperty("--testimonial-quote-color", s.testimonials_quote_color);
+  if (FONT_PAIRINGS[s.testimonials_quote_font]) root.setProperty("--testimonial-quote-font", FONT_PAIRINGS[s.testimonials_quote_font].display);
 
   document.documentElement.classList.toggle("grain-on", s.texture_enabled === "true");
   if (s.texture_intensity) root.setProperty("--grain-opacity", parseInt(s.texture_intensity, 10) / 100);

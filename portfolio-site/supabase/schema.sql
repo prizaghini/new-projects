@@ -231,6 +231,7 @@ insert into site_settings (key, value) values
   ('testimonials_text_color', ''),
   ('testimonials_quote_font_size', ''),
   ('testimonials_quote_color', ''),
+  ('testimonials_quote_font', ''),
   ('site_title', ''),
   ('favicon_url', ''),
   ('nav_link_1_text', 'Portfolio'),

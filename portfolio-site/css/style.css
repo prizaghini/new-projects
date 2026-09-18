@@ -306,7 +306,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   color: var(--accent); opacity: 0.35; margin-bottom: 2px;
 }
 .testimonial-card-quote .quote {
-  font-family: var(--display); font-style: italic; font-weight: 500;
+  font-family: var(--testimonial-quote-font, var(--display)); font-style: italic; font-weight: 500;
   font-size: var(--testimonial-quote-size, 1rem); color: var(--testimonial-quote-color, #16160F);
   line-height: 1.5; flex: none;
 }
