@@ -524,6 +524,14 @@
           <input type="file" name="photo_file" accept="image/*">
           <input type="hidden" name="photo_url">
         </div>
+        <div class="field">
+          <label>Photo focal point (if their head is getting cropped, try a different one)</label>
+          <select name="photo_position">
+            <option value="top">Top</option>
+            <option value="center">Center</option>
+            <option value="bottom">Bottom</option>
+          </select>
+        </div>
         <div class="field"><label>Result stat (optional)</label><input name="result_stat" placeholder="e.g. 50M views on 1 video"></div>
         <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
         <div class="actions"><button class="btn" type="submit">Add testimonial</button></div>

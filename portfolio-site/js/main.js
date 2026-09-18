@@ -293,7 +293,7 @@ async function loadTestimonials(supabase) {
     // an emailed recommendation just as well as a typed-in LinkedIn one).
     const byline = [t.brand_handle, t.title].filter(Boolean).join(", ");
     const bylineHtml = t.photo_url
-      ? `<div class="byline-row"><img class="byline-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy">
+      ? `<div class="byline-row"><img class="byline-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">
            <div class="byline-text">${[t.brand_handle && `<b>${t.brand_handle}</b>`, t.title && `<span>${t.title}</span>`].filter(Boolean).join("")}</div>
          </div>`
       : (byline ? `<p class="byline">— ${byline}</p>` : "");

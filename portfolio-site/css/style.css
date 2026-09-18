@@ -312,7 +312,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 }
 .testimonial-card-quote .byline { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-soft); margin-top: 18px; }
 .byline-row { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
-.byline-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.byline-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; object-position: center top; flex-shrink: 0; }
 .byline-text { display: flex; flex-direction: column; line-height: 1.35; }
 .byline-text b { font-family: var(--display); font-size: 0.875rem; font-weight: 600; color: #16160F; }
 .byline-text span { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); }
