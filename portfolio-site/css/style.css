@@ -278,6 +278,16 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line);
   border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center;
+}
+.testimonial-card:hover {
+  transform: scale(1.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+  position: relative; z-index: 5;
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card { transition: none; }
+  .testimonial-card:hover { transform: none; }
 }
 .testimonial-card-img { width: 100%; height: auto; border-radius: 8px; }
 .testimonial-card-img:not(:only-child) { margin-bottom: 14px; }
