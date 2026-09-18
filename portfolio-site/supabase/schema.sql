@@ -221,6 +221,7 @@ insert into site_settings (key, value) values
   ('show_contact_form', 'true'),
   ('contact_media_url', ''),
   ('contact_info_text_color', ''),
+  ('show_about_location', 'true'),
   ('site_title', ''),
   ('favicon_url', ''),
   ('nav_link_1_text', 'Portfolio'),

@@ -486,6 +486,7 @@ async function loadSiteSettings(supabase) {
     document.getElementById("about-location").style.color = s.about_text_color;
   }
   if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
+  document.getElementById("about-location").hidden = s.show_about_location === "false";
   setPhoto("about-photo", s.about_photo_url, s.display_name, s.about_photo_position, s.about_photo_fit);
 
   for (let i = 1; i <= 4; i++) {

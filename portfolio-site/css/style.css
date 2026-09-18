@@ -196,7 +196,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* ---------- about ---------- */
 .about-grid { display: grid; gap: clamp(28px, 5vw, 48px); align-items: center; }
 @media (min-width: 860px) { .about-grid { grid-template-columns: 0.85fr 1.15fr; } }
-.about-photo { position: relative; aspect-ratio: 1; border-radius: 16px; background: var(--bg-alt); border: 1px dashed var(--line); overflow: hidden; }
+.about-photo { position: relative; aspect-ratio: 4/5; border-radius: 16px; background: var(--bg-alt); border: 1px dashed var(--line); overflow: hidden; }
 .about-photo.has-media { border: 0; }
 .about-photo.has-media:not(.fit-contain) { background: none; }
 #about-heading { margin-bottom: 14px; }
