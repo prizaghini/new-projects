@@ -278,7 +278,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line);
   border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
-  transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center; will-change: transform;
 }
 .testimonial-card:hover {
   transform: scale(1.15);
