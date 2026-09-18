@@ -507,6 +507,11 @@
         <div class="field"><label>Brand / handle (optional)</label><input name="brand_handle" placeholder="e.g. @brandname or Jane Smith, Manager at Acme"></div>
         <div class="field"><label>Title (optional)</label><input name="title" placeholder="e.g. Record-breaking Meta video"></div>
         <div class="field full"><label>Quote (optional if you upload a screenshot)</label><textarea name="quote" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Their photo (optional — shown next to their name; only used when there's no screenshot above)</label>
+          <input type="file" name="photo_file" accept="image/*">
+          <input type="hidden" name="photo_url">
+        </div>
         <div class="field"><label>Result stat (optional)</label><input name="result_stat" placeholder="e.g. 50M views on 1 video"></div>
         <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
         <div class="actions"><button class="btn" type="submit">Add testimonial</button></div>

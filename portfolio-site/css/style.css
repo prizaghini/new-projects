@@ -304,6 +304,11 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   color: var(--ink); line-height: 1.5; flex: none;
 }
 .testimonial-card-quote .byline { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink-soft); margin-top: 18px; }
+.byline-row { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+.byline-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.byline-text { display: flex; flex-direction: column; line-height: 1.35; }
+.byline-text b { font-family: var(--display); font-size: 0.875rem; font-weight: 600; color: var(--ink); }
+.byline-text span { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); }
 
 /* ---------- contact ---------- */
 .contact-grid { display: grid; gap: clamp(28px, 5vw, 48px); }

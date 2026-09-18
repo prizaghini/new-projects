@@ -30,6 +30,7 @@ create table if not exists case_studies (
 );
 alter table case_studies add column if not exists image_url text;
 alter table testimonials add column if not exists image_url text;
+alter table testimonials add column if not exists photo_url text;
 
 create table if not exists testimonials (
   id uuid primary key default gen_random_uuid(),
@@ -38,6 +39,7 @@ create table if not exists testimonials (
   quote text not null,
   result_stat text,                 -- e.g. '50M views on 1 video'
   image_url text,                   -- optional screenshot (e.g. a LinkedIn recommendation) shown instead of/above the quote
+  photo_url text,                   -- optional headshot shown next to the byline on text-only (pull-quote) cards
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );

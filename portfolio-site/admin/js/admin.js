@@ -375,12 +375,16 @@ setupCrudSection({
     form.quote.value = row.quote || "";
     form.result_stat.value = row.result_stat || "";
     form.image_url.value = row.image_url || "";
+    form.photo_url.value = row.photo_url || "";
     form.sort_order.value = row.sort_order || 0;
   },
   beforeSubmit: async form => {
-    const file = form.elements.image_file.files[0];
-    if (file) return { image_url: await uploadToSiteMedia(file, "testimonials") };
-    return {};
+    const extra = {};
+    const imageFile = form.elements.image_file.files[0];
+    if (imageFile) extra.image_url = await uploadToSiteMedia(imageFile, "testimonials");
+    const photoFile = form.elements.photo_file.files[0];
+    if (photoFile) extra.photo_url = await uploadToSiteMedia(photoFile, "testimonials");
+    return extra;
   },
 });
 
