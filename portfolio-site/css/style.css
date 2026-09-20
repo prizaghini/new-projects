@@ -52,6 +52,7 @@ p { margin: 0 0 12px; }
   #hero-label { margin-top: 64px; font-size: 0.625rem; }
 }
 .section-head { text-align: center; max-width: 44ch; margin: 0 auto clamp(30px, 5vw, 48px); }
+.section-head .lead { margin-top: 12px; }
 
 :root { --btn-radius: 999px; --btn-bg: #FFFFFF; --btn-ink: #000000; }
 .btn {
@@ -272,6 +273,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 @media (min-width: 720px) { .service-grid { grid-template-columns: repeat(4, 1fr); } }
 .service-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; color: #16160F; }
 .service-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 14px; }
+.service-card h3 { margin-bottom: 8px; }
 .service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
 
 /* ---------- testimonials ---------- */
