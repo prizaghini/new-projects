@@ -402,6 +402,14 @@ form.contact-form { display: grid; gap: 14px; }
   border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
   border-radius: 999px; text-decoration: none; color: inherit; font-size: 0.875rem;
 }
+/* Email + LinkedIn + WhatsApp, all with their text labels, don't fit one
+   row on a narrow phone and the WhatsApp pill was the one wrapping onto
+   its own line. Icon-only pills (still labeled for screen readers via
+   aria-label on the link) keep all three on one row at any phone width. */
+@media (max-width: 480px) {
+  .contact-info-item { padding: 8px; gap: 0; }
+  .contact-info-item span:not(.contact-info-icon) { display: none; }
+}
 .contact-media { width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: var(--bg-alt); }
 .contact-media img, .contact-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .contact-info-icon {
