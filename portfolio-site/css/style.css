@@ -276,18 +276,21 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 
 /* ---------- testimonials ---------- */
 #testimonials .wrap { max-width: 1400px; }
-.testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
-@media (min-width: 720px) {
-  .testimonial-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
-  .testimonial-card-quote { grid-column: 1 / -1; }
+.testimonial-grid {
+  display: flex; gap: 28px; width: max-content; align-items: flex-start;
+  animation: scroll-left 36s linear infinite;
 }
+.testimonial-grid.no-scroll { animation: none; margin: 0 auto; }
+.marquee:hover .testimonial-grid { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .testimonial-grid { animation: none; } }
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line); color: #16160F;
-  border-radius: 12px; padding: 14px; display: flex; flex-direction: column;
+  border-radius: 12px; padding: 20px; display: flex; flex-direction: column;
+  width: min(560px, 82vw); flex-shrink: 0;
   transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center; will-change: transform;
 }
 .testimonial-card:hover {
-  transform: scale(1.08);
+  transform: scale(1.05);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
   position: relative; z-index: 5;
 }

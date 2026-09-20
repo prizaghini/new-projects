@@ -282,6 +282,7 @@ async function loadTestimonials(supabase) {
     .order("sort_order", { ascending: true });
 
   if (error || !data || data.length === 0) {
+    track.classList.add("no-scroll");
     track.innerHTML = `<div class="empty-note">No testimonials yet — add some from the admin dashboard.</div>`;
     return;
   }
@@ -353,7 +354,13 @@ async function loadTestimonials(supabase) {
       </div>
     </div>`;
   });
-  track.innerHTML = cards.join("");
+  // Same trick as the brand-logo marquee: duplicating the list is what makes
+  // the scroll loop seamless. With only a handful of testimonials the
+  // duplicate set is what keeps the row moving instead of stopping dead as
+  // soon as the originals scroll past.
+  const enoughToScroll = cards.length > 1;
+  track.classList.toggle("no-scroll", !enoughToScroll);
+  track.innerHTML = (enoughToScroll ? [...cards, ...cards] : cards).join("");
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
