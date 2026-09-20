@@ -452,6 +452,21 @@ function setupTestimonialTapZoom(track) {
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
+// The admin field is labeled "LinkedIn handle", but people naturally paste
+// in whatever's in their browser's address bar when they're on their own
+// profile — the full https://www.linkedin.com/in/... URL, not just the
+// handle. Building the link as `https://linkedin.com/in/${handle}` without
+// accounting for that turns a pasted full URL into a broken, doubled-up
+// link (https://linkedin.com/in/https://www.linkedin.com/in/...) that 404s
+// even though what was typed in was a perfectly correct URL. Accept either.
+function buildLinkedinUrl(value) {
+  const v = (value || "").trim();
+  if (!v) return "";
+  if (/^https?:\/\//i.test(v)) return v;
+  const handle = v.replace(/^@/, "").replace(/^(www\.)?linkedin\.com\/in\//i, "").replace(/^\/+|\/+$/g, "");
+  return `https://www.linkedin.com/in/${handle}`;
+}
+
 // Splits on blank lines into <p> paragraphs (for spacing), and turns any
 // remaining single line break into <br> within a paragraph.
 function textToParagraphs(text) {
@@ -685,7 +700,7 @@ async function loadSiteSettings(supabase) {
     el.href = `mailto:${s.contact_email}`;
   }
   if (s.linkedin_handle) {
-    document.getElementById("footer-linkedin").href = `https://linkedin.com/in/${s.linkedin_handle.replace("@", "")}`;
+    document.getElementById("footer-linkedin").href = buildLinkedinUrl(s.linkedin_handle);
   }
 
   if (s.contact_heading) document.getElementById("contact-heading").textContent = s.contact_heading;
@@ -702,7 +717,7 @@ async function loadSiteSettings(supabase) {
   const contactLinkedinEl = document.getElementById("contact-info-linkedin");
   if (contactLinkedinEl) {
     contactLinkedinEl.hidden = s.show_contact_info_linkedin === "false" || !s.linkedin_handle;
-    if (s.linkedin_handle) contactLinkedinEl.href = `https://linkedin.com/in/${s.linkedin_handle.replace("@", "")}`;
+    if (s.linkedin_handle) contactLinkedinEl.href = buildLinkedinUrl(s.linkedin_handle);
   }
   const contactWhatsappEl = document.getElementById("contact-info-whatsapp");
   if (contactWhatsappEl) {
