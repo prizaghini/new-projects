@@ -300,29 +300,21 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-.testimonial-card-quote { padding: 0; overflow: hidden; justify-content: flex-start; max-height: 400px; }
-.testimonial-card-quote .email-bar {
-  display: flex; align-items: center; gap: 6px; padding: 9px 14px;
-  background: color-mix(in srgb, var(--ink) 6%, var(--card));
-  border-bottom: 1px solid var(--line);
+.testimonial-card-quote { padding: 0; overflow: hidden; justify-content: flex-start; max-height: 420px; }
+.compose-titlebar {
+  display: flex; align-items: center; gap: 6px; padding: 10px 14px; flex-shrink: 0;
+  background: #4A6D8C;
 }
-.email-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
-.email-bar .dot-red { background: #FF5F57; }
-.email-bar .dot-yellow { background: #FEBC2E; }
-.email-bar .dot-green { background: #28C840; }
-.testimonial-card-quote .email-head {
-  background: color-mix(in srgb, var(--ink) 2%, var(--card));
-  border-bottom: 1px solid var(--line);
-  padding: 14px 22px 12px;
-}
-.email-head-row { display: flex; align-items: baseline; gap: 8px; }
-.email-head-row + .email-head-row { margin-top: 5px; }
-.email-label {
-  font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.6;
-  flex-shrink: 0; width: 44px;
-}
-.email-from { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
-.email-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.compose-titlebar .dot { width: 9px; height: 9px; border-radius: 50%; }
+.compose-titlebar .dot-red { background: #FF5F57; }
+.compose-titlebar .dot-yellow { background: #FEBC2E; }
+.compose-titlebar .dot-green { background: #28C840; }
+.compose-close { margin-left: auto; color: rgba(255, 255, 255, 0.85); font-size: 1.0625rem; line-height: 1; }
+.compose-fields { padding: 6px 20px 0; flex-shrink: 0; }
+.compose-field { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.compose-label { font-family: var(--body); font-size: 0.8125rem; color: var(--ink-soft); width: 44px; flex-shrink: 0; }
+.compose-from { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.email-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .email-from-name { font-family: var(--body); font-weight: 400; font-size: 0.8125rem; color: var(--ink-soft); }
 .email-from-name b { font-weight: 600; color: #16160F; }
 .email-address { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.8; }
@@ -331,10 +323,29 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card-quote .quote {
   font-family: var(--body); font-weight: 400;
   font-size: var(--testimonial-quote-size, 1rem); color: var(--testimonial-quote-color, #16160F);
-  line-height: 1.6; flex: 1; min-height: 0; overflow-y: auto; padding: 18px 22px 20px;
+  line-height: 1.6; flex: 1; min-height: 0; overflow-y: auto; padding: 16px 22px 20px;
 }
 .testimonial-card-quote .quote p + p { margin-top: 12px; }
-.testimonial-card-quote .result { margin: 0 22px 20px; flex-shrink: 0; }
+.testimonial-card-quote .result { margin: 0 22px 16px; flex-shrink: 0; }
+.compose-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0;
+  padding: 10px 16px; background: color-mix(in srgb, var(--ink) 5%, var(--card));
+  border-top: 1px solid var(--line);
+}
+.compose-tools { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); }
+.compose-tools .tool-aa { font-family: var(--body); font-size: 0.8125rem; font-weight: 600; }
+.compose-tools .tool-icon { display: flex; align-items: center; justify-content: center; font-family: var(--body); font-size: 0.8125rem; }
+.compose-tools .tool-bold { font-weight: 700; }
+.compose-tools .tool-italic { font-style: italic; }
+.compose-tools .tool-underline { text-decoration: underline; }
+.tool-sep { width: 1px; height: 14px; background: var(--line); }
+.compose-actions { display: flex; align-items: center; gap: 6px; }
+.compose-btn {
+  font-family: var(--body); font-size: 0.75rem; font-weight: 600;
+  padding: 6px 12px; border-radius: 6px; white-space: nowrap;
+}
+.compose-btn-ghost { color: var(--ink-soft); }
+.compose-btn-send { background: #3E6EA5; color: #fff; }
 
 /* ---------- contact ---------- */
 .contact-grid { display: grid; gap: clamp(28px, 5vw, 48px); }

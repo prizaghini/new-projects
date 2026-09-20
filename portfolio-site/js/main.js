@@ -267,6 +267,13 @@ async function loadBrandLogos(supabase) {
 }
 
 // ---------- testimonials ----------
+// Decorative toolbar icons for the email-compose-style testimonial card —
+// purely visual flourish to sell the "screenshot of a real mail app" look.
+const ALIGN_LEFT_ICON = `<svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect width="14" height="1.4"/><rect y="4.3" width="8" height="1.4"/><rect y="8.6" width="11" height="1.4"/></svg>`;
+const ALIGN_CENTER_ICON = `<svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect width="14" height="1.4"/><rect x="3" y="4.3" width="8" height="1.4"/><rect x="1.5" y="8.6" width="11" height="1.4"/></svg>`;
+const ALIGN_RIGHT_ICON = `<svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect width="14" height="1.4"/><rect x="6" y="4.3" width="8" height="1.4"/><rect x="3" y="8.6" width="11" height="1.4"/></svg>`;
+const TRASH_ICON = `<svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 3.5H11M4.5 1H7.5M2 3.5L2.5 13H9.5L10 3.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 async function loadTestimonials(supabase) {
   const track = document.getElementById("testimonial-track");
   const { data, error } = await supabase
@@ -289,12 +296,13 @@ async function loadTestimonials(supabase) {
         ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
       </div>`;
     }
-    // No screenshot — style as an actual forwarded-email screenshot instead
-    // (works for an emailed recommendation just as well as a typed-in
-    // LinkedIn one): a mail-app window bar, then classic Outlook-style
-    // From:/Sent: header lines above the message body. The sender's email
-    // address is shown with its name part blurred out for privacy, domain
-    // left legible for authenticity.
+    // No screenshot — style as an actual email-compose window screenshot
+    // instead (works for an emailed recommendation just as well as a
+    // typed-in LinkedIn one): a mac-style title bar, a single From field
+    // (no To/Cc — this is a received recommendation, not a draft), and a
+    // decorative compose toolbar to sell the "real screenshot" look. The
+    // sender's email address is shown with its name part blurred out for
+    // privacy, domain left legible for authenticity.
     const nameHtml = [t.brand_handle && `<b>${t.brand_handle}</b>`, t.title]
       .filter(Boolean).join(t.brand_handle && t.title ? ", " : "");
     let emailHtml = "";
@@ -302,27 +310,47 @@ async function loadTestimonials(supabase) {
       const [local, domain] = t.sender_email.split("@");
       emailHtml = ` <span class="email-address">&lt;<span class="email-blur">${local}</span>@${domain}&gt;</span>`;
     }
-    const fromRow = (nameHtml || emailHtml) ? `
-        <div class="email-head-row">
-          <span class="email-label">From:</span>
-          <div class="email-from">
+    const fromField = (nameHtml || emailHtml || t.photo_url) ? `
+        <div class="compose-field">
+          <span class="compose-label">From</span>
+          <div class="compose-from">
             ${t.photo_url ? `<img class="email-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">` : ""}
             <span class="email-from-name">${nameHtml}</span>${emailHtml}
           </div>
         </div>` : "";
-    const sentRow = t.quote_date ? `
-        <div class="email-head-row">
-          <span class="email-label">Sent:</span>
+    const sentField = t.quote_date ? `
+        <div class="compose-field">
+          <span class="compose-label">Sent</span>
           <span class="email-value">${t.quote_date}</span>
         </div>` : "";
-    const headerHtml = `
-      <div class="email-bar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
-      ${(fromRow || sentRow) ? `<div class="email-head">${fromRow}${sentRow}</div>` : ""}`;
     return `
     <div class="testimonial-card testimonial-card-quote">
-      ${headerHtml}
+      <div class="compose-titlebar">
+        <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+        <span class="compose-close" aria-hidden="true">&times;</span>
+      </div>
+      ${(fromField || sentField) ? `<div class="compose-fields">${fromField}${sentField}</div>` : ""}
       ${t.quote ? `<div class="quote">${textToParagraphs(t.quote)}</div>` : ""}
       ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
+      <div class="compose-toolbar" aria-hidden="true">
+        <div class="compose-tools">
+          <span class="tool-aa">Aa</span>
+          <span class="tool-sep"></span>
+          <span class="tool-icon">${ALIGN_LEFT_ICON}</span>
+          <span class="tool-icon">${ALIGN_CENTER_ICON}</span>
+          <span class="tool-icon">${ALIGN_RIGHT_ICON}</span>
+          <span class="tool-sep"></span>
+          <span class="tool-icon tool-bold">B</span>
+          <span class="tool-icon tool-italic">I</span>
+          <span class="tool-icon tool-underline">U</span>
+          <span class="tool-icon">${TRASH_ICON}</span>
+        </div>
+        <div class="compose-actions">
+          <span class="compose-btn compose-btn-ghost">Cancel</span>
+          <span class="compose-btn compose-btn-ghost">Save</span>
+          <span class="compose-btn compose-btn-send">Send</span>
+        </div>
+      </div>
     </div>`;
   });
   track.innerHTML = cards.join("");
