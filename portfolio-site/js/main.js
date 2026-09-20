@@ -289,18 +289,20 @@ async function loadTestimonials(supabase) {
         ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
       </div>`;
     }
-    // No screenshot — style as a letter-style pull quote instead (works for
-    // an emailed recommendation just as well as a typed-in LinkedIn one).
+    // No screenshot — style as a letter/email instead (works for an emailed
+    // recommendation just as well as a typed-in LinkedIn one): sender header
+    // up top, then the message body as proper paragraphs.
     const byline = [t.brand_handle, t.title].filter(Boolean).join(", ");
-    const bylineHtml = t.photo_url
-      ? `<div class="byline-row"><img class="byline-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">
-           <div class="byline-text">${[t.brand_handle && `<b>${t.brand_handle}</b>`, t.title && `<span>${t.title}</span>`].filter(Boolean).join("")}</div>
-         </div>`
-      : (byline ? `<p class="byline">— ${byline}</p>` : "");
+    const headerHtml = (t.photo_url || byline || t.quote_date) ? `
+      <div class="byline-row">
+        ${t.photo_url ? `<img class="byline-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">` : ""}
+        ${byline ? `<div class="byline-text">${[t.brand_handle && `<b>${t.brand_handle}</b>`, t.title && `<span>${t.title}</span>`].filter(Boolean).join("")}</div>` : ""}
+        ${t.quote_date ? `<span class="quote-date">${t.quote_date}</span>` : ""}
+      </div>` : "";
     return `
     <div class="testimonial-card testimonial-card-quote">
-      ${t.quote ? `<span class="quote-mark" aria-hidden="true">&ldquo;</span><p class="quote">${t.quote}</p>` : ""}
-      ${bylineHtml}
+      ${headerHtml}
+      ${t.quote ? `<div class="quote">${textToParagraphs(t.quote)}</div>` : ""}
       ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
     </div>`;
   }).join("");

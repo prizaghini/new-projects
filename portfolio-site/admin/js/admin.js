@@ -384,6 +384,7 @@ setupCrudSection({
     form.image_url.value = row.image_url || "";
     form.photo_url.value = row.photo_url || "";
     form.photo_position.value = row.photo_position || "top";
+    form.quote_date.value = row.quote_date || "";
     form.sort_order.value = row.sort_order || 0;
   },
   beforeSubmit: async form => {
