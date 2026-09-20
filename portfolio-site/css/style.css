@@ -276,7 +276,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 
 /* ---------- testimonials ---------- */
 #testimonials .wrap { max-width: 1400px; }
-#testimonials .marquee { padding: 90px 0; }
+#testimonials .marquee { padding: 135px 0; }
 .testimonial-grid {
   display: flex; gap: 28px; width: max-content; align-items: flex-start;
   animation: scroll-left 36s linear infinite;
@@ -291,7 +291,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center; will-change: transform;
 }
 .testimonial-card:hover {
-  transform: scale(1.3);
+  transform: scale(1.55);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
   position: relative; z-index: 5;
 }
