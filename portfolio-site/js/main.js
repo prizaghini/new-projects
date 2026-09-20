@@ -364,25 +364,41 @@ async function loadTestimonials(supabase) {
   setupTestimonialTapZoom(track);
 }
 
-// :hover doesn't fire from a tap, so touch devices need their own way to
-// zoom a card in. Scaling it up in place like :hover does would need it to
-// spill out of the marquee's clipped, endlessly-scrolling strip, and how
-// much room that leaves depends on wherever the card happens to be sitting
-// in the row the moment it's tapped — never reliable. So tapping instead
-// lifts the card clean out of the track (a comment node left behind marks
-// where to put it back) and pins it centered over the page as a lightbox,
-// above a dimmed backdrop; pauses the marquee while it's out so the track
-// isn't still moving underneath when the card goes back.
+// Scaling a card up in place (on hover or tap) would need it to spill out
+// of the marquee's clipped, endlessly-scrolling strip, and how much room
+// that leaves depends on wherever the card happens to be sitting in the row
+// at that moment — never reliable, and reserving enough space for it
+// *always* (not just while zoomed) is what made the section balloon in
+// height before. So both a tap and a mouse hover instead lift the card
+// clean out of the track (a comment node left behind marks where to put it
+// back) and pin it centered over the page as a lightbox, above a dimmed
+// backdrop; pauses the marquee while it's out so the track isn't still
+// moving underneath when the card goes back.
 function setupTestimonialTapZoom(track) {
   let backdrop = document.querySelector(".testimonial-zoom-backdrop");
   if (!backdrop) {
     backdrop = document.createElement("div");
     backdrop.className = "testimonial-zoom-backdrop";
     document.body.appendChild(backdrop);
-    backdrop.addEventListener("click", closeZoom);
   }
+  const marquee = track.closest(".marquee");
   let zoomedCard = null;
   let placeholder = null;
+  let hoverTimer = null;
+
+  function openZoom(card) {
+    if (card === zoomedCard) return;
+    closeZoom();
+    placeholder = document.createComment("testimonial-zoom-placeholder");
+    card.before(placeholder);
+    document.body.appendChild(card);
+    card.classList.add("zoomed");
+    zoomedCard = card;
+    track.classList.add("paused");
+    backdrop.classList.add("active");
+    document.body.style.overflow = "hidden";
+    document.addEventListener("mousemove", onMouseMove);
+  }
 
   function closeZoom() {
     if (!zoomedCard) return;
@@ -393,22 +409,46 @@ function setupTestimonialTapZoom(track) {
     track.classList.remove("paused");
     backdrop.classList.remove("active");
     document.body.style.overflow = "";
+    document.removeEventListener("mousemove", onMouseMove);
   }
+
+  function pointInRect(x, y, r) {
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }
+
+  // While a card is zoomed via hover, keep it open as long as the pointer
+  // is still somewhere over the row it came from or over the zoomed card
+  // itself (wherever that ends up on screen) — only close once it's moved
+  // to neither. A plain mouseleave on the card doesn't work here: the
+  // instant it's repositioned to the center of the page the cursor is, by
+  // definition, no longer over it, so it'd close itself the moment it opened.
+  function onMouseMove(e) {
+    if (!zoomedCard) return;
+    const overCard = pointInRect(e.clientX, e.clientY, zoomedCard.getBoundingClientRect());
+    const overRow = marquee && pointInRect(e.clientX, e.clientY, marquee.getBoundingClientRect());
+    if (!overCard && !overRow) closeZoom();
+  }
+
+  backdrop.onclick = closeZoom;
 
   track.onclick = e => {
     const card = e.target.closest(".testimonial-card");
     if (!card) return;
-    if (card === zoomedCard) { closeZoom(); return; }
-    closeZoom();
-    placeholder = document.createComment("testimonial-zoom-placeholder");
-    card.before(placeholder);
-    document.body.appendChild(card);
-    card.classList.add("zoomed");
-    zoomedCard = card;
-    track.classList.add("paused");
-    backdrop.classList.add("active");
-    document.body.style.overflow = "hidden";
+    if (card === zoomedCard) closeZoom();
+    else openZoom(card);
   };
+
+  // Hover only means anything for a mouse — a brief dwell avoids opening on
+  // every card the cursor merely passes over while scrolling by.
+  track.addEventListener("mouseover", e => {
+    const card = e.target.closest(".testimonial-card");
+    if (!card || card === zoomedCard) return;
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(() => {
+      if (card.matches(":hover")) openZoom(card);
+    }, 250);
+  });
+  track.addEventListener("mouseout", () => clearTimeout(hoverTimer));
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------

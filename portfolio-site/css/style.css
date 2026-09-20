@@ -276,7 +276,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 
 /* ---------- testimonials ---------- */
 #testimonials .wrap { max-width: 1400px; }
-#testimonials .marquee { padding: 40px 0; }
+#testimonials .marquee { padding: 24px 0; }
 .testimonial-grid {
   display: flex; gap: 28px; width: max-content; align-items: flex-start;
   animation: scroll-left 36s linear infinite;
@@ -288,27 +288,26 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   background: var(--card); border: 1px solid var(--line); color: #16160F;
   border-radius: 12px; padding: 20px; display: flex; flex-direction: column;
   width: min(560px, 82vw); flex-shrink: 0; cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center; will-change: transform;
+  transition: box-shadow 0.2s ease; will-change: box-shadow;
 }
-.testimonial-card:hover {
-  transform: scale(1.04);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
-  position: relative; z-index: 5;
-}
-@media (prefers-reduced-motion: reduce) {
-  .testimonial-card { transition: none; }
-  .testimonial-card:hover { transform: none; }
-}
+/* Just a shadow lift, no scale — the real zoom (see .zoomed below) needs
+   much more room than an in-place transform can grow into without either
+   clipping against the marquee's edges or forcing extra reserved space
+   around the row for every card, all the time, whether anyone's hovering
+   or not (that's what made the section balloon in height before). */
+.testimonial-card:hover { box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18); }
+@media (prefers-reduced-motion: reduce) { .testimonial-card { transition: none; } }
 @media (max-width: 640px) { .testimonial-card { width: 65vw; } }
 /* :hover doesn't exist on touch, so tapping a card is the mobile way to
-   zoom in — but scaling it up in place (like :hover does) would need it to
-   spill outside the marquee's clipped, horizontally-scrolling strip, and
-   how much room that leaves depends on exactly where the card sits in the
-   row at the moment it's tapped, which is never reliable. So instead
-   setupTestimonialTapZoom lifts the tapped card out of the track (out from
-   under the marquee's overflow:hidden and its animated ancestor entirely)
-   and this class pins it centered over the page instead, above a dimmed
-   backdrop, sized independently of the small resting card. */
+   zoom in; on a mouse, hovering (after a short dwell — see
+   setupTestimonialTapZoom) does the same thing. Either way, scaling the
+   card up in place would need it to spill outside the marquee's clipped,
+   horizontally-scrolling strip, and how much room that leaves depends on
+   exactly where the card sits in the row at that moment, which is never
+   reliable. So instead the card gets lifted clean out of the track (out
+   from under the marquee's overflow:hidden and its animated ancestor
+   entirely) and this class pins it centered over the page instead, above
+   a dimmed backdrop, sized independently of the small resting card. */
 .testimonial-card.zoomed {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) !important;
   /* The resting card is already min(560px, 82vw) — capping the zoomed
