@@ -289,16 +289,25 @@ async function loadTestimonials(supabase) {
         ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
       </div>`;
     }
-    // No screenshot — style as a letter/email instead (works for an emailed
-    // recommendation just as well as a typed-in LinkedIn one): sender header
-    // up top, then the message body as proper paragraphs.
-    const byline = [t.brand_handle, t.title].filter(Boolean).join(", ");
-    const headerHtml = (t.photo_url || byline || t.quote_date) ? `
-      <div class="byline-row">
-        ${t.photo_url ? `<img class="byline-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">` : ""}
-        ${byline ? `<div class="byline-text">${[t.brand_handle && `<b>${t.brand_handle}</b>`, t.title && `<span>${t.title}</span>`].filter(Boolean).join("")}</div>` : ""}
-        ${t.quote_date ? `<span class="quote-date">${t.quote_date}</span>` : ""}
-      </div>` : "";
+    // No screenshot — style as an actual email instead (works for an emailed
+    // recommendation just as well as a typed-in LinkedIn one): a shaded
+    // From/Date header like a mail client, then the message as paragraphs.
+    const nameHtml = [t.brand_handle && `<b>${t.brand_handle}</b>`, t.title]
+      .filter(Boolean).join(t.brand_handle && t.title ? ", " : "");
+    const fromRow = nameHtml ? `
+        <div class="email-head-row">
+          <span class="email-label">From</span>
+          <div class="email-from">
+            ${t.photo_url ? `<img class="email-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">` : ""}
+            <span class="email-from-name">${nameHtml}</span>
+          </div>
+        </div>` : "";
+    const dateRow = t.quote_date ? `
+        <div class="email-head-row">
+          <span class="email-label">Date</span>
+          <span class="email-value">${t.quote_date}</span>
+        </div>` : "";
+    const headerHtml = (fromRow || dateRow) ? `<div class="email-head">${fromRow}${dateRow}</div>` : "";
     return `
     <div class="testimonial-card testimonial-card-quote">
       ${headerHtml}

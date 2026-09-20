@@ -299,22 +299,29 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-.testimonial-card-quote { padding: 22px 28px; justify-content: flex-start; }
+.testimonial-card-quote { padding: 0; overflow: hidden; justify-content: flex-start; }
+.testimonial-card-quote .email-head {
+  background: color-mix(in srgb, var(--ink) 4%, var(--card));
+  border-bottom: 1px solid var(--line);
+  padding: 14px 22px; display: flex; flex-direction: column; gap: 7px;
+}
+.email-head-row { display: flex; align-items: center; gap: 10px; }
+.email-label {
+  font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-soft); opacity: 0.6; width: 38px; flex-shrink: 0;
+}
+.email-from { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.email-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.email-from-name, .email-value { font-family: var(--body); font-size: 0.875rem; color: #16160F; }
+.email-from-name b { font-weight: 600; }
+.email-value { color: var(--ink-soft); font-size: 0.8125rem; }
 .testimonial-card-quote .quote {
-  font-family: var(--testimonial-quote-font, var(--display)); font-weight: 400;
+  font-family: var(--body); font-weight: 400;
   font-size: var(--testimonial-quote-size, 1rem); color: var(--testimonial-quote-color, #16160F);
-  line-height: 1.6; flex: 1;
+  line-height: 1.6; flex: 1; padding: 18px 22px 20px;
 }
 .testimonial-card-quote .quote p + p { margin-top: 12px; }
-.byline-row {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
-  padding-bottom: 14px; border-bottom: 1px solid var(--line);
-}
-.byline-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; object-position: center top; flex-shrink: 0; }
-.byline-text { display: flex; flex-direction: column; line-height: 1.35; }
-.byline-text b { font-family: var(--display); font-size: 0.875rem; font-weight: 600; color: #16160F; }
-.byline-text span { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); }
-.quote-date { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.75; margin-left: auto; white-space: nowrap; }
+.testimonial-card-quote .result { margin: 0 22px 20px; }
 
 /* ---------- contact ---------- */
 .contact-grid { display: grid; gap: clamp(28px, 5vw, 48px); }
