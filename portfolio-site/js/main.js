@@ -275,14 +275,17 @@ async function loadTestimonials(supabase) {
     .order("sort_order", { ascending: true });
 
   if (error || !data || data.length === 0) {
+    track.classList.add("no-scroll");
     track.innerHTML = `<div class="empty-note">No testimonials yet — add some from the admin dashboard.</div>`;
     return;
   }
-  track.innerHTML = data.map(t => {
+  const cards = data.map(t => {
     if (t.image_url) {
       return `
       <div class="testimonial-card">
-        <img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">
+        <div class="testimonial-card-img-wrap">
+          <img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">
+        </div>
         ${t.brand_handle ? `<span class="handle">${t.brand_handle}</span>` : ""}
         ${t.title ? `<h3>${t.title}</h3>` : ""}
         ${t.quote ? `<p class="quote">"${t.quote}"</p>` : ""}
@@ -324,7 +327,14 @@ async function loadTestimonials(supabase) {
       ${t.quote ? `<div class="quote">${textToParagraphs(t.quote)}</div>` : ""}
       ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
     </div>`;
-  }).join("");
+  });
+  // Same trick as the brand-logo marquee: duplicating the list is what makes
+  // the scroll loop seamless, but with few cards the duplicate would just
+  // sit visibly next to the originals instead of off-screen — so only
+  // duplicate (and animate) once there are enough to actually need scrolling.
+  const enoughToScroll = cards.length > 2;
+  track.classList.toggle("no-scroll", !enoughToScroll);
+  track.innerHTML = (enoughToScroll ? [...cards, ...cards] : cards).join("");
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
