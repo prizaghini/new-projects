@@ -326,33 +326,6 @@ async function loadTestimonials(supabase) {
     </div>`;
   });
   track.innerHTML = cards.join("");
-  setupCarouselArrows(track);
-}
-
-// Click-to-advance version of the horizontal card row (no auto-scroll):
-// each arrow click scrolls by one card's width, and arrows disable
-// themselves at either end instead of wrapping around.
-function setupCarouselArrows(track) {
-  const viewport = track.parentElement;
-  const prevBtn = document.getElementById("testimonial-prev");
-  const nextBtn = document.getElementById("testimonial-next");
-  if (!prevBtn || !nextBtn) return;
-
-  function step(dir) {
-    const card = track.querySelector(".testimonial-card");
-    const distance = card ? card.getBoundingClientRect().width + 24 : viewport.clientWidth;
-    viewport.scrollBy({ left: dir * distance, behavior: "smooth" });
-  }
-  function updateArrows() {
-    const max = viewport.scrollWidth - viewport.clientWidth;
-    prevBtn.disabled = viewport.scrollLeft <= 4;
-    nextBtn.disabled = viewport.scrollLeft >= max - 4;
-  }
-  prevBtn.onclick = () => step(-1);
-  nextBtn.onclick = () => step(1);
-  viewport.addEventListener("scroll", updateArrows);
-  window.addEventListener("resize", updateArrows);
-  updateArrows();
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
