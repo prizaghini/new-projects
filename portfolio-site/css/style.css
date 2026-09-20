@@ -311,7 +311,10 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
    backdrop, sized independently of the small resting card. */
 .testimonial-card.zoomed {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) !important;
-  width: min(560px, 90vw); max-height: 85vh; overflow-y: auto;
+  /* The resting card is already min(560px, 82vw) — capping the zoomed
+     size at the same 560px meant clicking to zoom did nothing on a
+     desktop-width screen, since both states hit the same ceiling. */
+  width: min(900px, 92vw); max-height: 88vh; overflow-y: auto;
   z-index: 201; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
 }
 .testimonial-zoom-backdrop {
