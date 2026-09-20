@@ -21,11 +21,6 @@ function parseCategories(str) {
   }).filter(c => c.key);
 }
 
-const SERVICE_WORDS = [
-  "Conversion UGC", "High-Performance Creatives", "Strategic Scripts",
-  "Lifestyle Photos", "E-commerce Content", "UGC Consulting", "Sponsored Posts",
-];
-
 function fillMarquee(el, words) {
   const doubled = [...words, ...words];
   el.innerHTML = doubled.map(w => `<span>${w}</span><span class="marquee-dot">◆</span>`).join("");
@@ -895,9 +890,13 @@ function showUnavailable(id, note) {
 }
 
 // ---------- init ----------
-// UI-only behaviour (marquees, counters, reveal animations) never depends on
-// Supabase loading, so it always runs even if the data layer below fails.
-fillMarquee(document.getElementById("marquee-1"), SERVICE_WORDS);
+// UI-only behaviour (counters, reveal animations) never depends on Supabase
+// loading, so it always runs even if the data layer below fails. The
+// scrolling banner used to fill with generic placeholder words immediately
+// here, before your real marquee_text setting arrives — meaning every
+// visitor saw that placeholder flash before your actual text replaced it a
+// moment later. It's left empty now and only ever filled once, with the
+// real text once settings load.
 document.getElementById("footer-year").textContent = new Date().getFullYear();
 
 setupReveal();
