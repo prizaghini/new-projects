@@ -278,7 +278,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 #testimonials .wrap { max-width: 1400px; }
 .testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
 @media (min-width: 720px) {
-  .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonial-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
   .testimonial-card-quote { grid-column: 1 / -1; }
 }
 .testimonial-card {
