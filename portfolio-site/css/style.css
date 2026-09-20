@@ -388,6 +388,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* ---------- contact ---------- */
 .contact-grid { display: grid; gap: clamp(28px, 5vw, 48px); }
 @media (min-width: 860px) { .contact-grid { grid-template-columns: 0.9fr 1.1fr; } }
+#contact-subcopy { margin-top: 20px; }
 form.contact-form { display: grid; gap: 14px; }
 .field { display: grid; gap: 6px; }
 .field label { font-family: var(--mono); font-size: 0.71875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
