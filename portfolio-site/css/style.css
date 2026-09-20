@@ -276,9 +276,9 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 
 /* ---------- testimonials ---------- */
 #testimonials .wrap { max-width: 1400px; }
-.testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+.testimonial-grid { display: grid; gap: 24px; grid-template-columns: 1fr; align-items: stretch; }
 @media (min-width: 720px) {
-  .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonial-grid { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
 }
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line); color: #16160F;
@@ -299,7 +299,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card .handle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-.testimonial-card-quote { padding: 0; overflow: hidden; justify-content: flex-start; }
+.testimonial-card-quote { padding: 0; overflow: hidden; justify-content: flex-start; max-height: 480px; }
 .testimonial-card-quote .email-bar {
   display: flex; align-items: center; gap: 6px; padding: 9px 14px;
   background: color-mix(in srgb, var(--ink) 6%, var(--card));
@@ -314,19 +314,26 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   border-bottom: 1px solid var(--line);
   padding: 14px 22px 12px;
 }
-.email-subject { font-family: var(--body); font-weight: 700; font-size: 1rem; color: #16160F; margin-bottom: 8px; }
-.email-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.email-from { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.email-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.email-from-name { font-family: var(--body); font-weight: 600; font-size: 0.8125rem; color: var(--ink-soft); }
-.email-date { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.7; white-space: nowrap; }
+.email-head-row { display: flex; align-items: baseline; gap: 8px; }
+.email-head-row + .email-head-row { margin-top: 5px; }
+.email-label {
+  font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.6;
+  flex-shrink: 0; width: 44px;
+}
+.email-from { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.email-avatar { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.email-from-name { font-family: var(--body); font-weight: 400; font-size: 0.8125rem; color: var(--ink-soft); }
+.email-from-name b { font-weight: 600; color: #16160F; }
+.email-address { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.8; }
+.email-blur { filter: blur(4px); user-select: none; }
+.email-value { font-family: var(--body); font-size: 0.8125rem; color: var(--ink-soft); }
 .testimonial-card-quote .quote {
   font-family: var(--body); font-weight: 400;
   font-size: var(--testimonial-quote-size, 1rem); color: var(--testimonial-quote-color, #16160F);
-  line-height: 1.6; flex: 1; padding: 18px 22px 20px;
+  line-height: 1.6; flex: 1; min-height: 0; overflow-y: auto; padding: 18px 22px 20px;
 }
 .testimonial-card-quote .quote p + p { margin-top: 12px; }
-.testimonial-card-quote .result { margin: 0 22px 20px; }
+.testimonial-card-quote .result { margin: 0 22px 20px; flex-shrink: 0; }
 
 /* ---------- contact ---------- */
 .contact-grid { display: grid; gap: clamp(28px, 5vw, 48px); }

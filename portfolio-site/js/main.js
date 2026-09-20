@@ -289,22 +289,35 @@ async function loadTestimonials(supabase) {
         ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
       </div>`;
     }
-    // No screenshot — style as an actual email screenshot instead (works for
-    // an emailed recommendation just as well as a typed-in LinkedIn one): a
-    // mail-app window bar, a bold subject line (the "title" field), and a
-    // From/Date meta row above the message body.
-    const subjectHtml = t.title ? `<div class="email-subject">${t.title}</div>` : "";
-    const fromHtml = t.brand_handle ? `
-        <div class="email-from">
-          ${t.photo_url ? `<img class="email-avatar" src="${t.photo_url}" alt="${t.brand_handle}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">` : ""}
-          <span class="email-from-name">${t.brand_handle}</span>
+    // No screenshot — style as an actual forwarded-email screenshot instead
+    // (works for an emailed recommendation just as well as a typed-in
+    // LinkedIn one): a mail-app window bar, then classic Outlook-style
+    // From:/Sent: header lines above the message body. The sender's email
+    // address is shown with its name part blurred out for privacy, domain
+    // left legible for authenticity.
+    const nameHtml = [t.brand_handle && `<b>${t.brand_handle}</b>`, t.title]
+      .filter(Boolean).join(t.brand_handle && t.title ? ", " : "");
+    let emailHtml = "";
+    if (t.sender_email && t.sender_email.includes("@")) {
+      const [local, domain] = t.sender_email.split("@");
+      emailHtml = ` <span class="email-address">&lt;<span class="email-blur">${local}</span>@${domain}&gt;</span>`;
+    }
+    const fromRow = (nameHtml || emailHtml) ? `
+        <div class="email-head-row">
+          <span class="email-label">From:</span>
+          <div class="email-from">
+            ${t.photo_url ? `<img class="email-avatar" src="${t.photo_url}" alt="${t.brand_handle || ""}" loading="lazy" style="object-position:center ${t.photo_position || "top"}">` : ""}
+            <span class="email-from-name">${nameHtml}</span>${emailHtml}
+          </div>
         </div>` : "";
-    const metaRow = (fromHtml || t.quote_date)
-      ? `<div class="email-meta-row">${fromHtml}${t.quote_date ? `<span class="email-date">${t.quote_date}</span>` : ""}</div>`
-      : "";
+    const sentRow = t.quote_date ? `
+        <div class="email-head-row">
+          <span class="email-label">Sent:</span>
+          <span class="email-value">${t.quote_date}</span>
+        </div>` : "";
     const headerHtml = `
       <div class="email-bar"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
-      ${(subjectHtml || metaRow) ? `<div class="email-head">${subjectHtml}${metaRow}</div>` : ""}`;
+      ${(fromRow || sentRow) ? `<div class="email-head">${fromRow}${sentRow}</div>` : ""}`;
     return `
     <div class="testimonial-card testimonial-card-quote">
       ${headerHtml}

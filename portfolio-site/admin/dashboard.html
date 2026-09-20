@@ -517,7 +517,7 @@
           <input type="hidden" name="image_url">
         </div>
         <div class="field"><label>Brand / handle (optional)</label><input name="brand_handle" placeholder="e.g. @brandname or Jane Smith"></div>
-        <div class="field"><label>Title (optional — the screenshot headline, or the subject line on text-only/email-style cards)</label><input name="title" placeholder="e.g. Record-breaking Meta video"></div>
+        <div class="field"><label>Title (optional — the screenshot headline, or their role on text-only/email-style cards, e.g. "Managing Partner, Acme Co.")</label><input name="title" placeholder="e.g. Record-breaking Meta video"></div>
         <div class="field full"><label>Quote (optional if you upload a screenshot)</label><textarea name="quote" rows="3"></textarea></div>
         <div class="field full">
           <label>Their photo (optional — shown next to their name; only used when there's no screenshot above)</label>
@@ -532,7 +532,8 @@
             <option value="bottom">Bottom</option>
           </select>
         </div>
-        <div class="field"><label>Date (optional — shown on text-only cards, e.g. an emailed recommendation)</label><input name="quote_date" placeholder="e.g. March 2024"></div>
+        <div class="field"><label>Sender email (optional — shown as "From: ****@domain" on text-only cards; the part before @ is blurred for privacy)</label><input name="sender_email" type="email" placeholder="e.g. dora@gracecertifiedaccountants.co.uk"></div>
+        <div class="field"><label>Sent date (optional — shown as "Sent:" on text-only cards, e.g. an emailed recommendation)</label><input name="quote_date" placeholder="e.g. 29 July 2022"></div>
         <div class="field"><label>Result stat (optional)</label><input name="result_stat" placeholder="e.g. 50M views on 1 video"></div>
         <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
         <div class="actions"><button class="btn" type="submit">Add testimonial</button></div>

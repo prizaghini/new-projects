@@ -33,6 +33,7 @@ alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';
 alter table testimonials add column if not exists quote_date text;
+alter table testimonials add column if not exists sender_email text;
 
 create table if not exists testimonials (
   id uuid primary key default gen_random_uuid(),
@@ -43,7 +44,8 @@ create table if not exists testimonials (
   image_url text,                   -- optional screenshot (e.g. a LinkedIn recommendation) shown instead of/above the quote
   photo_url text,                   -- optional headshot shown next to the byline on text-only (pull-quote) cards
   photo_position text not null default 'top', -- which part of the photo stays visible when cropped to a circle
-  quote_date text,                  -- optional date line for text-only cards (e.g. an emailed recommendation's send date)
+  quote_date text,                  -- optional "Sent:" date line for text-only cards (e.g. an emailed recommendation's send date)
+  sender_email text,                -- optional "From:" email address for text-only cards; the part before '@' is blurred on display
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
