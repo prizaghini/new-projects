@@ -275,7 +275,6 @@ async function loadTestimonials(supabase) {
     .order("sort_order", { ascending: true });
 
   if (error || !data || data.length === 0) {
-    track.classList.add("no-scroll");
     track.innerHTML = `<div class="empty-note">No testimonials yet — add some from the admin dashboard.</div>`;
     return;
   }
@@ -283,9 +282,7 @@ async function loadTestimonials(supabase) {
     if (t.image_url) {
       return `
       <div class="testimonial-card">
-        <div class="testimonial-card-img-wrap">
-          <img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">
-        </div>
+        <img class="testimonial-card-img" src="${t.image_url}" alt="${t.brand_handle || "Testimonial"}" loading="lazy">
         ${t.brand_handle ? `<span class="handle">${t.brand_handle}</span>` : ""}
         ${t.title ? `<h3>${t.title}</h3>` : ""}
         ${t.quote ? `<p class="quote">"${t.quote}"</p>` : ""}
@@ -328,13 +325,34 @@ async function loadTestimonials(supabase) {
       ${t.result_stat ? `<p class="result">${t.result_stat}</p>` : ""}
     </div>`;
   });
-  // Same trick as the brand-logo marquee: duplicating the list is what makes
-  // the scroll loop seamless, but with few cards the duplicate would just
-  // sit visibly next to the originals instead of off-screen — so only
-  // duplicate (and animate) once there are enough to actually need scrolling.
-  const enoughToScroll = cards.length > 2;
-  track.classList.toggle("no-scroll", !enoughToScroll);
-  track.innerHTML = (enoughToScroll ? [...cards, ...cards] : cards).join("");
+  track.innerHTML = cards.join("");
+  setupCarouselArrows(track);
+}
+
+// Click-to-advance version of the horizontal card row (no auto-scroll):
+// each arrow click scrolls by one card's width, and arrows disable
+// themselves at either end instead of wrapping around.
+function setupCarouselArrows(track) {
+  const viewport = track.parentElement;
+  const prevBtn = document.getElementById("testimonial-prev");
+  const nextBtn = document.getElementById("testimonial-next");
+  if (!prevBtn || !nextBtn) return;
+
+  function step(dir) {
+    const card = track.querySelector(".testimonial-card");
+    const distance = card ? card.getBoundingClientRect().width + 24 : viewport.clientWidth;
+    viewport.scrollBy({ left: dir * distance, behavior: "smooth" });
+  }
+  function updateArrows() {
+    const max = viewport.scrollWidth - viewport.clientWidth;
+    prevBtn.disabled = viewport.scrollLeft <= 4;
+    nextBtn.disabled = viewport.scrollLeft >= max - 4;
+  }
+  prevBtn.onclick = () => step(-1);
+  nextBtn.onclick = () => step(1);
+  viewport.addEventListener("scroll", updateArrows);
+  window.addEventListener("resize", updateArrows);
+  updateArrows();
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
