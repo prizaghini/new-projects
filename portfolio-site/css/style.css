@@ -300,21 +300,26 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .testimonial-card .quote { font-size: 0.90625rem; color: var(--ink-soft); flex: 1; }
 .testimonial-card .result { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
 .testimonial-card-quote { padding: 0; overflow: hidden; justify-content: flex-start; }
-.testimonial-card-quote .email-head {
-  background: color-mix(in srgb, var(--ink) 4%, var(--card));
+.testimonial-card-quote .email-bar {
+  display: flex; align-items: center; gap: 6px; padding: 9px 14px;
+  background: color-mix(in srgb, var(--ink) 6%, var(--card));
   border-bottom: 1px solid var(--line);
-  padding: 14px 22px; display: flex; flex-direction: column; gap: 7px;
 }
-.email-head-row { display: flex; align-items: center; gap: 10px; }
-.email-label {
-  font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--ink-soft); opacity: 0.6; width: 38px; flex-shrink: 0;
+.email-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
+.email-bar .dot-red { background: #FF5F57; }
+.email-bar .dot-yellow { background: #FEBC2E; }
+.email-bar .dot-green { background: #28C840; }
+.testimonial-card-quote .email-head {
+  background: color-mix(in srgb, var(--ink) 2%, var(--card));
+  border-bottom: 1px solid var(--line);
+  padding: 14px 22px 12px;
 }
+.email-subject { font-family: var(--body); font-weight: 700; font-size: 1rem; color: #16160F; margin-bottom: 8px; }
+.email-meta-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .email-from { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .email-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.email-from-name, .email-value { font-family: var(--body); font-size: 0.875rem; color: #16160F; }
-.email-from-name b { font-weight: 600; }
-.email-value { color: var(--ink-soft); font-size: 0.8125rem; }
+.email-from-name { font-family: var(--body); font-weight: 600; font-size: 0.8125rem; color: var(--ink-soft); }
+.email-date { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); opacity: 0.7; white-space: nowrap; }
 .testimonial-card-quote .quote {
   font-family: var(--body); font-weight: 400;
   font-size: var(--testimonial-quote-size, 1rem); color: var(--testimonial-quote-color, #16160F);
