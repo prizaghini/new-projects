@@ -797,9 +797,9 @@ async function loadSiteSettings(supabase) {
     show_logos: "section-logos",
     show_case_studies: "section-case-studies",
     show_portfolio: "portfolio",
-    show_services: "services",
-    show_testimonials: "testimonials",
-    show_contact: "contact",
+    show_services: "what-i-bring",
+    show_testimonials: "recommendations",
+    show_contact: "lets-talk",
   };
   for (const [key, id] of Object.entries(sectionToggles)) {
     if (s[key] === "false") {

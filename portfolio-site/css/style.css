@@ -272,7 +272,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* Wider than the shared 44ch .section-head cap — the services subheading
    tends to run longer than other sections' (it's summarizing a whole list
    of offerings), and at 44ch it was wrapping to 3 lines instead of 2. */
-#services .section-head { max-width: 56ch; }
+#what-i-bring .section-head { max-width: 56ch; }
 /* Forces "What I can bring to your marketing" to break after "bring" at
    every screen size, matching the current heading text — if that text
    changes later, this width may need retuning to land the break right. */
@@ -285,8 +285,8 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
 
 /* ---------- testimonials ---------- */
-#testimonials .wrap { max-width: 1400px; }
-#testimonials .marquee { padding: 24px 0; }
+#recommendations .wrap { max-width: 1400px; }
+#recommendations .marquee { padding: 24px 0; }
 .testimonial-grid {
   display: flex; gap: 28px; width: max-content; align-items: flex-start;
   animation: scroll-left 36s linear infinite;
