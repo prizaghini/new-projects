@@ -282,12 +282,12 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   animation: scroll-left 36s linear infinite;
 }
 .testimonial-grid.no-scroll { animation: none; margin: 0 auto; }
-.marquee:hover .testimonial-grid { animation-play-state: paused; }
+.marquee:hover .testimonial-grid, .testimonial-grid.paused { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) { .testimonial-grid { animation: none; } }
 .testimonial-card {
   background: var(--card); border: 1px solid var(--line); color: #16160F;
   border-radius: 12px; padding: 20px; display: flex; flex-direction: column;
-  width: min(560px, 82vw); flex-shrink: 0;
+  width: min(560px, 82vw); flex-shrink: 0; cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease; transform-origin: center; will-change: transform;
 }
 .testimonial-card:hover {
@@ -298,6 +298,29 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 @media (prefers-reduced-motion: reduce) {
   .testimonial-card { transition: none; }
   .testimonial-card:hover { transform: none; }
+}
+@media (max-width: 640px) { .testimonial-card { width: 65vw; } }
+/* :hover doesn't exist on touch, so tapping a card is the mobile way to
+   zoom in — but scaling it up in place (like :hover does) would need it to
+   spill outside the marquee's clipped, horizontally-scrolling strip, and
+   how much room that leaves depends on exactly where the card sits in the
+   row at the moment it's tapped, which is never reliable. So instead
+   setupTestimonialTapZoom lifts the tapped card out of the track (out from
+   under the marquee's overflow:hidden and its animated ancestor entirely)
+   and this class pins it centered over the page instead, above a dimmed
+   backdrop, sized independently of the small resting card. */
+.testimonial-card.zoomed {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) !important;
+  width: min(560px, 90vw); max-height: 85vh; overflow-y: auto;
+  z-index: 201; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+}
+.testimonial-zoom-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 10, 10, 0.55); z-index: 200;
+  opacity: 0; visibility: hidden; transition: opacity 0.2s ease;
+}
+.testimonial-zoom-backdrop.active { opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card.zoomed, .testimonial-zoom-backdrop { transition: none; }
 }
 .testimonial-card-img { width: 100%; height: auto; border-radius: 8px; }
 .testimonial-card-img:not(:only-child) { margin-bottom: 14px; }

@@ -361,6 +361,54 @@ async function loadTestimonials(supabase) {
   const enoughToScroll = cards.length > 1;
   track.classList.toggle("no-scroll", !enoughToScroll);
   track.innerHTML = (enoughToScroll ? [...cards, ...cards] : cards).join("");
+  setupTestimonialTapZoom(track);
+}
+
+// :hover doesn't fire from a tap, so touch devices need their own way to
+// zoom a card in. Scaling it up in place like :hover does would need it to
+// spill out of the marquee's clipped, endlessly-scrolling strip, and how
+// much room that leaves depends on wherever the card happens to be sitting
+// in the row the moment it's tapped — never reliable. So tapping instead
+// lifts the card clean out of the track (a comment node left behind marks
+// where to put it back) and pins it centered over the page as a lightbox,
+// above a dimmed backdrop; pauses the marquee while it's out so the track
+// isn't still moving underneath when the card goes back.
+function setupTestimonialTapZoom(track) {
+  let backdrop = document.querySelector(".testimonial-zoom-backdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.className = "testimonial-zoom-backdrop";
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener("click", closeZoom);
+  }
+  let zoomedCard = null;
+  let placeholder = null;
+
+  function closeZoom() {
+    if (!zoomedCard) return;
+    zoomedCard.classList.remove("zoomed");
+    placeholder.replaceWith(zoomedCard);
+    zoomedCard = null;
+    placeholder = null;
+    track.classList.remove("paused");
+    backdrop.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  track.onclick = e => {
+    const card = e.target.closest(".testimonial-card");
+    if (!card) return;
+    if (card === zoomedCard) { closeZoom(); return; }
+    closeZoom();
+    placeholder = document.createComment("testimonial-zoom-placeholder");
+    card.before(placeholder);
+    document.body.appendChild(card);
+    card.classList.add("zoomed");
+    zoomedCard = card;
+    track.classList.add("paused");
+    backdrop.classList.add("active");
+    document.body.style.overflow = "hidden";
+  };
 }
 
 // ---------- site settings (identity/copy editable from admin) ----------
