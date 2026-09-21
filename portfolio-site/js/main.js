@@ -802,6 +802,15 @@ async function loadSiteSettings(supabase) {
       if (el) el.style.display = "none";
     }
   }
+  // Sections alternate a light/dark "alt" background down the page for
+  // visual rhythm, via a class baked into each one's markup. That only
+  // holds up if every section actually shows — hiding just one (as above)
+  // leaves two same-colored sections sitting next to each other with
+  // nothing to tell them apart. Recompute which of the still-visible
+  // sections get "alt" instead of trusting the fixed classes in the HTML.
+  const rhythmSections = [...document.querySelectorAll("section")]
+    .filter(el => el.id !== "top" && el.style.display !== "none");
+  rhythmSections.forEach((el, i) => el.classList.toggle("alt", i % 2 === 1));
 
   const navLinks = [
     { id: "nav-link-portfolio", textKey: "nav_link_1_text", showKey: "show_portfolio" },
