@@ -363,6 +363,28 @@ setupCrudSection({
     form.sector.value = row.sector || "";
     form.period.value = row.period || "";
     form.stats.value = row.stats || "";
+    form.challenge_label.value = row.challenge_label || "";
+    form.challenge_heading.value = row.challenge_heading || "";
+    form.challenge_body.value = row.challenge_body || "";
+    form.tags.value = row.tags || "";
+    form.proof_caption.value = row.proof_caption || "";
+    form.proof_urls.value = row.proof_urls || "";
+    form.featured_label.value = row.featured_label || "";
+    form.featured_heading.value = row.featured_heading || "";
+    form.featured_intro.value = row.featured_intro || "";
+    form.featured_pages.value = row.featured_pages || "";
+    form.wearables_label.value = row.wearables_label || "";
+    form.wearables_heading.value = row.wearables_heading || "";
+    form.wearables_intro.value = row.wearables_intro || "";
+    form.wearables_pages.value = row.wearables_pages || "";
+    form.moodboard_label.value = row.moodboard_label || "";
+    form.moodboard_heading.value = row.moodboard_heading || "";
+    form.moodboard_intro.value = row.moodboard_intro || "";
+    form.moodboard_items.value = row.moodboard_items || "";
+    form.moodboard_note.value = row.moodboard_note || "";
+    form.reflection_label.value = row.reflection_label || "";
+    form.reflection_heading.value = row.reflection_heading || "";
+    form.reflection_body.value = row.reflection_body || "";
     form.sort_order.value = row.sort_order || 0;
   },
 });

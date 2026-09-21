@@ -47,9 +47,59 @@ create table if not exists case_study_pages (
   sector text,
   period text,
   stats text,                       -- 'number:label' groups separated by | — e.g. '10:New landing pages|2:Platform pages updated'
+  -- "The challenge" section
+  challenge_label text,
+  challenge_heading text,
+  challenge_body text,              -- paragraphs separated by a blank line
+  tags text,                        -- pipe-separated, e.g. 'Product Copywriting|Landing Pages'
+  proof_caption text,
+  proof_urls text,                  -- one per line, 'url|status' — e.g. 'https://.../payments/|Updated'
+  -- First "featured page" section
+  featured_label text,
+  featured_heading text,
+  featured_intro text,
+  featured_pages text,              -- one per line, 'heading|description'
+  -- Second "featured page" section
+  wearables_label text,
+  wearables_heading text,
+  wearables_intro text,
+  wearables_pages text,             -- one per line, 'heading|description'
+  -- Moodboard section
+  moodboard_label text,
+  moodboard_heading text,
+  moodboard_intro text,
+  moodboard_items text,             -- one per line, 'title|description'
+  moodboard_note text,
+  -- Reflection section
+  reflection_label text,
+  reflection_heading text,
+  reflection_body text,             -- paragraphs separated by a blank line
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
+-- Safe to re-run against a table created by an older version of this file:
+alter table case_study_pages add column if not exists challenge_label text;
+alter table case_study_pages add column if not exists challenge_heading text;
+alter table case_study_pages add column if not exists challenge_body text;
+alter table case_study_pages add column if not exists tags text;
+alter table case_study_pages add column if not exists proof_caption text;
+alter table case_study_pages add column if not exists proof_urls text;
+alter table case_study_pages add column if not exists featured_label text;
+alter table case_study_pages add column if not exists featured_heading text;
+alter table case_study_pages add column if not exists featured_intro text;
+alter table case_study_pages add column if not exists featured_pages text;
+alter table case_study_pages add column if not exists wearables_label text;
+alter table case_study_pages add column if not exists wearables_heading text;
+alter table case_study_pages add column if not exists wearables_intro text;
+alter table case_study_pages add column if not exists wearables_pages text;
+alter table case_study_pages add column if not exists moodboard_label text;
+alter table case_study_pages add column if not exists moodboard_heading text;
+alter table case_study_pages add column if not exists moodboard_intro text;
+alter table case_study_pages add column if not exists moodboard_items text;
+alter table case_study_pages add column if not exists moodboard_note text;
+alter table case_study_pages add column if not exists reflection_label text;
+alter table case_study_pages add column if not exists reflection_heading text;
+alter table case_study_pages add column if not exists reflection_body text;
 alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';

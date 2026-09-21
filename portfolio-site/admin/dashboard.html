@@ -518,11 +518,13 @@
     <!-- CASE STUDY PAGES -->
     <section class="panel" id="panel-case-study-pages">
       <h2>Case Study Pages</h2>
-      <p class="hint">Controls the text on the hero section of each case study webpage (the pages your case study cards link to — e.g. case-studies/1fit-website.html). The "Slug" must match the page's filename exactly, without the .html.</p>
+      <p class="hint">Controls every text section of a case study webpage (the pages your case study cards link to — e.g. case-studies/1fit-website.html). The "Slug" must match the page's filename exactly, without the .html. Photos/screenshots on these pages aren't editable here — ask to have those swapped directly.</p>
       <form class="add-form" id="form-case-study-pages">
         <div class="field"><label>Slug (matches the page's filename, e.g. 1fit-website)</label><input name="slug" required placeholder="1fit-website"></div>
         <div class="field"><label>Browser tab title</label><input name="page_title" required></div>
         <div class="field full"><label>Meta description (optional — for search engines)</label><input name="meta_description"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Hero</p>
         <div class="field full"><label>Label (small tag above the headline)</label><input name="label" placeholder="e.g. Case Study · Website & Product Marketing"></div>
         <div class="field full"><label>Headline</label><input name="headline" required></div>
         <div class="field full"><label>Intro paragraph</label><textarea name="intro" rows="3"></textarea></div>
@@ -534,6 +536,63 @@
           <input name="stats" placeholder="10:New landing pages|2:Platform pages updated|12:Total URLs delivered|1:Website redesign moodboard">
           <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">Each number:label pair becomes one of the stat cards next to the headline. Add, remove or reorder by editing this list.</p>
         </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">"The challenge" section</p>
+        <div class="field full"><label>Label</label><input name="challenge_label" placeholder="e.g. The challenge"></div>
+        <div class="field full"><label>Heading</label><input name="challenge_heading"></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line)</label>
+          <textarea name="challenge_body" rows="5"></textarea>
+        </div>
+        <div class="field full">
+          <label>Tags (separated by |)</label>
+          <input name="tags" placeholder="Product Copywriting|Landing Pages|Information Architecture">
+        </div>
+        <div class="field full"><label>Proof panel caption</label><input name="proof_caption" placeholder="e.g. All URLs delivered · May – Aug 2026"></div>
+        <div class="field full">
+          <label>Proof panel URL list (one per line, format: url|status)</label>
+          <textarea name="proof_urls" rows="5" placeholder="https://1fit.com/platform/payments/|Updated
+https://1fit.com/platform/wearable-integrations/|New"></textarea>
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">Status is usually "New" or "Updated".</p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">First "featured page" section</p>
+        <div class="field full"><label>Label</label><input name="featured_label" placeholder="e.g. Featured page"></div>
+        <div class="field full"><label>Heading</label><input name="featured_heading"></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="featured_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Page mockup cards (one per line, format: heading|description)</label>
+          <textarea name="featured_pages" rows="5" placeholder="Hero — benefit-led headline|Three-line headline that directly addresses the coach's goal."></textarea>
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">This only changes the captions under each mockup screenshot — swapping the screenshots themselves isn't done here.</p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Second "featured page" section</p>
+        <div class="field full"><label>Label</label><input name="wearables_label" placeholder="e.g. Featured page"></div>
+        <div class="field full"><label>Heading</label><input name="wearables_heading"></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="wearables_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Page mockup cards (one per line, format: heading|description)</label>
+          <textarea name="wearables_pages" rows="6"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Moodboard section</p>
+        <div class="field full"><label>Label</label><input name="moodboard_label" placeholder="e.g. Website redesign"></div>
+        <div class="field full"><label>Heading</label><input name="moodboard_heading"></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="moodboard_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>"What the moodboard covered" cards (one per line, format: title|description)</label>
+          <textarea name="moodboard_items" rows="6"></textarea>
+        </div>
+        <div class="field full"><label>Note box text</label><textarea name="moodboard_note" rows="2"></textarea></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Reflection section</p>
+        <div class="field full"><label>Label</label><input name="reflection_label" placeholder="e.g. Reflection"></div>
+        <div class="field full"><label>Heading</label><input name="reflection_heading"></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line)</label>
+          <textarea name="reflection_body" rows="5"></textarea>
+        </div>
+
         <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
         <div class="actions"><button class="btn" type="submit">Add case study page</button></div>
       </form>
