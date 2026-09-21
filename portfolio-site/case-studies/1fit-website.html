@@ -142,16 +142,33 @@ footer.site-footer .links { display: flex; justify-content: center; gap: 16px; m
     <a class="back-link" href="../index.html#portfolio">← Back to portfolio</a>
     <div class="case-hero-inner">
       <div>
-        <span class="label-white" id="cs-label"></span>
-        <h1 style="color:#fff;" id="cs-headline"></h1>
-        <p class="lead-white" style="margin-top:16px;" id="cs-intro"></p>
+        <span class="label-white" id="cs-label">Case Study · Website & Product Marketing</span>
+        <h1 style="color:#fff;" id="cs-headline">Building the product marketing engine from scratch</h1>
+        <p class="lead-white" style="margin-top:16px;" id="cs-intro">In four months as the sole marketer at 1FIT, I created 10 new platform landing pages, rewrote existing product pages, produced a full website redesign moodboard, and developed the copy and content architecture that underpins the platform section of the site.</p>
         <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;">
-          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Client</b><span id="cs-client"></span></div>
-          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Sector</b><span id="cs-sector"></span></div>
-          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Period</b><span id="cs-period"></span></div>
+          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Client</b><span id="cs-client">1FIT (1fit.com)</span></div>
+          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Sector</b><span id="cs-sector">B2B SaaS · Health & Fitness</span></div>
+          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Period</b><span id="cs-period">May – Aug 2026</span></div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="cs-stats"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="cs-stats">
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">10</div>
+          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">New landing pages</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">2</div>
+          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Platform pages updated</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">12</div>
+          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Total URLs delivered</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">1</div>
+          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Website redesign moodboard</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -400,12 +417,12 @@ async function loadCaseStudyPage() {
     document.getElementById("cs-page-title").textContent = data.page_title;
   }
   if (data.meta_description) document.getElementById("cs-meta-description").setAttribute("content", data.meta_description);
-  document.getElementById("cs-label").textContent = data.label || "";
-  document.getElementById("cs-headline").textContent = data.headline || "";
-  document.getElementById("cs-intro").textContent = data.intro || "";
-  document.getElementById("cs-client").textContent = data.client || "";
-  document.getElementById("cs-sector").textContent = data.sector || "";
-  document.getElementById("cs-period").textContent = data.period || "";
+  if (data.label) document.getElementById("cs-label").textContent = data.label;
+  if (data.headline) document.getElementById("cs-headline").textContent = data.headline;
+  if (data.intro) document.getElementById("cs-intro").textContent = data.intro;
+  if (data.client) document.getElementById("cs-client").textContent = data.client;
+  if (data.sector) document.getElementById("cs-sector").textContent = data.sector;
+  if (data.period) document.getElementById("cs-period").textContent = data.period;
 
   const statsEl = document.getElementById("cs-stats");
   if (data.stats) {
