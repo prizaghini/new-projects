@@ -230,11 +230,12 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 /* ---------- portfolio ---------- */
 .cat-nav { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 22px; scrollbar-width: thin; }
 .cat-btn {
-  font-family: var(--portfolio-btn-font, var(--mono)); font-size: 0.78125rem; text-transform: uppercase; letter-spacing: 0.04em;
+  font-family: var(--portfolio-btn-font, var(--mono)); font-size: 0.78125rem; text-transform: lowercase; letter-spacing: 0.04em;
   padding: 9px 14px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); color: var(--ink-soft);
   white-space: nowrap; cursor: pointer;
 }
-.cat-btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.cat-btn::first-letter { text-transform: uppercase; }
+.cat-btn.active { background: var(--accent); color: var(--accent-ink); border: 2px solid #fff; }
 .swipe-hint { font-family: var(--mono); font-size: 0.71875rem; color: var(--portfolio-swipe-hint-color, var(--ink-soft)); margin-bottom: 14px; }
 .portfolio-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
 .portfolio-card {
