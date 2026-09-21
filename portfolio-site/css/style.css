@@ -218,11 +218,12 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 
 /* ---------- case studies ---------- */
 .case-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
-@media (min-width: 720px) { .case-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 720px) { .case-grid { grid-template-columns: repeat(3, 1fr); } }
 /* Cards always sit on a light --card background even inside dark sections
    or when the sitewide text color is customized to white — so their own
    text color is fixed here rather than inherited, to always stay legible. */
-.case-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; color: #16160F; }
+.case-card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; color: #16160F; text-decoration: none; }
+a.case-card:hover { border-color: var(--accent); }
 .case-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 14px; }
 .case-card b { display: block; font-family: var(--display); font-size: clamp(1.375rem, 4vw, 1.75rem); color: var(--accent); }
 .case-card .brand { font-family: var(--mono); font-size: 0.71875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 8px; display: block; }

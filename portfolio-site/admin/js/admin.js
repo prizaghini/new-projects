@@ -332,6 +332,7 @@ setupCrudSection({
     form.headline_stat.value = row.headline_stat;
     form.description.value = row.description;
     form.image_url.value = row.image_url || "";
+    form.link_url.value = row.link_url || "";
     form.sort_order.value = row.sort_order || 0;
   },
   beforeSubmit: async form => {

@@ -112,14 +112,18 @@ async function loadCaseStudies(supabase) {
     container.innerHTML = `<div class="empty-note">No case studies yet — add some from the admin dashboard.</div>`;
     return;
   }
-  container.innerHTML = data.map(cs => `
-    <div class="case-card">
+  container.innerHTML = data.map(cs => {
+    const tag = cs.link_url ? "a" : "div";
+    const linkAttrs = cs.link_url ? `href="${cs.link_url}" target="_blank" rel="noopener"` : "";
+    return `
+    <${tag} class="case-card" ${linkAttrs}>
       ${cs.image_url ? `<img class="case-card-img" src="${cs.image_url}" alt="" loading="lazy">` : ""}
       <span class="brand">${cs.brand}</span>
       <b>${cs.headline_stat}</b>
       <p>${cs.description}</p>
-    </div>
-  `).join("");
+    </${tag}>
+  `;
+  }).join("");
 }
 
 // ---------- services ----------

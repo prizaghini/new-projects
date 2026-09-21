@@ -29,6 +29,7 @@ create table if not exists case_studies (
   created_at timestamptz not null default now()
 );
 alter table case_studies add column if not exists image_url text;
+alter table case_studies add column if not exists link_url text;
 alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';
