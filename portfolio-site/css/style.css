@@ -279,10 +279,13 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 #services-heading { max-width: 16ch; margin-left: auto; margin-right: auto; }
 .service-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
 @media (min-width: 720px) { .service-grid { grid-template-columns: repeat(4, 1fr); } }
-.service-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 22px; color: #16160F; }
+.service-card {
+  background: var(--services-card-bg, var(--card)); border: 1px solid var(--line);
+  border-radius: 12px; padding: 22px; color: var(--services-card-title-color, #16160F);
+}
 .service-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 14px; }
 .service-card h3 { margin-bottom: 8px; }
-.service-card p { color: var(--ink-soft); font-size: 0.875rem; margin: 0; }
+.service-card p { color: var(--services-card-text-color, var(--ink-soft)); font-size: 0.875rem; margin: 0; }
 
 /* ---------- testimonials ---------- */
 #recommendations .wrap { max-width: 1400px; }

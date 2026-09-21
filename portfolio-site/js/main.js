@@ -767,6 +767,13 @@ async function loadSiteSettings(supabase) {
     document.getElementById("services-heading").style.color = s.services_text_color;
     document.getElementById("services-subheading").style.color = s.services_text_color;
   }
+  const servicesSectionEl = document.getElementById("what-i-bring");
+  if (servicesSectionEl) {
+    if (s.services_bg_color) servicesSectionEl.style.background = s.services_bg_color;
+    if (s.services_card_bg_color) servicesSectionEl.style.setProperty("--services-card-bg", s.services_card_bg_color);
+    if (s.services_card_title_color) servicesSectionEl.style.setProperty("--services-card-title-color", s.services_card_title_color);
+    if (s.services_card_text_color) servicesSectionEl.style.setProperty("--services-card-text-color", s.services_card_text_color);
+  }
 
   if (s.testimonials_heading) document.getElementById("testimonials-heading").textContent = s.testimonials_heading;
   if (s.testimonials_subheading) {
