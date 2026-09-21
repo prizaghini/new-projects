@@ -5,6 +5,27 @@
 // calls loadCaseStudyPage() picks up the change.
 import { supabase } from "./supabase-client.js";
 
+// Site-wide name and header-button text, kept in sync with the main site's own
+// Site Settings (display_name, name_text_color, header_cta_text) instead of
+// being hardcoded per case study page — so a change made once in the admin
+// dashboard's Site Settings tab applies here too, automatically.
+export async function loadSiteChrome() {
+  const { data } = await supabase.from("site_settings").select("*");
+  if (!data) return;
+  const s = {};
+  data.forEach(row => { s[row.key] = row.value; });
+
+  if (s.display_name) {
+    document.querySelectorAll(".site-name-text").forEach(el => { el.textContent = s.display_name; });
+  }
+  if (s.name_text_color) {
+    document.querySelectorAll(".site-name-text").forEach(el => { el.style.color = s.name_text_color; });
+  }
+  if (s.header_cta_text) {
+    document.querySelectorAll(".site-cta-text").forEach(el => { el.textContent = s.header_cta_text; });
+  }
+}
+
 // Only updates each mockup card's existing heading/description text, leaving its
 // screenshot image untouched, matched by position (line 1 -> first card, etc).
 function applyPageCards(gridId, pagesText) {
