@@ -775,6 +775,8 @@ async function loadSiteSettings(supabase) {
     if (s.services_card_text_color) servicesSectionEl.style.setProperty("--services-card-text-color", s.services_card_text_color);
   }
 
+  if (s.portfolio_label) document.getElementById("portfolio-label").textContent = s.portfolio_label;
+  if (s.portfolio_label_color) document.getElementById("portfolio-label").style.color = s.portfolio_label_color;
   if (s.portfolio_heading) document.getElementById("portfolio-heading").textContent = s.portfolio_heading;
   if (s.portfolio_text_color) document.getElementById("portfolio-heading").style.color = s.portfolio_text_color;
   const portfolioSectionEl = document.getElementById("portfolio");
