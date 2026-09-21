@@ -30,6 +30,26 @@ create table if not exists case_studies (
 );
 alter table case_studies add column if not exists image_url text;
 alter table case_studies add column if not exists link_url text;
+
+-- Editable content for individual case study webpages (the pages case_studies.link_url
+-- points to, e.g. case-studies/1fit-website.html). The hero section on each page
+-- reads its text from the row whose slug matches the page — edit it from the
+-- admin dashboard's "Case Study Pages" tab instead of the HTML file.
+create table if not exists case_study_pages (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,        -- matches the page's filename, e.g. '1fit-website'
+  page_title text not null,         -- browser tab title
+  meta_description text,
+  label text,                       -- small tag above the headline, e.g. 'Case Study · Website & Product Marketing'
+  headline text not null,
+  intro text,                       -- lead paragraph under the headline
+  client text,
+  sector text,
+  period text,
+  stats text,                       -- 'number:label' groups separated by | — e.g. '10:New landing pages|2:Platform pages updated'
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
 alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';
@@ -268,9 +288,11 @@ alter table checklist_notes enable row level security;
 alter table site_settings enable row level security;
 alter table brand_logos enable row level security;
 alter table services enable row level security;
+alter table case_study_pages enable row level security;
 
 create policy "public can read portfolio_items" on portfolio_items for select using (true);
 create policy "public can read case_studies" on case_studies for select using (true);
+create policy "public can read case_study_pages" on case_study_pages for select using (true);
 create policy "public can read testimonials" on testimonials for select using (true);
 create policy "public can read site_settings" on site_settings for select using (true);
 create policy "public can read brand_logos" on brand_logos for select using (true);
@@ -279,6 +301,7 @@ create policy "public can submit leads" on leads for insert with check (true);
 
 create policy "admin manages portfolio_items" on portfolio_items for all using (auth.role() = 'authenticated');
 create policy "admin manages case_studies" on case_studies for all using (auth.role() = 'authenticated');
+create policy "admin manages case_study_pages" on case_study_pages for all using (auth.role() = 'authenticated');
 create policy "admin manages testimonials" on testimonials for all using (auth.role() = 'authenticated');
 create policy "admin manages leads" on leads for all using (auth.role() = 'authenticated');
 create policy "admin manages brand_logos" on brand_logos for all using (auth.role() = 'authenticated');

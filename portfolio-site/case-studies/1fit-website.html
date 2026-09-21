@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>1FIT — Website & Product Marketing Case Study | Priscila Zaghini</title>
-<meta name="description" content="How I built 10 new landing pages, rewrote existing platform pages, and created a website moodboard and redesign direction for 1FIT in under four months.">
+<title id="cs-page-title">1FIT — Website & Product Marketing Case Study | Priscila Zaghini</title>
+<meta name="description" id="cs-meta-description" content="How I built 10 new landing pages, rewrote existing platform pages, and created a website moodboard and redesign direction for 1FIT in under four months.">
+<link rel="modulepreload" href="../js/supabase-client.js">
+<link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='black'/%3E%3Ctext x='50' y='53' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPZ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -140,33 +142,16 @@ footer.site-footer .links { display: flex; justify-content: center; gap: 16px; m
     <a class="back-link" href="../index.html#portfolio">← Back to portfolio</a>
     <div class="case-hero-inner">
       <div>
-        <span class="label-white">Case Study · Website & Product Marketing</span>
-        <h1 style="color:#fff;">Building the product marketing engine from scratch</h1>
-        <p class="lead-white" style="margin-top:16px;">In four months as the sole marketer at 1FIT, I created 10 new platform landing pages, rewrote existing product pages, produced a full website redesign moodboard, and developed the copy and content architecture that underpins the platform section of the site.</p>
+        <span class="label-white" id="cs-label"></span>
+        <h1 style="color:#fff;" id="cs-headline"></h1>
+        <p class="lead-white" style="margin-top:16px;" id="cs-intro"></p>
         <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;">
-          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Client</b>1FIT (1fit.com)</div>
-          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Sector</b>B2B SaaS · Health & Fitness</div>
-          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Period</b>May – Aug 2026</div>
+          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Client</b><span id="cs-client"></span></div>
+          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Sector</b><span id="cs-sector"></span></div>
+          <div style="font-family:var(--mono);font-size:0.71875rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);"><b style="display:block;color:rgba(255,255,255,0.85);font-weight:500;font-size:0.8125rem;margin-bottom:3px;">Period</b><span id="cs-period"></span></div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
-          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">10</div>
-          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">New landing pages</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
-          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">2</div>
-          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Platform pages updated</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
-          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">12</div>
-          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Total URLs delivered</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
-          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">1</div>
-          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Website redesign moodboard</div>
-        </div>
-      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="cs-stats"></div>
     </div>
   </div>
 </section>
@@ -402,6 +387,40 @@ footer.site-footer .links { display: flex; justify-content: center; gap: 16px; m
   </div>
 </footer>
 
+<script type="module" src="../js/config.js"></script>
+<script type="module">
+import { supabase } from "../js/supabase-client.js";
+
+async function loadCaseStudyPage() {
+  const { data } = await supabase.from("case_study_pages").select("*").eq("slug", "1fit-website").maybeSingle();
+  if (!data) return;
+
+  if (data.page_title) {
+    document.title = data.page_title;
+    document.getElementById("cs-page-title").textContent = data.page_title;
+  }
+  if (data.meta_description) document.getElementById("cs-meta-description").setAttribute("content", data.meta_description);
+  document.getElementById("cs-label").textContent = data.label || "";
+  document.getElementById("cs-headline").textContent = data.headline || "";
+  document.getElementById("cs-intro").textContent = data.intro || "";
+  document.getElementById("cs-client").textContent = data.client || "";
+  document.getElementById("cs-sector").textContent = data.sector || "";
+  document.getElementById("cs-period").textContent = data.period || "";
+
+  const statsEl = document.getElementById("cs-stats");
+  if (data.stats) {
+    statsEl.innerHTML = data.stats.split("|").map(pair => {
+      const [number, label] = pair.split(":");
+      return `
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#fff;line-height:1;">${(number || "").trim()}</div>
+          <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">${(label || "").trim()}</div>
+        </div>`;
+    }).join("");
+  }
+}
+loadCaseStudyPage();
+</script>
 <script>
 const revealEls = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver((entries) => {

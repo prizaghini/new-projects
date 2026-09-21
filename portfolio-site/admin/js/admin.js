@@ -342,6 +342,31 @@ setupCrudSection({
   },
 });
 
+// ---------- case study pages ----------
+setupCrudSection({
+  table: "case_study_pages",
+  formId: "form-case-study-pages",
+  tbodyId: "table-case-study-pages",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${esc(row.slug)}</td><td>${esc(row.headline)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.slug.value = row.slug;
+    form.page_title.value = row.page_title;
+    form.meta_description.value = row.meta_description || "";
+    form.label.value = row.label || "";
+    form.headline.value = row.headline;
+    form.intro.value = row.intro || "";
+    form.client.value = row.client || "";
+    form.sector.value = row.sector || "";
+    form.period.value = row.period || "";
+    form.stats.value = row.stats || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+});
+
 // ---------- services ----------
 setupCrudSection({
   table: "services",

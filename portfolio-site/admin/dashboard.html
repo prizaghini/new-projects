@@ -15,6 +15,7 @@
     <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
     <button class="tab-btn" data-tab="logos">Brand logos</button>
     <button class="tab-btn" data-tab="case-studies">Case Studies</button>
+    <button class="tab-btn" data-tab="case-study-pages">Case Study Pages</button>
     <button class="tab-btn" data-tab="services">Services</button>
     <button class="tab-btn" data-tab="testimonials">Testimonials</button>
     <button class="tab-btn" data-tab="checklist">Checklist (bonus)</button>
@@ -506,12 +507,38 @@
           <input type="file" name="image_file" accept="image/*">
           <input type="hidden" name="image_url">
         </div>
-        <div class="field full"><label>Case study link (optional — the card opens this webpage when clicked)</label><input name="link_url" type="url" placeholder="https://..."></div>
+        <div class="field full"><label>Case study link (optional — the card opens this webpage when clicked; a full URL or a site path like /case-studies/your-page.html)</label><input name="link_url" type="text" placeholder="/case-studies/your-page.html"></div>
         <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
         <div class="actions"><button class="btn" type="submit">Add case study</button></div>
       </form>
       <table><thead><tr><th>Image</th><th>Brand</th><th>Headline stat</th><th>Order</th><th></th></tr></thead>
         <tbody id="table-case-studies"></tbody></table>
+    </section>
+
+    <!-- CASE STUDY PAGES -->
+    <section class="panel" id="panel-case-study-pages">
+      <h2>Case Study Pages</h2>
+      <p class="hint">Controls the text on the hero section of each case study webpage (the pages your case study cards link to — e.g. case-studies/1fit-website.html). The "Slug" must match the page's filename exactly, without the .html.</p>
+      <form class="add-form" id="form-case-study-pages">
+        <div class="field"><label>Slug (matches the page's filename, e.g. 1fit-website)</label><input name="slug" required placeholder="1fit-website"></div>
+        <div class="field"><label>Browser tab title</label><input name="page_title" required></div>
+        <div class="field full"><label>Meta description (optional — for search engines)</label><input name="meta_description"></div>
+        <div class="field full"><label>Label (small tag above the headline)</label><input name="label" placeholder="e.g. Case Study · Website & Product Marketing"></div>
+        <div class="field full"><label>Headline</label><input name="headline" required></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="intro" rows="3"></textarea></div>
+        <div class="field"><label>Client</label><input name="client" placeholder="e.g. 1FIT (1fit.com)"></div>
+        <div class="field"><label>Sector</label><input name="sector" placeholder="e.g. B2B SaaS · Health & Fitness"></div>
+        <div class="field"><label>Period</label><input name="period" placeholder="e.g. May – Aug 2026"></div>
+        <div class="field full">
+          <label>Stat cards (format: number:label, separated by |)</label>
+          <input name="stats" placeholder="10:New landing pages|2:Platform pages updated|12:Total URLs delivered|1:Website redesign moodboard">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">Each number:label pair becomes one of the stat cards next to the headline. Add, remove or reorder by editing this list.</p>
+        </div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add case study page</button></div>
+      </form>
+      <table><thead><tr><th>Slug</th><th>Headline</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-case-study-pages"></tbody></table>
     </section>
 
     <!-- SERVICES -->
