@@ -1,0 +1,115 @@
+/* Shared styles for all case study webpages (case-studies/*.html).
+   Edit here once and every case study page picks up the change. */
+:root {
+  --bg: #FFFFFF;
+  --bg-alt: #0D0D0C;
+  --card: #FFFFFF;
+  --ink: #111111;
+  --ink-soft: #5B584E;
+  --accent: #0D0C0C;
+  --accent-ink: #FFFFFF;
+  --line: rgba(22, 22, 15, 0.12);
+  --display: 'Playfair Display', Georgia, serif;
+  --body: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  --max: 1120px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 1rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+section { padding: clamp(48px, 9vw, 88px) 0; }
+.alt { background: var(--bg-alt); color: #FFFFFF; }
+h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -0.02em; line-height: 1.06; }
+h1 { font-weight: 700; font-size: clamp(2rem, 6vw, 3.25rem); }
+h2 { font-weight: 700; font-size: clamp(1.5rem, 4.5vw, 2.25rem); }
+h3 { font-weight: 600; font-size: clamp(1rem, 3.4vw, 1.2rem); }
+p { margin: 0 0 12px; }
+.lead { font-size: clamp(1rem, 3.6vw, 1.125rem); color: var(--ink-soft); }
+.lead-white { font-size: clamp(1rem, 3.6vw, 1.125rem); color: rgba(255,255,255,0.7); }
+.label { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; display: inline-block; }
+.label-white { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin: 0 0 14px; display: inline-block; }
+/* Wide enough that a long marketing headline (e.g. "1FIT Pay — Accept Payments.
+   Automate Billing. Grow Your Coaching Business.") wraps to 1-2 lines instead of 4 —
+   44ch was sized for short section titles, not full-sentence headlines. */
+.section-head { text-align: center; max-width: 800px; margin: 0 auto clamp(30px, 5vw, 48px); }
+
+/* header */
+header.site-header { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.header-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+.logo { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 1.0625rem; text-decoration: none; color: var(--ink); }
+.btn { display: inline-flex; align-items: center; gap: 8px; justify-content: center; padding: 10px 18px; border-radius: 999px; border: 0; cursor: pointer; text-decoration: none; font-family: var(--display); font-weight: 600; font-size: 0.875rem; transition: transform 0.12s ease, opacity 0.15s ease; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { opacity: 0.85; }
+.btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; }
+.btn-ghost:hover { background: var(--accent); color: #fff; }
+
+/* hero */
+.case-hero { background: var(--bg-alt); color: #fff; padding: clamp(64px, 10vw, 100px) 0 clamp(48px, 8vw, 80px); }
+.case-hero-inner { display: grid; gap: 48px; }
+@media (min-width: 860px) { .case-hero-inner { grid-template-columns: 1.1fr 0.9fr; align-items: center; } }
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 28px; transition: color 0.15s; }
+.back-link:hover { color: #fff; }
+
+/* stat strip */
+.stat-strip { background: #fff; border-bottom: 1px solid var(--line); }
+.stat-strip-inner { display: grid; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 600px) { .stat-strip-inner { grid-template-columns: repeat(4, 1fr); } }
+.stat-strip-item { padding: clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat-strip-item:nth-child(2n) { border-right: none; }
+@media (min-width: 600px) { .stat-strip-item { border-bottom: none; } .stat-strip-item:nth-child(2n) { border-right: 1px solid var(--line); } .stat-strip-item:last-child { border-right: none; } }
+.stat-strip-item b { display: block; font-family: var(--display); font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 700; color: var(--accent); line-height: 1; }
+.stat-strip-item span { display: block; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin-top: 6px; }
+
+/* layout */
+.two-col { display: grid; gap: clamp(32px, 6vw, 64px); }
+@media (min-width: 860px) { .two-col { grid-template-columns: 1fr 1fr; align-items: start; } }
+.two-col-wide { display: grid; gap: clamp(32px, 6vw, 64px); }
+@media (min-width: 860px) { .two-col-wide { grid-template-columns: 0.9fr 1.1fr; align-items: start; } }
+
+/* page gallery */
+.page-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 600px) { .page-grid { grid-template-columns: repeat(2, 1fr); } }
+.page-card { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--card); }
+.page-card-img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; object-position: top; }
+.page-card-body { padding: 14px 16px; }
+.page-card-body h3 { font-size: 0.9375rem; margin-bottom: 4px; }
+.page-card-body p { font-size: 0.8125rem; color: var(--ink-soft); margin: 0; }
+.page-card-url { font-family: var(--mono); font-size: 0.625rem; color: #aaa; display: block; margin-top: 6px; }
+
+/* moodboard grid */
+.mood-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 600px) { .mood-grid { grid-template-columns: repeat(3, 1fr); } }
+.mood-card { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 16/9; background: #0D0D0C; display: flex; align-items: center; justify-content: center; }
+.mood-card img { width: 100%; height: 100%; object-fit: cover; }
+
+/* tag list */
+.tag-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.tag { font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
+
+/* proof wrap */
+.proof-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.proof-bar { background: #f5f5f3; padding: 10px 16px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--line); }
+.proof-dot { width: 10px; height: 10px; border-radius: 50%; }
+.proof-caption { font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-left: auto; }
+
+/* URL list */
+.url-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.url-list li { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; padding: 10px 14px; background: #fafaf9; border: 1px solid var(--line); border-radius: 8px; }
+.url-list li span.dot { width: 8px; height: 8px; border-radius: 50%; background: #2CF5B8; flex-shrink: 0; }
+.url-list li a { font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-soft); text-decoration: none; }
+.url-list li a:hover { color: var(--ink); }
+.url-list .badge { font-family: var(--mono); font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; background: var(--accent); color: #fff; margin-left: auto; flex-shrink: 0; }
+.url-list .badge.new { background: #1a6635; }
+.url-list .badge.update { background: #5B584E; }
+
+/* reveal */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* footer */
+footer.site-footer { text-align: center; padding: clamp(40px, 8vw, 64px) 0; border-top: 1px solid var(--line); }
+footer.site-footer p { color: var(--ink-soft); font-size: 0.875rem; }
+footer.site-footer .links { display: flex; justify-content: center; gap: 16px; margin-top: 12px; font-size: 0.875rem; }
