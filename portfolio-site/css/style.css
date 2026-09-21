@@ -237,7 +237,10 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
 .cat-btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .swipe-hint { font-family: var(--mono); font-size: 0.71875rem; color: var(--ink-soft); margin-bottom: 14px; }
 .portfolio-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
-.portfolio-card { flex: 0 0 240px; scroll-snap-align: start; text-decoration: none; }
+.portfolio-card {
+  flex: 0 0 240px; scroll-snap-align: start; text-decoration: none;
+  background: var(--portfolio-card-bg, transparent); border-radius: 12px; padding: 10px;
+}
 .portfolio-thumb {
   position: relative; aspect-ratio: 9/16; border-radius: 10px; background: var(--bg-alt); border: 1px solid var(--line); overflow: hidden;
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='16' fill='%23111111'/%3E%3Cpath d='M14 11 L26 18 L14 25 Z' fill='white'/%3E%3C/svg%3E") 18 18, pointer;
@@ -264,8 +267,8 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   border-radius: 6px; padding: 9px 13px; font-family: var(--mono); font-size: 0.75rem; cursor: pointer;
 }
 .portfolio-card .meta { padding: 10px 2px; }
-.portfolio-card .meta b { display: block; font-size: 0.875rem; }
-.portfolio-card .meta span { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; color: var(--ink-soft); }
+.portfolio-card .meta b { display: block; font-size: 0.875rem; color: var(--portfolio-card-title-color, inherit); }
+.portfolio-card .meta span { font-family: var(--mono); font-size: 0.6875rem; text-transform: uppercase; color: var(--portfolio-card-text-color, var(--ink-soft)); }
 .empty-note { font-family: var(--mono); font-size: 0.78125rem; color: var(--ink-soft); padding: 24px; text-align: center; border: 1px dashed var(--line); border-radius: 10px; }
 
 /* ---------- services ---------- */

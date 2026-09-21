@@ -775,6 +775,16 @@ async function loadSiteSettings(supabase) {
     if (s.services_card_text_color) servicesSectionEl.style.setProperty("--services-card-text-color", s.services_card_text_color);
   }
 
+  if (s.portfolio_heading) document.getElementById("portfolio-heading").textContent = s.portfolio_heading;
+  if (s.portfolio_text_color) document.getElementById("portfolio-heading").style.color = s.portfolio_text_color;
+  const portfolioSectionEl = document.getElementById("portfolio");
+  if (portfolioSectionEl) {
+    if (s.portfolio_bg_color) portfolioSectionEl.style.background = s.portfolio_bg_color;
+    if (s.portfolio_card_bg_color) portfolioSectionEl.style.setProperty("--portfolio-card-bg", s.portfolio_card_bg_color);
+    if (s.portfolio_card_title_color) portfolioSectionEl.style.setProperty("--portfolio-card-title-color", s.portfolio_card_title_color);
+    if (s.portfolio_card_text_color) portfolioSectionEl.style.setProperty("--portfolio-card-text-color", s.portfolio_card_text_color);
+  }
+
   if (s.testimonials_heading) document.getElementById("testimonials-heading").textContent = s.testimonials_heading;
   if (s.testimonials_subheading) {
     const el = document.getElementById("testimonials-subheading");
