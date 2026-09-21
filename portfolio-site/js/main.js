@@ -783,6 +783,7 @@ async function loadSiteSettings(supabase) {
     if (s.portfolio_card_bg_color) portfolioSectionEl.style.setProperty("--portfolio-card-bg", s.portfolio_card_bg_color);
     if (s.portfolio_card_title_color) portfolioSectionEl.style.setProperty("--portfolio-card-title-color", s.portfolio_card_title_color);
     if (s.portfolio_card_text_color) portfolioSectionEl.style.setProperty("--portfolio-card-text-color", s.portfolio_card_text_color);
+    if (s.portfolio_swipe_hint_color) portfolioSectionEl.style.setProperty("--portfolio-swipe-hint-color", s.portfolio_swipe_hint_color);
   }
 
   if (s.testimonials_heading) document.getElementById("testimonials-heading").textContent = s.testimonials_heading;

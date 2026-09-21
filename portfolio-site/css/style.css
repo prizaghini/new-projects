@@ -235,7 +235,7 @@ html.grain-on .grain-overlay { opacity: var(--grain-opacity, 0.45); }
   white-space: nowrap; cursor: pointer;
 }
 .cat-btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.swipe-hint { font-family: var(--mono); font-size: 0.71875rem; color: var(--ink-soft); margin-bottom: 14px; }
+.swipe-hint { font-family: var(--mono); font-size: 0.71875rem; color: var(--portfolio-swipe-hint-color, var(--ink-soft)); margin-bottom: 14px; }
 .portfolio-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
 .portfolio-card {
   flex: 0 0 240px; scroll-snap-align: start; text-decoration: none;
