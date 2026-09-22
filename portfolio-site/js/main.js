@@ -119,7 +119,6 @@ async function loadCaseStudies(supabase) {
     <${tag} class="case-card" ${linkAttrs}>
       ${cs.image_url ? `<img class="case-card-img" src="${cs.image_url}" alt="" loading="lazy">` : ""}
       <span class="brand">${cs.brand}</span>
-      <b>${cs.headline_stat}</b>
       <p>${cs.description}</p>
     </${tag}>
   `;
