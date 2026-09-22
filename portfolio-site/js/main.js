@@ -669,6 +669,7 @@ async function loadSiteSettings(supabase) {
   }
   if (s.about_location) document.getElementById("about-location").textContent = s.about_location;
   document.getElementById("about-location").hidden = s.show_about_location === "false";
+  if (s.about_bg_color) document.getElementById("about").style.background = s.about_bg_color;
   setPhoto("about-photo", s.about_photo_url, s.display_name, s.about_photo_position, s.about_photo_fit);
 
   for (let i = 1; i <= 4; i++) {
@@ -707,6 +708,7 @@ async function loadSiteSettings(supabase) {
     document.getElementById("contact-heading").style.color = s.contact_text_color;
     document.getElementById("contact-subcopy").style.color = s.contact_text_color;
   }
+  if (s.contact_bg_color) document.getElementById("lets-talk").style.background = s.contact_bg_color;
   const contactEmailEl = document.getElementById("contact-info-email");
   if (contactEmailEl) {
     contactEmailEl.hidden = s.show_contact_info_email === "false" || !s.contact_email;
@@ -759,6 +761,7 @@ async function loadSiteSettings(supabase) {
     document.getElementById("case-studies-heading").style.color = s.case_studies_text_color;
     document.getElementById("case-studies-subheading").style.color = s.case_studies_text_color;
   }
+  if (s.case_studies_bg_color) document.getElementById("section-case-studies").style.background = s.case_studies_bg_color;
 
   if (s.services_heading) document.getElementById("services-heading").textContent = s.services_heading;
   if (s.services_subheading) {
@@ -802,6 +805,7 @@ async function loadSiteSettings(supabase) {
     document.getElementById("testimonials-heading").style.color = s.testimonials_text_color;
     document.getElementById("testimonials-subheading").style.color = s.testimonials_text_color;
   }
+  if (s.testimonials_bg_color) document.getElementById("recommendations").style.background = s.testimonials_bg_color;
   if (s.testimonials_quote_font_size) root.setProperty("--testimonial-quote-size", `${s.testimonials_quote_font_size}px`);
   if (s.testimonials_quote_color) root.setProperty("--testimonial-quote-color", s.testimonials_quote_color);
   if (FONT_PAIRINGS[s.testimonials_quote_font]) root.setProperty("--testimonial-quote-font", FONT_PAIRINGS[s.testimonials_quote_font].display);
