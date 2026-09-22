@@ -44,6 +44,42 @@ function applyPageCards(gridId, pagesText) {
   });
 }
 
+// Replaces each existing card's single caption line, matched by position —
+// leaves everything else about the card (its screenshot image) untouched.
+function applyCaptions(gridId, captionSelector, captionsText) {
+  if (!captionsText) return;
+  const captions = captionsText.split("\n").map(l => l.trim()).filter(Boolean);
+  const els = document.querySelectorAll(`#${gridId} ${captionSelector}`);
+  els.forEach((el, i) => { if (captions[i]) el.textContent = captions[i]; });
+}
+
+// Replaces each existing item's plain text, matched by position — for a flat
+// list of same-shape elements (no title/description split).
+function applyTextList(containerId, itemSelector, itemsText) {
+  if (!itemsText) return;
+  const items = itemsText.split("\n").map(l => l.trim()).filter(Boolean);
+  const els = document.querySelectorAll(`#${containerId} ${itemSelector}`);
+  els.forEach((el, i) => { if (items[i]) el.textContent = items[i]; });
+}
+
+// Replaces each existing item's title + description, matched by position —
+// for a repeated "title|description" list (e.g. delivered work, email segments).
+function applyPairsList(containerId, itemSelector, titleSelector, descSelector, pairsText) {
+  if (!pairsText) return;
+  const pairs = pairsText.split("\n").map(l => l.trim()).filter(Boolean).map(line => {
+    const [title, desc] = line.split("|");
+    return { title: (title || "").trim(), desc: (desc || "").trim() };
+  });
+  const items = document.querySelectorAll(`#${containerId} ${itemSelector}`);
+  items.forEach((item, i) => {
+    if (!pairs[i]) return;
+    const titleEl = item.querySelector(titleSelector);
+    const descEl = item.querySelector(descSelector);
+    if (titleEl && pairs[i].title) titleEl.textContent = pairs[i].title;
+    if (descEl && pairs[i].desc) descEl.textContent = pairs[i].desc;
+  });
+}
+
 // Splits on blank lines into paragraphs. The first paragraph keeps the "lead"
 // class + top margin so there's still visible space under the heading above it
 // (losing that class here was a real bug — it collapsed the heading/body gap).
@@ -146,7 +182,38 @@ export async function loadCaseStudyPage(slug) {
   }
   setText("cs-moodboard-note", data.moodboard_note);
 
-  // Reflection section
+  // "Brand identity" section
+  setText("cs-brand-label", data.brand_label);
+  setText("cs-brand-heading", data.brand_heading);
+  setText("cs-brand-intro", data.brand_intro);
+  applyCaptions("cs-brand-grid", ".brand-page-label", data.brand_pages);
+
+  // "LinkedIn presence" section
+  setText("cs-linkedin-label", data.linkedin_label);
+  setText("cs-linkedin-heading", data.linkedin_heading);
+  setText("cs-linkedin-intro", data.linkedin_intro);
+
+  // Video case studies section
+  setText("cs-video-label", data.video_label);
+  setText("cs-video-heading", data.video_heading);
+  setText("cs-video-intro", data.video_intro);
+  applyCaptions("cs-video-grid", ".thumb-label", data.video_captions);
+  setText("cs-video-all-caption", data.video_all_caption);
+  applyTextList("cs-video-all-list", "> div", data.video_all_list);
+
+  // Email marketing + "Also delivered" section
+  setText("cs-email-label", data.email_label);
+  setText("cs-email-heading", data.email_heading);
+  setText("cs-email-intro", data.email_intro);
+  applyPairsList("cs-email-segments", "> div", "div", "p", data.email_segments);
+  setText("cs-email-webinar-topic", data.email_webinar_topic);
+  setText("cs-email-webinar-detail", data.email_webinar_detail);
+  setText("cs-delivered-label", data.delivered_label);
+  setText("cs-delivered-heading", data.delivered_heading);
+  setText("cs-delivered-intro", data.delivered_intro);
+  applyPairsList("cs-delivered-items", "> div", "b", "p", data.delivered_items);
+
+  // Reflection section (shared shape across every case study)
   setText("cs-reflection-label", data.reflection_label);
   setText("cs-reflection-heading", data.reflection_heading);
   const reflectionBodyEl = document.getElementById("cs-reflection-body");

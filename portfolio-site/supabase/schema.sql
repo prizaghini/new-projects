@@ -70,10 +70,37 @@ create table if not exists case_study_pages (
   moodboard_intro text,
   moodboard_items text,             -- one per line, 'title|description'
   moodboard_note text,
-  -- Reflection section
+  -- Reflection section (shared by every case study's closing section)
   reflection_label text,
   reflection_heading text,
   reflection_body text,             -- paragraphs separated by a blank line
+  -- "Brand identity" section
+  brand_label text,
+  brand_heading text,
+  brand_intro text,
+  brand_pages text,                 -- one caption per line, matched to the brand guide images by position
+  -- "LinkedIn presence" section
+  linkedin_label text,
+  linkedin_heading text,
+  linkedin_intro text,
+  -- Video case studies section
+  video_label text,
+  video_heading text,
+  video_intro text,
+  video_captions text,              -- one per line, matched to the video thumbnail cards by position
+  video_all_caption text,           -- e.g. 'All 7 videos produced'
+  video_all_list text,              -- one per line, the full list of videos produced
+  -- Email marketing + "Also delivered" two-column section
+  email_label text,
+  email_heading text,
+  email_intro text,
+  email_segments text,              -- one per line, 'segment title|description'
+  email_webinar_topic text,
+  email_webinar_detail text,
+  delivered_label text,
+  delivered_heading text,
+  delivered_intro text,
+  delivered_items text,             -- one per line, 'title|description'
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
@@ -100,6 +127,29 @@ alter table case_study_pages add column if not exists moodboard_note text;
 alter table case_study_pages add column if not exists reflection_label text;
 alter table case_study_pages add column if not exists reflection_heading text;
 alter table case_study_pages add column if not exists reflection_body text;
+alter table case_study_pages add column if not exists brand_label text;
+alter table case_study_pages add column if not exists brand_heading text;
+alter table case_study_pages add column if not exists brand_intro text;
+alter table case_study_pages add column if not exists brand_pages text;
+alter table case_study_pages add column if not exists linkedin_label text;
+alter table case_study_pages add column if not exists linkedin_heading text;
+alter table case_study_pages add column if not exists linkedin_intro text;
+alter table case_study_pages add column if not exists video_label text;
+alter table case_study_pages add column if not exists video_heading text;
+alter table case_study_pages add column if not exists video_intro text;
+alter table case_study_pages add column if not exists video_captions text;
+alter table case_study_pages add column if not exists video_all_caption text;
+alter table case_study_pages add column if not exists video_all_list text;
+alter table case_study_pages add column if not exists email_label text;
+alter table case_study_pages add column if not exists email_heading text;
+alter table case_study_pages add column if not exists email_intro text;
+alter table case_study_pages add column if not exists email_segments text;
+alter table case_study_pages add column if not exists email_webinar_topic text;
+alter table case_study_pages add column if not exists email_webinar_detail text;
+alter table case_study_pages add column if not exists delivered_label text;
+alter table case_study_pages add column if not exists delivered_heading text;
+alter table case_study_pages add column if not exists delivered_intro text;
+alter table case_study_pages add column if not exists delivered_items text;
 alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';

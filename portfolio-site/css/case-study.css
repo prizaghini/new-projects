@@ -3,11 +3,13 @@
 :root {
   --bg: #FFFFFF;
   --bg-alt: #0D0D0C;
+  --bg-teal: #1D212D;
   --card: #FFFFFF;
   --ink: #111111;
   --ink-soft: #5B584E;
   --accent: #0D0C0C;
   --accent-ink: #FFFFFF;
+  --teal: #2CF5B8;
   --line: rgba(22, 22, 15, 0.12);
   --display: 'Playfair Display', Georgia, serif;
   --body: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -88,6 +90,38 @@ header.site-header { position: sticky; top: 0; z-index: 40; background: rgba(255
 /* tag list */
 .tag-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
 .tag { font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); }
+
+/* brand colours */
+.colour-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.colour-swatch { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.colour-block { height: 80px; }
+.colour-label { padding: 10px 12px; background: #fafaf9; }
+.colour-label b { display: block; font-family: var(--mono); font-size: 0.75rem; font-weight: 600; }
+.colour-label span { font-family: var(--mono); font-size: 0.5625rem; color: var(--ink-soft); }
+
+/* linkedin cards */
+.linkedin-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.linkedin-header { background: #f3f2ef; height: 80px; position: relative; }
+.linkedin-avatar { width: 64px; height: 64px; border-radius: 50%; border: 3px solid #fff; position: absolute; bottom: -20px; left: 20px; background: #0A66C2; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.25rem; font-family: var(--display); overflow: hidden; }
+.linkedin-body { padding: 28px 20px 20px; }
+.linkedin-name { font-family: var(--display); font-weight: 700; font-size: 1.0625rem; margin-bottom: 2px; }
+.linkedin-title { font-size: 0.875rem; color: var(--ink-soft); margin-bottom: 8px; }
+.linkedin-about { font-size: 0.8125rem; color: var(--ink-soft); line-height: 1.5; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+.written-badge { display: inline-block; font-family: var(--mono); font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 999px; background: var(--teal); color: #0D0D0C; margin-top: 10px; }
+
+/* brand guide pages */
+.brand-page-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 600px) { .brand-page-grid { grid-template-columns: repeat(3, 1fr); } }
+.brand-page { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.brand-page img { width: 100%; display: block; }
+.brand-page-label { padding: 8px 12px; font-family: var(--mono); font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); background: #fafaf9; border-top: 1px solid var(--line); }
+
+/* video thumbnails */
+.thumb-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 600px) { .thumb-grid { grid-template-columns: repeat(3, 1fr); } }
+.thumb-card { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.thumb-card img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+.thumb-label { padding: 8px 12px; font-size: 0.75rem; color: var(--ink-soft); background: #fafaf9; border-top: 1px solid var(--line); }
 
 /* proof wrap */
 .proof-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
