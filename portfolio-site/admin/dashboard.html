@@ -531,6 +531,7 @@
         <div class="field"><label>Client</label><input name="client" placeholder="e.g. 1FIT (1fit.com)"></div>
         <div class="field"><label>Sector</label><input name="sector" placeholder="e.g. B2B SaaS · Health & Fitness"></div>
         <div class="field"><label>Period</label><input name="period" placeholder="e.g. May – Aug 2026"></div>
+        <div class="field"><label>Role (optional 4th hero meta item)</label><input name="role" placeholder="e.g. Growth Marketing Executive"></div>
         <div class="field full">
           <label>Stat cards (format: number:label, separated by |)</label>
           <input name="stats" placeholder="10:New landing pages|2:Platform pages updated|12:Total URLs delivered|1:Website redesign moodboard">
@@ -630,6 +631,31 @@ https://1fit.com/platform/wearable-integrations/|New"></textarea>
           <label>Delivered items (one per line, format: title|description)</label>
           <textarea name="delivered_items" rows="4"></textarea>
         </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">"Approach" section</p>
+        <div class="field full"><label>Label</label><input name="approach_label" placeholder="e.g. Approach"></div>
+        <div class="field full"><label>Heading</label><input name="approach_heading"></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="approach_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Timeline steps (one per line, format: heading|description)</label>
+          <textarea name="approach_items" rows="5"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Content spotlight section</p>
+        <div class="field full"><label>Label</label><input name="spotlight_label" placeholder="e.g. Content spotlight"></div>
+        <div class="field full"><label>Heading</label><input name="spotlight_heading"></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="spotlight_intro" rows="3"></textarea></div>
+        <div class="field full"><label>Pull-quote</label><textarea name="spotlight_quote" rows="2"></textarea></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line)</label>
+          <textarea name="spotlight_body" rows="4"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Results section</p>
+        <div class="field full"><label>Label</label><input name="results_label" placeholder="e.g. Results"></div>
+        <div class="field full"><label>Heading</label><input name="results_heading"></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="results_intro" rows="3"></textarea></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">The number panels in this section aren't editable here — ask to have those changed directly.</p>
 
         <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Reflection section</p>
         <div class="field full"><label>Label</label><input name="reflection_label" placeholder="e.g. Reflection"></div>

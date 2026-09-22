@@ -120,6 +120,7 @@ export async function loadCaseStudyPage(slug) {
   setText("cs-client", data.client);
   setText("cs-sector", data.sector);
   setText("cs-period", data.period);
+  setText("cs-role", data.role);
 
   const statsEl = document.getElementById("cs-stats");
   if (data.stats && statsEl) {
@@ -212,6 +213,25 @@ export async function loadCaseStudyPage(slug) {
   setText("cs-delivered-heading", data.delivered_heading);
   setText("cs-delivered-intro", data.delivered_intro);
   applyPairsList("cs-delivered-items", "> div", "b", "p", data.delivered_items);
+
+  // "Approach" section (label/heading/intro + a timeline of heading|description steps)
+  setText("cs-approach-label", data.approach_label);
+  setText("cs-approach-heading", data.approach_heading);
+  setText("cs-approach-intro", data.approach_intro);
+  applyPairsList("cs-approach-items", ".timeline-item", "h3", "p", data.approach_items);
+
+  // Content/case spotlight section
+  setText("cs-spotlight-label", data.spotlight_label);
+  setText("cs-spotlight-heading", data.spotlight_heading);
+  setText("cs-spotlight-intro", data.spotlight_intro);
+  setText("cs-spotlight-quote", data.spotlight_quote);
+  const spotlightBodyEl = document.getElementById("cs-spotlight-body");
+  if (data.spotlight_body && spotlightBodyEl) spotlightBodyEl.innerHTML = paragraphsHtml(data.spotlight_body);
+
+  // Results section intro (the number panels themselves are static, bespoke layouts)
+  setText("cs-results-label", data.results_label);
+  setText("cs-results-heading", data.results_heading);
+  setText("cs-results-intro", data.results_intro);
 
   // Reflection section (shared shape across every case study)
   setText("cs-reflection-label", data.reflection_label);

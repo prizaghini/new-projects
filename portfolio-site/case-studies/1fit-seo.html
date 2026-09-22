@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title id="cs-page-title">1FIT, SEO and Content Strategy Case Study | Priscila Zaghini</title>
+<meta name="description" id="cs-meta-description" content="How I grew 1FIT's organic keyword portfolio by 56% and increased organic traffic by 12% in three months through SEO content strategy, technical fixes, and video case studies.">
+<link rel="modulepreload" href="../js/supabase-client.js">
+<link rel="modulepreload" href="../js/case-study-loader.js">
+<link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2" crossorigin>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='black'/%3E%3Ctext x='50' y='53' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:wght@500;600;700&family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/case-study.css">
+<style>
+/* Styles specific to this page's chart / keyword-table / timeline widgets */
+.case-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
+.case-meta-item { font-family: var(--mono); font-size: 0.71875rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); }
+.case-meta-item b { display: block; color: rgba(255,255,255,0.85); font-weight: 500; margin-bottom: 3px; font-size: 0.8125rem; }
+
+.stat-strip { background: #fff; border-bottom: 1px solid var(--line); }
+.stat-strip-inner { display: grid; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 600px) { .stat-strip-inner { grid-template-columns: repeat(4, 1fr); } }
+.stat-strip-item { padding: clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.stat-strip-item:nth-child(2n) { border-right: none; }
+@media (min-width: 600px) {
+  .stat-strip-item { border-bottom: none; }
+  .stat-strip-item:nth-child(2n) { border-right: 1px solid var(--line); }
+  .stat-strip-item:last-child { border-right: none; }
+}
+.stat-strip-item b { display: block; font-family: var(--display); font-size: clamp(1.75rem, 5vw, 2.5rem); font-weight: 700; color: var(--accent); line-height: 1; }
+.stat-strip-item span { display: block; font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin-top: 6px; }
+.stat-strip-item small { display: block; font-family: var(--mono); font-size: 0.625rem; color: #aaa; margin-top: 4px; }
+
+.chart-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 4vw, 32px); overflow: hidden; }
+.chart-title { font-family: var(--mono); font-size: 0.71875rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 20px; }
+.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; }
+.bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.bar-before { background: #E5E3DF; }
+.bar-after { background: var(--accent); }
+.bar-label { font-family: var(--mono); font-size: 0.5625rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); text-align: center; white-space: nowrap; }
+.bar-val { font-family: var(--display); font-size: 0.75rem; font-weight: 700; color: var(--ink); }
+.chart-legend { display: flex; gap: 16px; margin-top: 14px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+.kw-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.kw-table thead th { font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); padding: 0 10px 10px; text-align: left; border-bottom: 1px solid var(--line); }
+.kw-table tbody tr { border-bottom: 1px solid var(--line); }
+.kw-table tbody tr:last-child { border-bottom: none; }
+.kw-table tbody td { padding: 10px; vertical-align: middle; }
+.kw-badge { display: inline-block; font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 999px; background: var(--accent); color: #fff; }
+.kw-badge.intent-c { background: #16160F; }
+.kw-badge.intent-i { background: #5B584E; }
+.pos-pill { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; font-family: var(--mono); font-size: 0.71875rem; font-weight: 600; }
+.pos-top { background: #D4F0DC; color: #1A6635; }
+.pos-mid { background: #FFF0CC; color: #7A5A00; }
+
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+.timeline-item { position: relative; margin-bottom: 28px; }
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot { position: absolute; left: -28px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-alt); flex-shrink: 0; }
+.timeline-item h3 { margin-bottom: 6px; color: #fff; }
+.timeline-item p { color: rgba(255,255,255,0.65); font-size: 0.9375rem; margin: 0; }
+
+.proof-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.proof-bar { background: #f5f5f3; padding: 10px 16px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--line); }
+.proof-dot { width: 10px; height: 10px; border-radius: 50%; }
+.proof-caption { font-family: var(--mono); font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-left: auto; }
+
+.callout { border-left: 3px solid var(--accent); padding: 16px 20px; background: color-mix(in srgb, var(--accent) 5%, white); border-radius: 0 8px 8px 0; margin: 20px 0; }
+.callout p { margin: 0; font-size: 0.9375rem; color: var(--ink-soft); font-style: italic; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="logo" href="../index.html"><span class="site-name-text">Priscila Zaghini</span></a>
+    <nav style="display:flex;align-items:center;gap:14px;">
+      <a href="../index.html#portfolio" style="font-size:0.875rem;color:var(--ink-soft);text-decoration:none;">Portfolio</a>
+      <a class="btn btn-primary" href="../index.html#lets-talk"><span class="site-cta-text">Let's Talk</span></a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="case-hero">
+  <div class="wrap">
+    <a class="back-link" href="../index.html#portfolio">← Back to portfolio</a>
+    <div class="case-hero-inner">
+      <div>
+        <span class="label-white" id="cs-label">Case Study · SEO & Content Strategy</span>
+        <h1 id="cs-headline">Growing 1FIT's organic presence from the ground up</h1>
+        <p class="lead-white" style="margin-top:16px;" id="cs-intro">In three months, a focused SEO and content strategy grew 1FIT's keyword portfolio by 56%, increased organic traffic by 12%, and turned a single blog post into the site's top non-branded traffic driver, with results still compounding after handover.</p>
+        <div class="case-meta">
+          <div class="case-meta-item"><b>Client</b><span id="cs-client">1FIT (1fit.com)</span></div>
+          <div class="case-meta-item"><b>Sector</b><span id="cs-sector">B2B SaaS · Health &amp; Fitness</span></div>
+          <div class="case-meta-item"><b>Period</b><span id="cs-period">May – Aug 2026</span></div>
+          <div class="case-meta-item"><b>Role</b><span id="cs-role">Growth Marketing Executive</span></div>
+        </div>
+      </div>
+      <div>
+        <!-- Visual stat highlight -->
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:28px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div>
+              <div style="font-family:var(--display);font-size:2.5rem;font-weight:700;color:#fff;line-height:1;">+56%</div>
+              <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Keyword growth</div>
+            </div>
+            <div>
+              <div style="font-family:var(--display);font-size:2.5rem;font-weight:700;color:#fff;line-height:1;">+12%</div>
+              <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Organic traffic</div>
+            </div>
+            <div>
+              <div style="font-family:var(--display);font-size:2.5rem;font-weight:700;color:#fff;line-height:1;">+6pts</div>
+              <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Site health score</div>
+            </div>
+            <div>
+              <div style="font-family:var(--display);font-size:2.5rem;font-weight:700;color:#fff;line-height:1;">36</div>
+              <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:6px;">Keywords, one blog post</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.35);">Source: Semrush · UK database · Sep 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="wrap">
+    <div class="stat-strip-inner">
+      <div class="stat-strip-item reveal">
+        <b>54 → 84</b>
+        <span>Ranking keywords</span>
+        <small>UK organic · May to Sep 2026</small>
+      </div>
+      <div class="stat-strip-item reveal">
+        <b>849 → 954</b>
+        <span>Monthly organic visits</span>
+        <small>Semrush estimate · UK</small>
+      </div>
+      <div class="stat-strip-item reveal">
+        <b>81% → 87%</b>
+        <span>Site health score</span>
+        <small>Semrush Site Audit</small>
+      </div>
+      <div class="stat-strip-item reveal">
+        <b>£3.5K</b>
+        <span>Organic traffic value</span>
+        <small>Equivalent PPC cost · Aug 2026</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BACKGROUND -->
+<section>
+  <div class="wrap" style="display:grid;gap:clamp(32px,6vw,64px);grid-template-columns:0.9fr 1.1fr;align-items:center;max-width:var(--max);margin:0 auto;padding:0 24px;">
+    <div class="reveal">
+      <span class="label" id="cs-challenge-label">The brief</span>
+      <h2 id="cs-challenge-heading">A platform with strong product, but limited organic visibility</h2>
+      <div id="cs-challenge-body">
+        <p class="lead" style="margin-top:16px;">1FIT is a UK-based B2B SaaS platform for fitness and health coaches, helping them manage clients, deliver programmes, and grow their businesses in one place.</p>
+        <p style="color:var(--ink-soft);margin-top:8px;">When I joined in May 2026 as Growth Marketing Executive, the site had no structured SEO strategy and a site health score of 81%, eleven points below top-performing sites. Almost all Google traffic came from people already searching for 1FIT by name. There was no presence for the searches that matter most to growth: personal trainer software, coaching platforms, PT apps. People who had never heard of 1FIT were not finding it. The gaps were clear and fixable, and the opportunity to build a content engine from scratch was real.</p>
+      </div>
+      <div class="tag-list" id="cs-tags">
+        <span class="tag">SEO Audit</span>
+        <span class="tag">Content Strategy</span>
+        <span class="tag">Technical SEO</span>
+        <span class="tag">On-Page Optimisation</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="proof-wrap">
+        <div class="proof-bar">
+          <div class="proof-dot" style="background:#FF5F57;"></div>
+          <div class="proof-dot" style="background:#FEBC2E;"></div>
+          <div class="proof-dot" style="background:#28C840;"></div>
+          <span class="proof-caption">Semrush Site Audit · May 2026, baseline</span>
+        </div>
+        <div style="padding:24px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div style="text-align:center;padding:16px;background:#fafaf9;border-radius:10px;border:1px solid var(--line);">
+              <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#B3261E;">81%</div>
+              <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-top:4px;">Site health</div>
+              <div style="font-family:var(--mono);font-size:0.5625rem;color:#1A6635;margin-top:3px;">→ 87% on leaving</div>
+            </div>
+            <div style="text-align:center;padding:16px;background:#fafaf9;border-radius:10px;border:1px solid var(--line);">
+              <div style="font-family:var(--display);font-size:2rem;font-weight:700;color:#B3261E;">46</div>
+              <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-top:4px;">Pages missing meta desc.</div>
+              <div style="font-family:var(--mono);font-size:0.5625rem;color:#1A6635;margin-top:3px;">→ resolved across site</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+            <div style="text-align:center;padding:12px 8px;background:#fafaf9;border-radius:8px;border:1px solid var(--line);">
+              <div style="font-family:var(--display);font-size:1.375rem;font-weight:700;color:var(--ink);">54</div>
+              <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);margin-top:3px;">Ranking keywords</div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:#1A6635;margin-top:2px;">→ 84 on leaving</div>
+            </div>
+            <div style="text-align:center;padding:12px 8px;background:#fafaf9;border-radius:8px;border:1px solid var(--line);">
+              <div style="font-family:var(--display);font-size:1.375rem;font-weight:700;color:var(--ink);">849</div>
+              <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);margin-top:3px;">Monthly visits</div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:#1A6635;margin-top:2px;">→ 954 on leaving</div>
+            </div>
+            <div style="text-align:center;padding:12px 8px;background:#fafaf9;border-radius:8px;border:1px solid var(--line);">
+              <div style="font-family:var(--display);font-size:1.375rem;font-weight:700;color:var(--ink);">5</div>
+              <div style="font-family:var(--mono);font-size:0.5625rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);margin-top:3px;">Errors on site</div>
+              <div style="font-family:var(--mono);font-size:0.5rem;color:#1A6635;margin-top:2px;">→ 0 on leaving</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT I DID -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label-white" id="cs-approach-label">Approach</span>
+      <h2 style="color:#fff;" id="cs-approach-heading">One brief, four workstreams</h2>
+      <p class="lead-white" id="cs-approach-intro">The audit came first. Once I had a clear picture of what was broken, what was missing and where the fastest wins were, the work fell into four areas.</p>
+    </div>
+    <div class="two-col">
+      <div class="timeline reveal" id="cs-approach-items">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <h3>Technical SEO audit and fixes</h3>
+          <p>Ran a full Semrush site audit on joining. Identified 46 pages missing meta descriptions, 14 with long title elements, broken pages, and AI Search optimisation gaps. Prioritised and systematically resolved the highest-impact issues, reducing errors from 5 to 0 and raising site health from 81% to 87%.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <h3>SEO content strategy</h3>
+          <p>Conducted keyword research to identify high-intent, low-competition terms relevant to personal trainers looking for software. Built a content plan targeting commercial and informational intent across the buyer journey.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <h3>Blog content production</h3>
+          <p>Produced 11 new blog posts and rewrote 3 existing pages, all optimised for target keywords. The first post, published in May 2026, became the site's top non-branded traffic driver within weeks, ranking for 36 keywords and appearing in Google's top 10 for terms including "personal trainer software" (720 searches/month).</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <h3>Video case studies and email campaign</h3>
+          <p>Produced seven YouTube client case study videos in a concentrated sprint during July, each scripted, filmed, and optimised with keyword-rich titles and descriptions. Also planned and wrote a segmented email sequence promoting a client webinar in June, delivering tailored sends to both existing clients and prospects.</p>
+        </div>
+      </div>
+
+      <!-- Charts column -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div class="chart-wrap reveal">
+          <div class="chart-title">Organic keywords, UK (Semrush)</div>
+          <div class="bar-chart" id="kw-chart">
+            <div class="bar-group">
+              <div class="bar-val">39</div>
+              <div class="bar bar-before" style="height:41%"></div>
+              <div class="bar-label">Apr</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">54</div>
+              <div class="bar bar-before" style="height:57%"></div>
+              <div class="bar-label">May</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">58</div>
+              <div class="bar bar-after" style="height:61%"></div>
+              <div class="bar-label">Jun</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">78</div>
+              <div class="bar bar-after" style="height:82%"></div>
+              <div class="bar-label">Jul</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">78</div>
+              <div class="bar bar-after" style="height:82%"></div>
+              <div class="bar-label">Aug</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">84</div>
+              <div class="bar bar-after" style="height:88%"></div>
+              <div class="bar-label">Sep ↑</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#E5E3DF;"></div>Before</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#0D0C0C;"></div>During / after tenure</div>
+          </div>
+        </div>
+
+        <div class="chart-wrap reveal">
+          <div class="chart-title">Organic traffic, UK monthly visits (Semrush)</div>
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar-val">760</div>
+              <div class="bar bar-before" style="height:56%"></div>
+              <div class="bar-label">Mar</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">796</div>
+              <div class="bar bar-before" style="height:59%"></div>
+              <div class="bar-label">Apr</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">849</div>
+              <div class="bar bar-before" style="height:63%"></div>
+              <div class="bar-label">May</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">864</div>
+              <div class="bar bar-after" style="height:64%"></div>
+              <div class="bar-label">Jun</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">824</div>
+              <div class="bar bar-after" style="height:61%"></div>
+              <div class="bar-label">Jul</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">942</div>
+              <div class="bar bar-after" style="height:70%"></div>
+              <div class="bar-label">Aug</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-val">954</div>
+              <div class="bar bar-after" style="height:71%"></div>
+              <div class="bar-label">Sep ↑</div>
+            </div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#E5E3DF;"></div>Before</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#0D0C0C;"></div>During / after tenure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAR BLOG POST -->
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="label" id="cs-spotlight-label">Content spotlight</span>
+      <h2 id="cs-spotlight-heading">One blog post. 36 keywords. The site's top organic asset.</h2>
+      <p class="lead" style="margin-top:16px;" id="cs-spotlight-intro">Published in May 2026, this single piece of content became responsible for the majority of 1FIT's non-branded organic traffic growth.</p>
+    </div>
+
+    <div class="two-col reveal">
+      <div>
+        <div class="callout">
+          <p id="cs-spotlight-quote">"Best personal trainer software", ranking positions 4 to 8 across multiple high-intent variants, targeting fitness coaches actively searching for a platform solution."</p>
+        </div>
+        <div id="cs-spotlight-body">
+          <p style="color:var(--ink-soft);margin-top:16px;">The article was built around a cluster of commercial and informational keywords identified during research. Rather than targeting a single term, it was structured to capture the full range of language personal trainers use when looking for software: from "pt apps" to "online personal training platforms" to "best personal trainer software uk".</p>
+          <p style="color:var(--ink-soft);">The page now accounts for <strong>8.6% of all organic traffic</strong> on the site and ranks for <strong>15 commercial-intent keywords</strong> and <strong>25 informational-intent keywords</strong> in the UK.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="proof-wrap">
+          <div class="proof-bar">
+            <div class="proof-dot" style="background:#FF5F57;"></div>
+            <div class="proof-dot" style="background:#FEBC2E;"></div>
+            <div class="proof-dot" style="background:#28C840;"></div>
+            <span class="proof-caption">Top ranking keywords · Sep 2026</span>
+          </div>
+          <div style="padding:4px 0;">
+            <table class="kw-table">
+              <thead>
+                <tr>
+                  <th>Keyword</th>
+                  <th>Vol.</th>
+                  <th>Pos.</th>
+                  <th>Intent</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-size:0.8125rem;">personal trainer software</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">720</td>
+                  <td><span class="pos-pill pos-mid">6</span></td>
+                  <td><span class="kw-badge intent-c">C</span></td>
+                </tr>
+                <tr>
+                  <td style="font-size:0.8125rem;">personal training software</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">480</td>
+                  <td><span class="pos-pill pos-mid">5</span></td>
+                  <td><span class="kw-badge intent-i">I</span></td>
+                </tr>
+                <tr>
+                  <td style="font-size:0.8125rem;">best apps for PTs uk</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">170</td>
+                  <td><span class="pos-pill pos-mid">5</span></td>
+                  <td><span class="kw-badge intent-c">C</span></td>
+                </tr>
+                <tr>
+                  <td style="font-size:0.8125rem;">good personal trainer apps</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">90</td>
+                  <td><span class="pos-pill pos-top">3</span></td>
+                  <td><span class="kw-badge intent-c">C</span></td>
+                </tr>
+                <tr>
+                  <td style="font-size:0.8125rem;">pt apps</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">210</td>
+                  <td><span class="pos-pill pos-mid">6</span></td>
+                  <td><span class="kw-badge intent-i">I</span></td>
+                </tr>
+                <tr>
+                  <td style="font-size:0.8125rem;">best personal training software</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">110</td>
+                  <td><span class="pos-pill pos-top">4</span></td>
+                  <td><span class="kw-badge intent-c">C</span></td>
+                </tr>
+                <tr>
+                  <td style="font-size:0.8125rem;">online personal trainer software</td>
+                  <td style="font-family:var(--mono);font-size:0.75rem;">170</td>
+                  <td><span class="pos-pill pos-mid">6</span></td>
+                  <td><span class="kw-badge intent-c">C</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORTING CONTENT -->
+<section style="background:#fafaf9;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+  <div class="wrap" style="max-width:760px;">
+    <span class="label reveal">Supporting content</span>
+    <h2 class="reveal" style="margin-bottom:20px;">A content strategy that worked across more than one channel</h2>
+    <p class="reveal" style="color:var(--ink-soft);">The blog content didn't sit in isolation. To support the SEO strategy, I also optimised and published seven client case study videos on YouTube, each with keyword-rich titles and descriptions targeting the same search terms as the blog posts.</p>
+    <p class="reveal" style="color:var(--ink-soft);">Two of the highest-volume keywords the blog ranks for, "personal trainer software" and "program for personal trainers", trigger a video pack in Google's search results. Having optimised video content alongside the blog posts meant 1FIT had a presence in both formats on the same SERPs, reinforcing visibility for the same audience at the same moment of search.</p>
+    <p class="reveal" style="color:var(--ink-soft);">The full breakdown of the video work is covered in the <a href="1fit-brand-content.html" style="color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;">Brand and Content Operations case study</a>.</p>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label-white" id="cs-results-label">Results</span>
+      <h2 style="color:#fff;" id="cs-results-heading">The numbers, verified</h2>
+      <p class="lead-white" id="cs-results-intro">All data sourced from Semrush UK database. September 2026 figures reflect work carried out during tenure. SEO improvements typically take 4–8 weeks to show in rankings.</p>
+    </div>
+    <div style="display:grid;gap:16px;grid-template-columns:repeat(2,1fr);" class="reveal">
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;">
+        <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:12px;">Site health</div>
+        <div style="display:flex;align-items:baseline;gap:12px;">
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:rgba(255,255,255,0.35);">81%</span>
+          <span style="color:rgba(255,255,255,0.3);">→</span>
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:#fff;">87%</span>
+        </div>
+        <p style="font-size:0.8125rem;color:rgba(255,255,255,0.5);margin:8px 0 0;">Errors reduced from 5 to 0. Meta descriptions fixed across the majority of 46 flagged pages.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;">
+        <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:12px;">Ranking keywords</div>
+        <div style="display:flex;align-items:baseline;gap:12px;">
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:rgba(255,255,255,0.35);">54</span>
+          <span style="color:rgba(255,255,255,0.3);">→</span>
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:#fff;">84</span>
+        </div>
+        <p style="font-size:0.8125rem;color:rgba(255,255,255,0.5);margin:8px 0 0;">+56% growth. Nearly all new keywords driven by a single optimised blog post published in month one.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;">
+        <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:12px;">Organic traffic</div>
+        <div style="display:flex;align-items:baseline;gap:12px;">
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:rgba(255,255,255,0.35);">849</span>
+          <span style="color:rgba(255,255,255,0.3);">→</span>
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:#fff;">954</span>
+        </div>
+        <p style="font-size:0.8125rem;color:rgba(255,255,255,0.5);margin:8px 0 0;">+12% monthly visits. Trajectory still rising in September, after handover.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;">
+        <div style="font-family:var(--mono);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:12px;">Traffic value</div>
+        <div style="display:flex;align-items:baseline;gap:12px;">
+          <span style="font-family:var(--display);font-size:1.75rem;font-weight:700;color:#fff;">£3.5K</span>
+        </div>
+        <p style="font-size:0.8125rem;color:rgba(255,255,255,0.5);margin:8px 0 0;">Equivalent monthly PPC cost to buy the same traffic via Google Ads. Up 6.5% in the last period.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT I LEARNED -->
+<section>
+  <div class="wrap" style="max-width:760px;">
+    <span class="label reveal" id="cs-reflection-label">Reflection</span>
+    <h2 class="reveal" style="margin-bottom:20px;" id="cs-reflection-heading">What this taught me</h2>
+    <div id="cs-reflection-body">
+      <p class="reveal" style="color:var(--ink-soft);">Working at an early-stage SaaS company meant doing everything with limited resources and no existing SEO foundation. That constraint was useful: it forced prioritisation. Rather than spreading effort across dozens of improvements, focusing on one well-researched, well-structured piece of content delivered more measurable impact than any number of smaller fixes.</p>
+      <p class="reveal" style="color:var(--ink-soft);">It also reinforced something important about how to report SEO work honestly: results lag behind execution by weeks, sometimes months. The September data, showing growth after I'd left, is not a coincidence. It's how organic search works, and knowing how to explain that clearly is part of the job.</p>
+    </div>
+    <div class="reveal" style="margin-top:32px;text-align:center;">
+      <a class="btn btn-primary" href="../index.html#lets-talk"><span class="site-cta-text">Let's Talk</span></a>
+      <a class="btn btn-ghost" href="../index.html#portfolio" style="margin-left:12px;border-color:var(--accent);color:var(--accent);">See more work</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="wrap">
+    <a class="logo" href="../index.html" style="display:inline-flex;margin-bottom:6px;font-family:var(--display);font-weight:700;font-size:1.0625rem;text-decoration:none;color:var(--ink);"><span class="site-name-text">Priscila Zaghini</span></a>
+    <p>Growth Marketing · SEO · Content Strategy</p>
+    <p style="margin-top:16px;font-size:12.5px;">© 2026 <span class="site-name-text">Priscila Zaghini</span></p>
+  </div>
+</footer>
+
+<script type="module" src="../js/config.js"></script>
+<script type="module">
+  import { loadCaseStudyPage, loadSiteChrome, initReveal } from "../js/case-study-loader.js";
+  loadSiteChrome();
+  loadCaseStudyPage("1fit-seo").finally(initReveal);
+</script>
+</body>
+</html>

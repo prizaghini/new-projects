@@ -362,6 +362,7 @@ setupCrudSection({
     form.client.value = row.client || "";
     form.sector.value = row.sector || "";
     form.period.value = row.period || "";
+    form.role.value = row.role || "";
     form.stats.value = row.stats || "";
     form.challenge_label.value = row.challenge_label || "";
     form.challenge_heading.value = row.challenge_heading || "";
@@ -405,6 +406,18 @@ setupCrudSection({
     form.delivered_heading.value = row.delivered_heading || "";
     form.delivered_intro.value = row.delivered_intro || "";
     form.delivered_items.value = row.delivered_items || "";
+    form.approach_label.value = row.approach_label || "";
+    form.approach_heading.value = row.approach_heading || "";
+    form.approach_intro.value = row.approach_intro || "";
+    form.approach_items.value = row.approach_items || "";
+    form.spotlight_label.value = row.spotlight_label || "";
+    form.spotlight_heading.value = row.spotlight_heading || "";
+    form.spotlight_intro.value = row.spotlight_intro || "";
+    form.spotlight_quote.value = row.spotlight_quote || "";
+    form.spotlight_body.value = row.spotlight_body || "";
+    form.results_label.value = row.results_label || "";
+    form.results_heading.value = row.results_heading || "";
+    form.results_intro.value = row.results_intro || "";
     form.reflection_label.value = row.reflection_label || "";
     form.reflection_heading.value = row.reflection_heading || "";
     form.reflection_body.value = row.reflection_body || "";

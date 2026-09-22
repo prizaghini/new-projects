@@ -46,6 +46,7 @@ create table if not exists case_study_pages (
   client text,
   sector text,
   period text,
+  role text,                        -- optional 4th hero meta item, e.g. 'Growth Marketing Executive'
   stats text,                       -- 'number:label' groups separated by | — e.g. '10:New landing pages|2:Platform pages updated'
   -- "The challenge" section
   challenge_label text,
@@ -101,6 +102,21 @@ create table if not exists case_study_pages (
   delivered_heading text,
   delivered_intro text,
   delivered_items text,             -- one per line, 'title|description'
+  -- "Approach" section (a labelled intro + a timeline of heading|description steps)
+  approach_label text,
+  approach_heading text,
+  approach_intro text,
+  approach_items text,              -- one per line, 'heading|description'
+  -- Content/case spotlight section (a labelled intro, a pull-quote, and body paragraphs)
+  spotlight_label text,
+  spotlight_heading text,
+  spotlight_intro text,
+  spotlight_quote text,
+  spotlight_body text,              -- paragraphs separated by a blank line
+  -- Results section intro (the numbers themselves stay as static, bespoke panels)
+  results_label text,
+  results_heading text,
+  results_intro text,
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
@@ -150,6 +166,19 @@ alter table case_study_pages add column if not exists delivered_label text;
 alter table case_study_pages add column if not exists delivered_heading text;
 alter table case_study_pages add column if not exists delivered_intro text;
 alter table case_study_pages add column if not exists delivered_items text;
+alter table case_study_pages add column if not exists role text;
+alter table case_study_pages add column if not exists approach_label text;
+alter table case_study_pages add column if not exists approach_heading text;
+alter table case_study_pages add column if not exists approach_intro text;
+alter table case_study_pages add column if not exists approach_items text;
+alter table case_study_pages add column if not exists spotlight_label text;
+alter table case_study_pages add column if not exists spotlight_heading text;
+alter table case_study_pages add column if not exists spotlight_intro text;
+alter table case_study_pages add column if not exists spotlight_quote text;
+alter table case_study_pages add column if not exists spotlight_body text;
+alter table case_study_pages add column if not exists results_label text;
+alter table case_study_pages add column if not exists results_heading text;
+alter table case_study_pages add column if not exists results_intro text;
 alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';
