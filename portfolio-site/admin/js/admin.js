@@ -88,12 +88,24 @@ async function setupSettings() {
   const form = document.getElementById("form-settings");
   const msg = document.getElementById("settings-msg");
 
+  // <input type="color"> can't represent "no color set" — the browser silently
+  // shows/reports #000000 for any field left blank. So we track each color
+  // field's real stored value here, and only trust the picker's live value once
+  // the user actually interacts with it (a real "input" event) — otherwise we
+  // save back the original value (which may be "") instead of a coerced black.
+  const originalColorValues = {};
+  const touchedColorFields = new Set();
+  form.querySelectorAll('input[type="color"]').forEach(el => {
+    el.addEventListener("input", () => touchedColorFields.add(el.name));
+  });
+
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
     const el = form.elements[row.key];
     if (!el) return;
     if (el.type === "checkbox") el.checked = row.value === "true";
     else el.value = row.value;
+    if (el.type === "color") originalColorValues[row.key] = row.value;
   });
   refreshAllMediaNotes(form);
 
@@ -120,7 +132,12 @@ async function setupSettings() {
     const skipNames = new Set(HIDDEN_MEDIA_FIELDS.map(f => f.remove).filter(Boolean));
     const rows = Array.from(form.elements)
       .filter(el => el.name && el.type !== "file" && !skipNames.has(el.name))
-      .map(el => ({ key: el.name, value: el.type === "checkbox" ? String(el.checked) : el.value }));
+      .map(el => {
+        if (el.type === "color" && !touchedColorFields.has(el.name)) {
+          return { key: el.name, value: originalColorValues[el.name] ?? "" };
+        }
+        return { key: el.name, value: el.type === "checkbox" ? String(el.checked) : el.value };
+      });
 
     const { error } = await supabase.from("site_settings").upsert(rows);
     if (error) {
