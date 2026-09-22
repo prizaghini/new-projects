@@ -657,6 +657,7 @@ async function loadSiteSettings(supabase) {
   if (s.stat_years_label) document.getElementById("stat-years-label").textContent = s.stat_years_label;
 
   if (s.about_label) document.getElementById("about-label").textContent = s.about_label;
+  if (s.about_label_color) document.getElementById("about-label").style.color = s.about_label_color;
   if (s.about_heading) {
     document.getElementById("about-heading").textContent = s.about_heading;
   } else if (s.display_name) {
@@ -704,6 +705,7 @@ async function loadSiteSettings(supabase) {
   }
 
   if (s.contact_label) document.getElementById("contact-label").textContent = s.contact_label;
+  if (s.contact_label_color) document.getElementById("contact-label").style.color = s.contact_label_color;
   if (s.contact_heading) document.getElementById("contact-heading").textContent = s.contact_heading;
   if (s.contact_subcopy) document.getElementById("contact-subcopy").textContent = s.contact_subcopy;
   if (s.contact_text_color) {
@@ -758,6 +760,7 @@ async function loadSiteSettings(supabase) {
   if (s.logos_heading_color) document.getElementById("logos-heading").style.color = s.logos_heading_color;
 
   if (s.case_studies_label) document.getElementById("case-studies-label").textContent = s.case_studies_label;
+  if (s.case_studies_label_color) document.getElementById("case-studies-label").style.color = s.case_studies_label_color;
   if (s.case_studies_heading) document.getElementById("case-studies-heading").textContent = s.case_studies_heading;
   if (s.case_studies_subheading) document.getElementById("case-studies-subheading").textContent = s.case_studies_subheading;
   if (s.case_studies_text_color) {
@@ -767,6 +770,7 @@ async function loadSiteSettings(supabase) {
   if (s.case_studies_bg_color) document.getElementById("section-case-studies").style.background = s.case_studies_bg_color;
 
   if (s.services_label) document.getElementById("services-label").textContent = s.services_label;
+  if (s.services_label_color) document.getElementById("services-label").style.color = s.services_label_color;
   if (s.services_heading) document.getElementById("services-heading").textContent = s.services_heading;
   if (s.services_subheading) {
     const el = document.getElementById("services-subheading");
@@ -800,6 +804,7 @@ async function loadSiteSettings(supabase) {
   }
 
   if (s.testimonials_label) document.getElementById("testimonials-label").textContent = s.testimonials_label;
+  if (s.testimonials_label_color) document.getElementById("testimonials-label").style.color = s.testimonials_label_color;
   if (s.testimonials_heading) document.getElementById("testimonials-heading").textContent = s.testimonials_heading;
   if (s.testimonials_subheading) {
     const el = document.getElementById("testimonials-subheading");
