@@ -26,7 +26,8 @@ When I joined in May 2026 as Growth Marketing Executive, the site had no structu
   $q$SEO Audit|Content Strategy|Technical SEO|On-Page Optimisation$q$,
 
   $q$Approach$q$,
-  $q$One brief, four workstreams$q$,
+  $q$One brief,
+four workstreams$q$,
   $q$The audit came first. Once I had a clear picture of what was broken, what was missing and where the fastest wins were, the work fell into four areas.$q$,
   $q$Technical SEO audit and fixes|Ran a full Semrush site audit on joining. Identified 46 pages missing meta descriptions, 14 with long title elements, broken pages, and AI Search optimisation gaps. Prioritised and systematically resolved the highest-impact issues, reducing errors from 5 to 0 and raising site health from 81% to 87%.
 SEO content strategy|Conducted keyword research to identify high-intent, low-competition terms relevant to personal trainers looking for software. Built a content plan targeting commercial and informational intent across the buyer journey.
@@ -34,7 +35,8 @@ Blog content production|Produced 11 new blog posts and rewrote 3 existing pages,
 Video case studies and email campaign|Produced seven YouTube client case study videos in a concentrated sprint during July, each scripted, filmed, and optimised with keyword-rich titles and descriptions. Also planned and wrote a segmented email sequence promoting a client webinar in June, delivering tailored sends to both existing clients and prospects.$q$,
 
   $q$Content spotlight$q$,
-  $q$One blog post. 36 keywords. The site's top organic asset.$q$,
+  $q$One blog post. 36 keywords.
+The site's top organic asset.$q$,
   $q$Published in May 2026, this single piece of content became responsible for the majority of 1FIT's non-branded organic traffic growth.$q$,
   $q$"Best personal trainer software", ranking positions 4 to 8 across multiple high-intent variants, targeting fitness coaches actively searching for a platform solution."$q$,
   $q$The article was built around a cluster of commercial and informational keywords identified during research. Rather than targeting a single term, it was structured to capture the full range of language personal trainers use when looking for software: from "pt apps" to "online personal training platforms" to "best personal trainer software uk".

@@ -37,6 +37,7 @@ p { margin: 0 0 12px; }
    Automate Billing. Grow Your Coaching Business.") wraps to 1-2 lines instead of 4 —
    44ch was sized for short section titles, not full-sentence headlines. */
 .section-head { text-align: center; max-width: 800px; margin: 0 auto clamp(30px, 5vw, 48px); }
+.section-head .lead, .section-head .lead-white { margin-top: 16px; }
 
 /* header */
 header.site-header { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }

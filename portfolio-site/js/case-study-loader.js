@@ -113,6 +113,14 @@ export async function loadCaseStudyPage(slug) {
     if (el) el.textContent = value;
   };
 
+  // Like setText, but a line break typed in the admin field becomes a <br> —
+  // used for headings that may need to wrap onto a second line deliberately.
+  const setTextWithBreaks = (id, value) => {
+    if (!value) return;
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = value.replace(/\\n|\n/g, "<br>");
+  };
+
   // Hero
   setText("cs-label", data.label);
   setText("cs-headline", data.headline);
@@ -216,13 +224,13 @@ export async function loadCaseStudyPage(slug) {
 
   // "Approach" section (label/heading/intro + a timeline of heading|description steps)
   setText("cs-approach-label", data.approach_label);
-  setText("cs-approach-heading", data.approach_heading);
+  setTextWithBreaks("cs-approach-heading", data.approach_heading);
   setText("cs-approach-intro", data.approach_intro);
   applyPairsList("cs-approach-items", ".timeline-item", "h3", "p", data.approach_items);
 
   // Content/case spotlight section
   setText("cs-spotlight-label", data.spotlight_label);
-  setText("cs-spotlight-heading", data.spotlight_heading);
+  setTextWithBreaks("cs-spotlight-heading", data.spotlight_heading);
   setText("cs-spotlight-intro", data.spotlight_intro);
   setText("cs-spotlight-quote", data.spotlight_quote);
   const spotlightBodyEl = document.getElementById("cs-spotlight-body");
