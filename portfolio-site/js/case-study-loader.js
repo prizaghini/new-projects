@@ -236,6 +236,12 @@ export async function loadCaseStudyPage(slug) {
   const spotlightBodyEl = document.getElementById("cs-spotlight-body");
   if (data.spotlight_body && spotlightBodyEl) spotlightBodyEl.innerHTML = paragraphsHtml(data.spotlight_body);
 
+  // "Supporting content" section
+  setText("cs-supporting-label", data.supporting_label);
+  setText("cs-supporting-heading", data.supporting_heading);
+  const supportingBodyEl = document.getElementById("cs-supporting-body");
+  if (data.supporting_body && supportingBodyEl) supportingBodyEl.innerHTML = paragraphsHtml(data.supporting_body);
+
   // Results section intro (the number panels themselves are static, bespoke layouts)
   setText("cs-results-label", data.results_label);
   setText("cs-results-heading", data.results_heading);

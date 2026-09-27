@@ -117,6 +117,10 @@ create table if not exists case_study_pages (
   results_label text,
   results_heading text,
   results_intro text,
+  -- "Supporting content" section (a labelled intro + body paragraphs)
+  supporting_label text,
+  supporting_heading text,
+  supporting_body text,             -- paragraphs separated by a blank line
   sort_order int not null default 0,
   created_at timestamptz not null default now()
 );
@@ -179,6 +183,9 @@ alter table case_study_pages add column if not exists spotlight_body text;
 alter table case_study_pages add column if not exists results_label text;
 alter table case_study_pages add column if not exists results_heading text;
 alter table case_study_pages add column if not exists results_intro text;
+alter table case_study_pages add column if not exists supporting_label text;
+alter table case_study_pages add column if not exists supporting_heading text;
+alter table case_study_pages add column if not exists supporting_body text;
 alter table testimonials add column if not exists image_url text;
 alter table testimonials add column if not exists photo_url text;
 alter table testimonials add column if not exists photo_position text not null default 'top';

@@ -432,6 +432,9 @@ setupCrudSection({
     form.spotlight_intro.value = row.spotlight_intro || "";
     form.spotlight_quote.value = row.spotlight_quote || "";
     form.spotlight_body.value = row.spotlight_body || "";
+    form.supporting_label.value = row.supporting_label || "";
+    form.supporting_heading.value = row.supporting_heading || "";
+    form.supporting_body.value = row.supporting_body || "";
     form.results_label.value = row.results_label || "";
     form.results_heading.value = row.results_heading || "";
     form.results_intro.value = row.results_intro || "";

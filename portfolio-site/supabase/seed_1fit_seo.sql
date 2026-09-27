@@ -5,6 +5,7 @@ insert into case_study_pages (
   spotlight_label, spotlight_heading, spotlight_intro, spotlight_quote, spotlight_body,
   results_label, results_heading, results_intro,
   reflection_label, reflection_heading, reflection_body,
+  supporting_label, supporting_heading, supporting_body,
   sort_order
 ) values (
   '1fit-seo',
@@ -53,6 +54,14 @@ The page now accounts for <strong>8.6% of all organic traffic</strong> on the si
 
 It also reinforced something important about how to report SEO work honestly: results lag behind execution by weeks, sometimes months. The September data, showing growth after I'd left, is not a coincidence. It's how organic search works, and knowing how to explain that clearly is part of the job.$q$,
 
+  $q$Supporting content$q$,
+  $q$A content strategy that worked across more than one channel$q$,
+  $q$The blog content didn't sit in isolation. To support the SEO strategy, I also optimised and published seven client case study videos on YouTube, each with keyword-rich titles and descriptions targeting the same search terms as the blog posts.
+
+Two of the highest-volume keywords the blog ranks for, "personal trainer software" and "program for personal trainers", trigger a video pack in Google's search results. Having optimised video content alongside the blog posts meant 1FIT had a presence in both formats on the same SERPs, reinforcing visibility for the same audience at the same moment of search.
+
+The full breakdown of the video work is covered in the <a href="1fit-brand-content.html" style="color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;">Brand and Content Operations case study</a>.$q$,
+
   0
 )
 on conflict (slug) do update set
@@ -83,4 +92,7 @@ on conflict (slug) do update set
   results_intro = excluded.results_intro,
   reflection_label = excluded.reflection_label,
   reflection_heading = excluded.reflection_heading,
-  reflection_body = excluded.reflection_body;
+  reflection_body = excluded.reflection_body,
+  supporting_label = excluded.supporting_label,
+  supporting_heading = excluded.supporting_heading,
+  supporting_body = excluded.supporting_body;
