@@ -131,7 +131,7 @@ export async function loadCaseStudyPage(slug) {
 
   // Hero
   setText("cs-label", data.label);
-  setText("cs-headline", data.headline);
+  setTextWithBreaks("cs-headline", data.headline);
   setText("cs-intro", data.intro);
   setText("cs-client", data.client);
   setText("cs-sector", data.sector);
@@ -152,7 +152,7 @@ export async function loadCaseStudyPage(slug) {
 
   // "The challenge" section
   setText("cs-challenge-label", data.challenge_label);
-  setText("cs-challenge-heading", data.challenge_heading);
+  setTextWithBreaks("cs-challenge-heading", data.challenge_heading);
   const challengeBodyEl = document.getElementById("cs-challenge-body");
   if (data.challenge_body && challengeBodyEl) challengeBodyEl.innerHTML = paragraphsHtml(data.challenge_body, { leadFirst: true });
   const tagsEl = document.getElementById("cs-tags");
@@ -169,19 +169,19 @@ export async function loadCaseStudyPage(slug) {
 
   // First "featured page" section
   setText("cs-featured-label", data.featured_label);
-  setText("cs-featured-heading", data.featured_heading);
+  setTextWithBreaks("cs-featured-heading", data.featured_heading);
   setText("cs-featured-intro", data.featured_intro);
   applyPageCards("cs-featured-grid", data.featured_pages);
 
   // Second "featured page" section
   setText("cs-wearables-label", data.wearables_label);
-  setText("cs-wearables-heading", data.wearables_heading);
+  setTextWithBreaks("cs-wearables-heading", data.wearables_heading);
   setText("cs-wearables-intro", data.wearables_intro);
   applyPageCards("cs-wearables-grid", data.wearables_pages);
 
   // Moodboard section
   setText("cs-moodboard-label", data.moodboard_label);
-  setText("cs-moodboard-heading", data.moodboard_heading);
+  setTextWithBreaks("cs-moodboard-heading", data.moodboard_heading);
   setText("cs-moodboard-intro", data.moodboard_intro);
   if (data.moodboard_items) {
     const pairs = data.moodboard_items.split("\n").map(l => l.trim()).filter(Boolean).map(line => {
@@ -201,18 +201,18 @@ export async function loadCaseStudyPage(slug) {
 
   // "Brand identity" section
   setText("cs-brand-label", data.brand_label);
-  setText("cs-brand-heading", data.brand_heading);
+  setTextWithBreaks("cs-brand-heading", data.brand_heading);
   setText("cs-brand-intro", data.brand_intro);
   applyCaptions("cs-brand-grid", ".brand-page-label", data.brand_pages);
 
   // "LinkedIn presence" section
   setText("cs-linkedin-label", data.linkedin_label);
-  setText("cs-linkedin-heading", data.linkedin_heading);
+  setTextWithBreaks("cs-linkedin-heading", data.linkedin_heading);
   setText("cs-linkedin-intro", data.linkedin_intro);
 
   // Video case studies section
   setText("cs-video-label", data.video_label);
-  setText("cs-video-heading", data.video_heading);
+  setTextWithBreaks("cs-video-heading", data.video_heading);
   setText("cs-video-intro", data.video_intro);
   applyCaptions("cs-video-grid", ".thumb-label", data.video_captions);
   setText("cs-video-all-caption", data.video_all_caption);
@@ -220,13 +220,13 @@ export async function loadCaseStudyPage(slug) {
 
   // Email marketing + "Also delivered" section
   setText("cs-email-label", data.email_label);
-  setText("cs-email-heading", data.email_heading);
+  setTextWithBreaks("cs-email-heading", data.email_heading);
   setText("cs-email-intro", data.email_intro);
   applyPairsList("cs-email-segments", "> div", "div", "p", data.email_segments);
   setText("cs-email-webinar-topic", data.email_webinar_topic);
   setText("cs-email-webinar-detail", data.email_webinar_detail);
   setText("cs-delivered-label", data.delivered_label);
-  setText("cs-delivered-heading", data.delivered_heading);
+  setTextWithBreaks("cs-delivered-heading", data.delivered_heading);
   setText("cs-delivered-intro", data.delivered_intro);
   applyPairsList("cs-delivered-items", "> div", "b", "p", data.delivered_items);
 
@@ -246,18 +246,18 @@ export async function loadCaseStudyPage(slug) {
 
   // "Supporting content" section
   setText("cs-supporting-label", data.supporting_label);
-  setText("cs-supporting-heading", data.supporting_heading);
+  setTextWithBreaks("cs-supporting-heading", data.supporting_heading);
   const supportingBodyEl = document.getElementById("cs-supporting-body");
   if (data.supporting_body && supportingBodyEl) supportingBodyEl.innerHTML = paragraphsHtml(data.supporting_body);
 
   // Results section intro (the number panels themselves are static, bespoke layouts)
   setText("cs-results-label", data.results_label);
-  setText("cs-results-heading", data.results_heading);
+  setTextWithBreaks("cs-results-heading", data.results_heading);
   setText("cs-results-intro", data.results_intro);
 
   // Reflection section (shared shape across every case study)
   setText("cs-reflection-label", data.reflection_label);
-  setText("cs-reflection-heading", data.reflection_heading);
+  setTextWithBreaks("cs-reflection-heading", data.reflection_heading);
   const reflectionBodyEl = document.getElementById("cs-reflection-body");
   if (data.reflection_body && reflectionBodyEl) reflectionBodyEl.innerHTML = paragraphsHtml(data.reflection_body);
 }

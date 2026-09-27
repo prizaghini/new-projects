@@ -29,7 +29,8 @@ Social Media
 Banners$q$,
 
   $q$LinkedIn presence$q$,
-  $q$Company page and founder profiles, written to convert$q$,
+  $q$Company page and founder profiles,
+written to convert$q$,
   $q$I rewrote the 1FIT LinkedIn company page overview and wrote the About sections for both co-founders, aligning each voice with the brand positioning while keeping the tone personal and authentic.$q$,
 
   $q$YouTube content$q$,
