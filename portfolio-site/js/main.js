@@ -949,11 +949,23 @@ try {
   await loadSiteSettings(supabase);
   setupCounters();
   setupContactForm(supabase);
-  loadCaseStudies(supabase);
-  loadServices(supabase);
-  loadPortfolio(supabase);
-  loadTestimonials(supabase);
-  loadBrandLogos(supabase);
+  const dataLoads = [
+    loadCaseStudies(supabase),
+    loadServices(supabase),
+    loadPortfolio(supabase),
+    loadTestimonials(supabase),
+    loadBrandLogos(supabase),
+  ];
+  // Arriving at #lets-talk (e.g. the "Let's Talk" button on a case study
+  // page) races the browser's native jump-to-anchor against these sections
+  // still loading their content above it — once they resolve and the page
+  // has grown, the anchor's no longer where the browser scrolled to. Redo
+  // the scroll once everything above the contact section has settled.
+  if (location.hash) {
+    Promise.allSettled(dataLoads).then(() => {
+      document.querySelector(location.hash)?.scrollIntoView();
+    });
+  }
 } catch (err) {
   setupCounters(); // still animate using the placeholder numbers already in the markup
   console.error("Failed to load Supabase client:", err);
