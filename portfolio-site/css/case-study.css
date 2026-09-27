@@ -21,6 +21,9 @@ html { scroll-behavior: smooth; font-size: 16px; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 1rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
+/* Links typed via the admin's [text](url) shorthand (see paragraphsHtml
+   in case-study-loader.js) render with this instead of inline styles. */
+.body-link { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 section { padding: clamp(48px, 9vw, 88px) 0; }
 .alt { background: var(--bg-alt); color: #FFFFFF; }

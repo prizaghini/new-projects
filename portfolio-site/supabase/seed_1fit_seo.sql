@@ -60,7 +60,7 @@ It also reinforced something important about how to report SEO work honestly: re
 
 Two of the highest-volume keywords the blog ranks for, "personal trainer software" and "program for personal trainers", trigger a video pack in Google's search results. Having optimised video content alongside the blog posts meant 1FIT had a presence in both formats on the same SERPs, reinforcing visibility for the same audience at the same moment of search.
 
-The full breakdown of the video work is covered in the <a href="1fit-brand-content.html" style="color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;">Brand and Content Operations case study</a>.$q$,
+The full breakdown of the video work is covered in the **[Brand and Content Operations case study](1fit-brand-content.html#youtube-content)**.$q$,
 
   0
 )

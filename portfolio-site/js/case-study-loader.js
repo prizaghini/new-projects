@@ -86,9 +86,17 @@ function applyPairsList(containerId, itemSelector, titleSelector, descSelector, 
 // Never adds class="reveal": elements created after the page's scroll-reveal
 // IntersectionObserver has already run never get observed, so they'd stay
 // permanently invisible (opacity: 0) — that was the second real bug.
+// Lets the admin type **bold** and [link text](url) in a body textarea
+// instead of raw HTML — converted here before the paragraph is rendered.
+function applyInlineMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" class="body-link">$1</a>');
+}
+
 function paragraphsHtml(text, { leadFirst = false } = {}) {
   return text.split(/\n\s*\n/).map((p, i) => {
-    const t = p.trim();
+    const t = applyInlineMarkdown(p.trim());
     return i === 0 && leadFirst
       ? `<p class="lead" style="margin-top:16px;">${t}</p>`
       : `<p style="color:var(--ink-soft);">${t}</p>`;
