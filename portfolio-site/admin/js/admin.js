@@ -101,6 +101,7 @@ async function setupSettings() {
 
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
+    if (row.key === "categories") return; // owned by setupCategoriesEditor() below, to avoid a load race clobbering in-progress edits
     const el = form.elements[row.key];
     if (!el) return;
     if (el.type === "checkbox") el.checked = row.value === "true";
@@ -186,6 +187,70 @@ async function setupCategoryOptions() {
   });
 }
 setupCategoryOptions();
+
+// ---------- portfolio categories editor (add / delete / reorder) ----------
+async function setupCategoriesEditor() {
+  const hiddenInput = document.querySelector('input[name="categories"]');
+  const list = document.getElementById("categories-list");
+  const addBtn = document.getElementById("add-category-btn");
+  if (!hiddenInput || !list || !addBtn) return;
+
+  const { data } = await supabase.from("site_settings").select("value").eq("key", "categories").maybeSingle();
+  let categories = ((data && data.value) || "").split("|").map(pair => {
+    const [key, label] = pair.split(":");
+    return { key: (key || "").trim(), label: (label || "").trim() };
+  }).filter(c => c.key || c.label);
+
+  function sync() {
+    hiddenInput.value = categories.map(c => `${c.key}:${c.label}`).join("|");
+  }
+
+  function render() {
+    list.innerHTML = categories.map((c, i) => `
+      <div class="category-row" data-index="${i}">
+        <input class="cat-key" placeholder="key" value="${esc(c.key)}">
+        <input class="cat-label" placeholder="Label" value="${esc(c.label)}">
+        <button type="button" class="cat-up" ${i === 0 ? "disabled" : ""} title="Move up">↑</button>
+        <button type="button" class="cat-down" ${i === categories.length - 1 ? "disabled" : ""} title="Move down">↓</button>
+        <button type="button" class="cat-delete" title="Delete">✕</button>
+      </div>`).join("");
+    sync();
+  }
+
+  list.addEventListener("input", e => {
+    const row = e.target.closest(".category-row");
+    if (!row) return;
+    const i = Number(row.dataset.index);
+    if (e.target.classList.contains("cat-key")) categories[i].key = e.target.value.trim();
+    if (e.target.classList.contains("cat-label")) categories[i].label = e.target.value.trim();
+    sync();
+  });
+
+  list.addEventListener("click", e => {
+    const row = e.target.closest(".category-row");
+    if (!row) return;
+    const i = Number(row.dataset.index);
+    if (e.target.classList.contains("cat-delete")) {
+      categories.splice(i, 1);
+      render();
+    } else if (e.target.classList.contains("cat-up") && i > 0) {
+      [categories[i - 1], categories[i]] = [categories[i], categories[i - 1]];
+      render();
+    } else if (e.target.classList.contains("cat-down") && i < categories.length - 1) {
+      [categories[i], categories[i + 1]] = [categories[i + 1], categories[i]];
+      render();
+    }
+  });
+
+  addBtn.addEventListener("click", () => {
+    categories.push({ key: "", label: "" });
+    render();
+    list.querySelector(".category-row:last-child .cat-key")?.focus();
+  });
+
+  render();
+}
+setupCategoriesEditor();
 
 function esc(str) {
   return String(str ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

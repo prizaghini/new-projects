@@ -38,6 +38,14 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--b
 .btn.danger { background: #B3261E; }
 .msg { font-size: 13.5px; margin-top: 10px; }
 .msg.err { color: #B3261E; }
+
+/* ---------- portfolio categories editor ---------- */
+.category-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.category-row input { font-family: var(--body); font-size: 14px; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+.category-row .cat-key { width: 110px; font-family: var(--mono); font-size: 12.5px; }
+.category-row .cat-label { flex: 1; }
+.category-row button { background: none; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 13px; cursor: pointer; line-height: 1; }
+.category-row button:disabled { opacity: 0.35; cursor: default; }
 .msg.ok { color: var(--accent); }
 
 /* ---------- dashboard layout ---------- */
