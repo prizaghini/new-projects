@@ -81,6 +81,7 @@ th { font-family: var(--mono); font-size: 11px; text-transform: uppercase; lette
 tr:last-child td { border-bottom: 0; }
 td.actions-cell { display: flex; gap: 8px; }
 td.actions-cell button { background: none; border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px; font-size: 12px; cursor: pointer; }
+td.actions-cell button:disabled { opacity: 0.35; cursor: default; }
 .empty-row td { text-align: center; color: var(--ink-soft); padding: 22px; }
 
 .notice {

@@ -257,22 +257,29 @@ function esc(str) {
 }
 
 // ---------- generic CRUD section (add / list / edit / delete) ----------
-function setupCrudSection({ table, formId, tbodyId, orderCol, renderRow, mapRowToForm, beforeSubmit }) {
+// `sortable: true` lists by sort_order (ascending) instead of orderCol, and
+// renderRow gets (row, index, total) so it can render up/down move buttons —
+// see the portfolio section below for the pattern.
+function setupCrudSection({ table, formId, tbodyId, orderCol, sortable, renderRow, mapRowToForm, beforeSubmit }) {
   const form = document.getElementById(formId);
   const tbody = document.getElementById(tbodyId);
   let editingId = null;
+  let rows = [];
 
   async function reload() {
-    const { data } = await supabase.from(table).select("*").order(orderCol, { ascending: false });
-    if (!data || data.length === 0) {
+    const { data } = sortable
+      ? await supabase.from(table).select("*").order("sort_order", { ascending: true })
+      : await supabase.from(table).select("*").order(orderCol, { ascending: false });
+    rows = data || [];
+    if (rows.length === 0) {
       tbody.innerHTML = `<tr class="empty-row"><td colspan="10">Nothing here yet — add one above.</td></tr>`;
       return;
     }
-    tbody.innerHTML = data.map(row => renderRow(row)).join("");
+    tbody.innerHTML = rows.map((row, i) => renderRow(row, i, rows.length)).join("");
 
     tbody.querySelectorAll("[data-edit]").forEach(btn => {
       btn.addEventListener("click", () => {
-        const row = data.find(r => r.id === btn.dataset.edit);
+        const row = rows.find(r => r.id === btn.dataset.edit);
         editingId = row.id;
         mapRowToForm(form, row);
         form.querySelector("button[type=submit]").textContent = "Save changes";
@@ -285,6 +292,22 @@ function setupCrudSection({ table, formId, tbodyId, orderCol, renderRow, mapRowT
         reload();
       });
     });
+    if (sortable) {
+      tbody.querySelectorAll("[data-move]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const i = rows.findIndex(r => r.id === btn.dataset.move);
+          const j = i + (btn.dataset.dir === "up" ? -1 : 1);
+          if (j < 0 || j >= rows.length) return;
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+          btn.disabled = true;
+          // Re-numbers every row's sort_order to its new position — items added
+          // before this feature existed all share the same default (0), so
+          // swapping raw values wouldn't move anything; this always works.
+          await Promise.all(rows.map((r, idx) => supabase.from(table).update({ sort_order: idx }).eq("id", r.id)));
+          reload();
+        });
+      });
+    }
   }
 
   form.addEventListener("submit", async e => {
@@ -335,13 +358,17 @@ setupCrudSection({
   table: "portfolio_items",
   formId: "form-portfolio",
   tbodyId: "table-portfolio",
-  orderCol: "created_at",
-  renderRow: row => `<tr>
+  sortable: true,
+  renderRow: (row, i, total) => `<tr>
     <td>${esc(row.category)}</td><td>${esc(row.brand)}</td><td>${esc(row.title)}</td>
     <td>${esc(row.platform)}</td>
     <td>${row.video_file_path ? "Yes" : ""}</td>
     <td>${row.featured_ad ? "Yes" : ""}</td>
-    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+    <td class="actions-cell">
+      <button data-move="${row.id}" data-dir="up" ${i === 0 ? "disabled" : ""} title="Move up">↑</button>
+      <button data-move="${row.id}" data-dir="down" ${i === total - 1 ? "disabled" : ""} title="Move down">↓</button>
+      <button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button>
+    </td>
   </tr>`,
   mapRowToForm: (form, row) => {
     form.category.value = row.category;
