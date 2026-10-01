@@ -38,9 +38,35 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
 });
 
 // ---------- site settings ----------
+// Photos straight off a phone/camera are routinely 3000-4000px wide and
+// several MB — way more than any card or hero image on the site ever
+// displays at. Every visitor downloads the full original on every page
+// load, which is the single biggest lever on perceived load time. This
+// downscales (but keeps the original format, so PNG/logo transparency
+// survives) before it ever reaches storage.
+const MAX_IMAGE_DIMENSION = 2000;
+async function resizeImageIfNeeded(file) {
+  if (!file.type.startsWith("image/") || file.type === "image/svg+xml") return file;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(bitmap.width, bitmap.height));
+    if (scale === 1) return file; // already small enough
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const quality = file.type === "image/png" ? undefined : 0.85;
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, file.type, quality));
+    return blob ? new File([blob], file.name, { type: file.type }) : file;
+  } catch {
+    return file; // if resizing fails for any reason, upload the original rather than block the save
+  }
+}
+
 async function uploadToSiteMedia(file, folder) {
+  const upload = await resizeImageIfNeeded(file);
   const path = `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
-  const { error } = await supabase.storage.from("site-media").upload(path, file);
+  const { error } = await supabase.storage.from("site-media").upload(path, upload);
   if (error) throw error;
   return supabase.storage.from("site-media").getPublicUrl(path).data.publicUrl;
 }
