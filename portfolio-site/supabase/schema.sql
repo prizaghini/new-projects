@@ -427,11 +427,17 @@ insert into site_settings (key, value) values
   ('sla_tiktok_video_url', ''),
   ('sla_tiktok_caption', ''),
   ('sla_carousel_img_1_url', ''),
+  ('sla_carousel_img_1_caption', ''),
   ('sla_carousel_img_2_url', ''),
+  ('sla_carousel_img_2_caption', ''),
   ('sla_carousel_img_3_url', ''),
+  ('sla_carousel_img_3_caption', ''),
   ('sla_carousel_img_4_url', ''),
+  ('sla_carousel_img_4_caption', ''),
   ('sla_carousel_img_5_url', ''),
+  ('sla_carousel_img_5_caption', ''),
   ('sla_carousel_img_6_url', ''),
+  ('sla_carousel_img_6_caption', ''),
   ('sla_carousel_caption', '')
 on conflict (key) do nothing;
 

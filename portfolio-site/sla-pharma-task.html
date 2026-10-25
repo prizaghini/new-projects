@@ -33,13 +33,14 @@
 }
 
 .carousel-wrap { position: relative; }
-.carousel-row { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scroll-behavior: smooth; }
+.carousel-row { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scroll-behavior: smooth; }
+.carousel-item { flex: 0 0 72%; max-width: 320px; scroll-snap-align: start; }
+@media (min-width: 540px) { .carousel-item { flex-basis: 30%; } }
 .carousel-slide {
-  flex: 0 0 72%; max-width: 320px; scroll-snap-align: start;
   aspect-ratio: 4/5; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-alt);
 }
-@media (min-width: 540px) { .carousel-slide { flex-basis: 30%; } }
 .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carousel-item-caption { margin-top: 10px; font-size: 0.8125rem; color: var(--ink-soft); white-space: pre-line; }
 .carousel-arrow {
   position: absolute; top: 50%; translate: 0 -50%; z-index: 2;
   width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
@@ -103,7 +104,7 @@
     <div class="reveal carousel-wrap">
       <button class="carousel-arrow prev" id="carousel-prev" type="button" aria-label="Previous slide">‹</button>
       <div class="carousel-row" id="carousel-row">
-        <div class="carousel-slide"><div class="empty-note">Carousel not uploaded yet.</div></div>
+        <div class="carousel-item"><div class="carousel-slide"><div class="empty-note">Carousel not uploaded yet.</div></div></div>
       </div>
       <button class="carousel-arrow next" id="carousel-next" type="button" aria-label="Next slide">›</button>
     </div>
@@ -149,13 +150,18 @@
       document.getElementById("carousel-caption").textContent = s.sla_carousel_caption;
     }
 
-    const slideUrls = [1, 2, 3, 4, 5, 6]
-      .map(n => s[`sla_carousel_img_${n}_url`])
-      .filter(Boolean);
+    const escapeHtml = str => str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const slides = [1, 2, 3, 4, 5, 6]
+      .map(n => ({ url: s[`sla_carousel_img_${n}_url`], caption: s[`sla_carousel_img_${n}_caption`] }))
+      .filter(slide => slide.url);
     const row = document.getElementById("carousel-row");
-    if (slideUrls.length) {
-      row.innerHTML = slideUrls
-        .map((url, i) => `<div class="carousel-slide"><img src="${url}" alt="Carousel slide ${i + 1}"></div>`)
+    if (slides.length) {
+      row.innerHTML = slides
+        .map((slide, i) => `
+          <div class="carousel-item">
+            <div class="carousel-slide"><img src="${slide.url}" alt="Carousel slide ${i + 1}"></div>
+            ${slide.caption ? `<p class="carousel-item-caption">${escapeHtml(slide.caption)}</p>` : ""}
+          </div>`)
         .join("");
     }
 
@@ -164,8 +170,8 @@
     const prevBtn = document.getElementById("carousel-prev");
     const nextBtn = document.getElementById("carousel-next");
     function slideStep() {
-      const slide = row.querySelector(".carousel-slide");
-      return slide ? slide.getBoundingClientRect().width + 10 : row.clientWidth;
+      const item = row.querySelector(".carousel-item");
+      return item ? item.getBoundingClientRect().width + 16 : row.clientWidth;
     }
     function updateArrows() {
       prevBtn.disabled = row.scrollLeft <= 4;
