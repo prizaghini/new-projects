@@ -421,6 +421,10 @@ insert into site_settings (key, value) values
   ('show_about_stat_4', 'true'),
   -- One-off application task page (case-studies/sla-pharma-task.html),
   -- edited from the admin dashboard's "SLA Task" tab.
+  ('sla_back_link_text', '← Back to portfolio'),
+  ('sla_label', 'Application Task · SLA Pharma'),
+  ('sla_headline', 'Social Media & Content Executive — Health & Science'),
+  ('sla_intro', 'Two pieces made for this application: a TikTok-format video and an Instagram carousel, each with the thinking behind it.'),
   ('sla_tiktok_video_url', ''),
   ('sla_tiktok_caption', ''),
   ('sla_carousel_img_1_url', ''),
