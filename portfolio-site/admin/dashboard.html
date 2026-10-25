@@ -12,6 +12,7 @@
   <aside class="sidebar">
     <p class="brand">[Your Name].</p>
     <button class="tab-btn" data-tab="settings">Site Settings</button>
+    <button class="tab-btn" data-tab="sla-task">SLA Task</button>
     <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
     <button class="tab-btn" data-tab="logos">Brand logos</button>
     <button class="tab-btn" data-tab="case-studies">Case Studies</button>
@@ -440,6 +441,39 @@
         <p style="margin:0 0 10px"><b>Export current settings</b> — click below, then copy the text and send it to your developer/assistant when asked for your current design values.</p>
         <button class="btn secondary" type="button" id="export-settings-btn">Generate export</button>
         <textarea id="export-settings-output" readonly style="width:100%;margin-top:10px;min-height:120px;font-family:var(--mono);font-size:11.5px;display:none"></textarea>
+      </div>
+    </section>
+
+    <!-- SLA TASK -->
+    <section class="panel" id="panel-sla-task">
+      <h2>SLA Task</h2>
+      <p class="hint">A one-off page to host your SLA Pharma application task: a TikTok-format video with your reasoning, and an Instagram carousel with its own reasoning. Lives at <code>case-studies/sla-pharma-task.html</code> — not linked from your main site, just a link you send directly.</p>
+      <form class="add-form" id="form-sla-task">
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:0">TikTok video</p>
+        <div class="field full">
+          <label>Video file</label>
+          <input type="file" name="sla_tiktok_video_file" accept="video/*">
+          <input type="hidden" name="sla_tiktok_video_url">
+          <p id="sla-tiktok-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field full"><label>Why you made it</label><textarea name="sla_tiktok_caption" rows="5" placeholder="Explain the thinking behind the video..."></textarea></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Instagram carousel</p>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Upload each slide in order. Leave any you don't need empty.</p>
+        <div class="field"><label>Slide 1</label><input type="file" name="sla_carousel_img_1_file" accept="image/*"><input type="hidden" name="sla_carousel_img_1_url"></div>
+        <div class="field"><label>Slide 2</label><input type="file" name="sla_carousel_img_2_file" accept="image/*"><input type="hidden" name="sla_carousel_img_2_url"></div>
+        <div class="field"><label>Slide 3</label><input type="file" name="sla_carousel_img_3_file" accept="image/*"><input type="hidden" name="sla_carousel_img_3_url"></div>
+        <div class="field"><label>Slide 4</label><input type="file" name="sla_carousel_img_4_file" accept="image/*"><input type="hidden" name="sla_carousel_img_4_url"></div>
+        <div class="field"><label>Slide 5</label><input type="file" name="sla_carousel_img_5_file" accept="image/*"><input type="hidden" name="sla_carousel_img_5_url"></div>
+        <div class="field"><label>Slide 6</label><input type="file" name="sla_carousel_img_6_file" accept="image/*"><input type="hidden" name="sla_carousel_img_6_url"></div>
+        <p id="sla-carousel-note" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0"></p>
+        <div class="field full"><label>Why you made it</label><textarea name="sla_carousel_caption" rows="5" placeholder="Explain the thinking behind the carousel..."></textarea></div>
+
+        <div class="actions"><button class="btn" type="submit">Save</button></div>
+        <p class="msg" id="sla-task-msg"></p>
+      </form>
+      <div class="notice">
+        <p style="margin:0"><b>Live page:</b> <a href="../case-studies/sla-pharma-task.html" target="_blank" rel="noopener">case-studies/sla-pharma-task.html</a> — open it in a new tab to check how it looks after saving.</p>
       </div>
     </section>
 

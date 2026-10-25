@@ -181,6 +181,74 @@ async function setupSettings() {
 }
 setupSettings();
 
+// ---------- SLA task page ----------
+// A single-row set of site_settings keys (sla_*), edited from their own tab
+// rather than folded into the giant settings form above, since this is a
+// one-off application artifact, not a site-wide setting.
+const SLA_MEDIA_FIELDS = [
+  { file: "sla_tiktok_video_file", url: "sla_tiktok_video_url", folder: "sla-task", noteId: "sla-tiktok-video-note",
+    setMsg: "A video is uploaded.", unsetMsg: "No video uploaded yet." },
+  { file: "sla_carousel_img_1_file", url: "sla_carousel_img_1_url", folder: "sla-task" },
+  { file: "sla_carousel_img_2_file", url: "sla_carousel_img_2_url", folder: "sla-task" },
+  { file: "sla_carousel_img_3_file", url: "sla_carousel_img_3_url", folder: "sla-task" },
+  { file: "sla_carousel_img_4_file", url: "sla_carousel_img_4_url", folder: "sla-task" },
+  { file: "sla_carousel_img_5_file", url: "sla_carousel_img_5_url", folder: "sla-task" },
+  { file: "sla_carousel_img_6_file", url: "sla_carousel_img_6_url", folder: "sla-task" },
+];
+
+async function setupSlaTask() {
+  const form = document.getElementById("form-sla-task");
+  if (!form) return;
+  const msg = document.getElementById("sla-task-msg");
+
+  const { data } = await supabase.from("site_settings").select("*");
+  (data || []).forEach(row => {
+    const el = form.elements[row.key];
+    if (el) el.value = row.value;
+  });
+  const videoField = SLA_MEDIA_FIELDS[0];
+  document.getElementById(videoField.noteId).textContent =
+    form.elements[videoField.url].value ? videoField.setMsg : videoField.unsetMsg;
+  const filledSlides = SLA_MEDIA_FIELDS.slice(1).filter(f => form.elements[f.url].value).length;
+  document.getElementById("sla-carousel-note").textContent =
+    filledSlides ? `${filledSlides} slide${filledSlides === 1 ? "" : "s"} uploaded.` : "No slides uploaded yet.";
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    msg.textContent = "";
+    try {
+      for (const f of SLA_MEDIA_FIELDS) {
+        const file = form.elements[f.file].files[0];
+        if (file) form.elements[f.url].value = await uploadToSiteMedia(file, f.folder);
+      }
+    } catch (err) {
+      msg.textContent = "Upload failed — " + err.message;
+      msg.className = "msg err";
+      return;
+    }
+
+    const rows = Array.from(form.elements)
+      .filter(el => el.name && el.type !== "file")
+      .map(el => ({ key: el.name, value: el.value }));
+
+    const { error } = await supabase.from("site_settings").upsert(rows);
+    if (error) {
+      msg.textContent = "Something went wrong — " + error.message;
+      msg.className = "msg err";
+    } else {
+      msg.textContent = "Saved.";
+      msg.className = "msg ok";
+      SLA_MEDIA_FIELDS.forEach(f => { form.elements[f.file].value = ""; });
+      document.getElementById(videoField.noteId).textContent =
+        form.elements[videoField.url].value ? videoField.setMsg : videoField.unsetMsg;
+      const filled = SLA_MEDIA_FIELDS.slice(1).filter(f => form.elements[f.url].value).length;
+      document.getElementById("sla-carousel-note").textContent =
+        filled ? `${filled} slide${filled === 1 ? "" : "s"} uploaded.` : "No slides uploaded yet.";
+    }
+  });
+}
+setupSlaTask();
+
 function setupExport() {
   const btn = document.getElementById("export-settings-btn");
   const output = document.getElementById("export-settings-output");
