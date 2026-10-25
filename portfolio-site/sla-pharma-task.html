@@ -32,14 +32,26 @@
   font-family: var(--mono); font-size: 0.75rem; color: rgba(255,255,255,0.4);
 }
 
-.carousel-row { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+.carousel-wrap { position: relative; }
+.carousel-row { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scroll-behavior: smooth; }
 .carousel-slide {
   flex: 0 0 72%; max-width: 320px; scroll-snap-align: start;
-  aspect-ratio: 1/1; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-alt);
+  aspect-ratio: 4/5; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-alt);
 }
-@media (min-width: 540px) { .carousel-slide { flex-basis: 46%; } }
+@media (min-width: 540px) { .carousel-slide { flex-basis: 30%; } }
 .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carousel-arrow {
+  position: absolute; top: 50%; translate: 0 -50%; z-index: 2;
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line);
+  background: #fff; color: var(--ink); display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+.carousel-arrow.prev { left: -4px; }
+.carousel-arrow.next { right: -4px; }
+.carousel-arrow:disabled { opacity: 0.3; cursor: default; }
+@media (min-width: 760px) { .carousel-arrow.prev { left: -20px; } .carousel-arrow.next { right: -20px; } }
 
+.task-copy { margin-top: 24px; }
 .task-copy h3 { margin-bottom: 14px; }
 .task-copy p { color: var(--ink-soft); white-space: pre-line; }
 </style>
@@ -87,17 +99,17 @@
 <!-- INSTAGRAM CAROUSEL -->
 <section class="task-section">
   <div class="wrap">
-    <div class="task-grid reverse">
-      <div class="task-copy reveal">
-        <span class="label">02 · Instagram carousel</span>
-        <h3>Why I made it</h3>
-        <p id="carousel-caption">—</p>
+    <span class="label reveal">02 · Instagram carousel</span>
+    <div class="reveal carousel-wrap">
+      <button class="carousel-arrow prev" id="carousel-prev" type="button" aria-label="Previous slide">‹</button>
+      <div class="carousel-row" id="carousel-row">
+        <div class="carousel-slide"><div class="empty-note">Carousel not uploaded yet.</div></div>
       </div>
-      <div class="reveal">
-        <div class="carousel-row" id="carousel-row">
-          <div class="carousel-slide"><div class="empty-note">Carousel not uploaded yet.</div></div>
-        </div>
-      </div>
+      <button class="carousel-arrow next" id="carousel-next" type="button" aria-label="Next slide">›</button>
+    </div>
+    <div class="task-copy reveal">
+      <h3>Why I made it</h3>
+      <p id="carousel-caption">—</p>
     </div>
   </div>
 </section>
@@ -140,11 +152,29 @@
     const slideUrls = [1, 2, 3, 4, 5, 6]
       .map(n => s[`sla_carousel_img_${n}_url`])
       .filter(Boolean);
+    const row = document.getElementById("carousel-row");
     if (slideUrls.length) {
-      document.getElementById("carousel-row").innerHTML = slideUrls
+      row.innerHTML = slideUrls
         .map((url, i) => `<div class="carousel-slide"><img src="${url}" alt="Carousel slide ${i + 1}"></div>`)
         .join("");
     }
+
+    // Arrow scrolling — steps by one slide's width (+gap) at a time, and
+    // disables an arrow when there's nothing further to scroll to.
+    const prevBtn = document.getElementById("carousel-prev");
+    const nextBtn = document.getElementById("carousel-next");
+    function slideStep() {
+      const slide = row.querySelector(".carousel-slide");
+      return slide ? slide.getBoundingClientRect().width + 10 : row.clientWidth;
+    }
+    function updateArrows() {
+      prevBtn.disabled = row.scrollLeft <= 4;
+      nextBtn.disabled = row.scrollLeft >= row.scrollWidth - row.clientWidth - 4;
+    }
+    prevBtn.addEventListener("click", () => row.scrollBy({ left: -slideStep(), behavior: "smooth" }));
+    nextBtn.addEventListener("click", () => row.scrollBy({ left: slideStep(), behavior: "smooth" }));
+    row.addEventListener("scroll", updateArrows);
+    updateArrows();
 
     initReveal();
   })();
