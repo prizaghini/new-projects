@@ -1,0 +1,774 @@
+// ---------- tabs (no backend dependency — must always work) ----------
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(`panel-${btn.dataset.tab}`).classList.add("active");
+  });
+});
+
+let supabase;
+try {
+  ({ supabase } = await import("../../js/supabase-client.js"));
+} catch (err) {
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+  const main = document.querySelector(".main");
+  if (main) {
+    const notice = document.createElement("div");
+    notice.className = "notice";
+    notice.style.color = "#B3261E";
+    notice.textContent = "Couldn't connect to the backend, so nothing here will load or save right now. Check your connection and refresh.";
+    main.prepend(notice);
+  }
+  throw err;
+}
+
+// ---------- auth guard ----------
+const { data: { session } } = await supabase.auth.getSession();
+if (!session) {
+  window.location.href = "index.html";
+}
+
+document.getElementById("logout-btn").addEventListener("click", async () => {
+  await supabase.auth.signOut();
+  window.location.href = "index.html";
+});
+
+// ---------- site settings ----------
+// Photos straight off a phone/camera are routinely 3000-4000px wide and
+// several MB — way more than any card or hero image on the site ever
+// displays at. Every visitor downloads the full original on every page
+// load, which is the single biggest lever on perceived load time. This
+// downscales (but keeps the original format, so PNG/logo transparency
+// survives) before it ever reaches storage.
+const MAX_IMAGE_DIMENSION = 2000;
+async function resizeImageIfNeeded(file) {
+  if (!file.type.startsWith("image/") || file.type === "image/svg+xml") return file;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(bitmap.width, bitmap.height));
+    if (scale === 1) return file; // already small enough
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const quality = file.type === "image/png" ? undefined : 0.85;
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, file.type, quality));
+    return blob ? new File([blob], file.name, { type: file.type }) : file;
+  } catch {
+    return file; // if resizing fails for any reason, upload the original rather than block the save
+  }
+}
+
+async function uploadToSiteMedia(file, folder) {
+  const upload = await resizeImageIfNeeded(file);
+  const path = `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const { error } = await supabase.storage.from("site-media").upload(path, upload);
+  if (error) throw error;
+  return supabase.storage.from("site-media").getPublicUrl(path).data.publicUrl;
+}
+
+// Fields that upload into a hidden URL field, with a note + optional "remove" checkbox.
+// (hero photo / about photo / thumbnails use a *visible* url field instead — see below.)
+const HIDDEN_MEDIA_FIELDS = [
+  { file: "hero_video_file", url: "hero_video_url", remove: null, folder: "hero", noteId: "hero-video-note",
+    setMsg: "A hero video is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No hero video set — the hero photo above is used instead." },
+  { file: "logo_file", url: "logo_url", remove: "remove_logo", folder: "branding", noteId: "logo-note",
+    setMsg: "A logo image is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No logo set — the text name is shown instead." },
+  { file: "favicon_file", url: "favicon_url", remove: "remove_favicon", folder: "branding", noteId: "favicon-note",
+    setMsg: "A custom favicon is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No custom favicon set — the default icon is used." },
+  { file: "contact_media_file", url: "contact_media_url", remove: "remove_contact_media", folder: "contact", noteId: "contact-media-note",
+    setMsg: "A photo/video is currently set next to the contact form. Uploading a new one replaces it.",
+    unsetMsg: "No photo/video set next to the contact form." },
+  { file: "hero_bg_file", url: "hero_bg_url", remove: "remove_hero_bg", folder: "hero-bg", noteId: "hero-bg-note",
+    setMsg: "A hero background image is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No hero background image set." },
+  { file: "hero_logo_file", url: "hero_logo_url", remove: "remove_hero_logo", folder: "hero", noteId: "hero-logo-note",
+    setMsg: "A logo badge is currently set. Uploading a new one replaces it.",
+    unsetMsg: "No logo badge set." },
+  { file: "hero_bg_video_file", url: "hero_bg_video_url", remove: "remove_hero_bg", folder: "hero-bg", noteId: "hero-bg-video-note",
+    setMsg: "A hero background video is currently set — it plays instead of the background image. Uploading a new one replaces it.",
+    unsetMsg: "No hero background video set." },
+];
+
+// Fields with a plain visible text/URL input — uploading just fills that input.
+const VISIBLE_MEDIA_FIELDS = [
+  { file: "hero_photo_file", url: "hero_photo_url", folder: "hero" },
+  { file: "about_photo_file", url: "about_photo_url", folder: "about" },
+];
+
+function refreshAllMediaNotes(form) {
+  HIDDEN_MEDIA_FIELDS.forEach(f => {
+    const note = document.getElementById(f.noteId);
+    note.textContent = form.elements[f.url].value ? f.setMsg : f.unsetMsg;
+  });
+}
+
+async function setupSettings() {
+  const form = document.getElementById("form-settings");
+  const msg = document.getElementById("settings-msg");
+
+  // <input type="color"> can't represent "no color set" — the browser silently
+  // shows/reports #000000 for any field left blank. So we track each color
+  // field's real stored value here, and only trust the picker's live value once
+  // the user actually interacts with it (a real "input" event) — otherwise we
+  // save back the original value (which may be "") instead of a coerced black.
+  const originalColorValues = {};
+  const touchedColorFields = new Set();
+  form.querySelectorAll('input[type="color"]').forEach(el => {
+    el.addEventListener("input", () => touchedColorFields.add(el.name));
+  });
+
+  const { data } = await supabase.from("site_settings").select("*");
+  (data || []).forEach(row => {
+    if (row.key === "categories") return; // owned by setupCategoriesEditor() below, to avoid a load race clobbering in-progress edits
+    const el = form.elements[row.key];
+    if (!el) return;
+    if (el.type === "checkbox") el.checked = row.value === "true";
+    else el.value = row.value;
+    if (el.type === "color") originalColorValues[row.key] = row.value;
+  });
+  refreshAllMediaNotes(form);
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    msg.textContent = "";
+
+    try {
+      for (const f of HIDDEN_MEDIA_FIELDS) {
+        if (f.remove && form.elements[f.remove].checked) form.elements[f.url].value = "";
+        const file = form.elements[f.file].files[0];
+        if (file) form.elements[f.url].value = await uploadToSiteMedia(file, f.folder);
+      }
+      for (const f of VISIBLE_MEDIA_FIELDS) {
+        const file = form.elements[f.file].files[0];
+        if (file) form.elements[f.url].value = await uploadToSiteMedia(file, f.folder);
+      }
+    } catch (err) {
+      msg.textContent = "Upload failed — " + err.message;
+      msg.className = "msg err";
+      return;
+    }
+
+    const skipNames = new Set(HIDDEN_MEDIA_FIELDS.map(f => f.remove).filter(Boolean));
+    const rows = Array.from(form.elements)
+      .filter(el => el.name && el.type !== "file" && !skipNames.has(el.name))
+      .map(el => {
+        if (el.type === "color" && !touchedColorFields.has(el.name)) {
+          return { key: el.name, value: originalColorValues[el.name] ?? "" };
+        }
+        return { key: el.name, value: el.type === "checkbox" ? String(el.checked) : el.value };
+      });
+
+    const { error } = await supabase.from("site_settings").upsert(rows);
+    if (error) {
+      msg.textContent = "Something went wrong — " + error.message;
+      msg.className = "msg err";
+    } else {
+      msg.textContent = "Saved. Refresh your public site to see the changes.";
+      msg.className = "msg ok";
+      [...HIDDEN_MEDIA_FIELDS, ...VISIBLE_MEDIA_FIELDS].forEach(f => { form.elements[f.file].value = ""; });
+      HIDDEN_MEDIA_FIELDS.forEach(f => { if (f.remove) form.elements[f.remove].checked = false; });
+      refreshAllMediaNotes(form);
+    }
+  });
+}
+setupSettings();
+
+// ---------- SLA task page ----------
+// A single-row set of site_settings keys (sla_*), edited from their own tab
+// rather than folded into the giant settings form above, since this is a
+// one-off application artifact, not a site-wide setting.
+const SLA_MEDIA_FIELDS = [
+  { file: "sla_tiktok_video_file", url: "sla_tiktok_video_url", folder: "sla-task", noteId: "sla-tiktok-video-note",
+    setMsg: "A video is uploaded.", unsetMsg: "No video uploaded yet." },
+  { file: "sla_carousel_img_1_file", url: "sla_carousel_img_1_url", folder: "sla-task" },
+  { file: "sla_carousel_img_2_file", url: "sla_carousel_img_2_url", folder: "sla-task" },
+  { file: "sla_carousel_img_3_file", url: "sla_carousel_img_3_url", folder: "sla-task" },
+  { file: "sla_carousel_img_4_file", url: "sla_carousel_img_4_url", folder: "sla-task" },
+  { file: "sla_carousel_img_5_file", url: "sla_carousel_img_5_url", folder: "sla-task" },
+  { file: "sla_carousel_img_6_file", url: "sla_carousel_img_6_url", folder: "sla-task" },
+];
+
+async function setupSlaTask() {
+  const form = document.getElementById("form-sla-task");
+  if (!form) return;
+  const msg = document.getElementById("sla-task-msg");
+
+  const { data } = await supabase.from("site_settings").select("*");
+  (data || []).forEach(row => {
+    const el = form.elements[row.key];
+    if (el) el.value = row.value;
+  });
+  const videoField = SLA_MEDIA_FIELDS[0];
+  document.getElementById(videoField.noteId).textContent =
+    form.elements[videoField.url].value ? videoField.setMsg : videoField.unsetMsg;
+  const filledSlides = SLA_MEDIA_FIELDS.slice(1).filter(f => form.elements[f.url].value).length;
+  document.getElementById("sla-carousel-note").textContent =
+    filledSlides ? `${filledSlides} slide${filledSlides === 1 ? "" : "s"} uploaded.` : "No slides uploaded yet.";
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    msg.textContent = "";
+    try {
+      for (const f of SLA_MEDIA_FIELDS) {
+        const file = form.elements[f.file].files[0];
+        if (file) form.elements[f.url].value = await uploadToSiteMedia(file, f.folder);
+      }
+    } catch (err) {
+      msg.textContent = "Upload failed — " + err.message;
+      msg.className = "msg err";
+      return;
+    }
+
+    const rows = Array.from(form.elements)
+      .filter(el => el.name && el.type !== "file")
+      .map(el => ({ key: el.name, value: el.value }));
+
+    const { error } = await supabase.from("site_settings").upsert(rows);
+    if (error) {
+      msg.textContent = "Something went wrong — " + error.message;
+      msg.className = "msg err";
+    } else {
+      msg.textContent = "Saved.";
+      msg.className = "msg ok";
+      SLA_MEDIA_FIELDS.forEach(f => { form.elements[f.file].value = ""; });
+      document.getElementById(videoField.noteId).textContent =
+        form.elements[videoField.url].value ? videoField.setMsg : videoField.unsetMsg;
+      const filled = SLA_MEDIA_FIELDS.slice(1).filter(f => form.elements[f.url].value).length;
+      document.getElementById("sla-carousel-note").textContent =
+        filled ? `${filled} slide${filled === 1 ? "" : "s"} uploaded.` : "No slides uploaded yet.";
+    }
+  });
+}
+setupSlaTask();
+
+function setupExport() {
+  const btn = document.getElementById("export-settings-btn");
+  const output = document.getElementById("export-settings-output");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const { data } = await supabase.from("site_settings").select("*");
+    const obj = {};
+    (data || []).forEach(row => { obj[row.key] = row.value; });
+    output.value = JSON.stringify(obj, null, 2);
+    output.style.display = "block";
+    output.select();
+  });
+}
+setupExport();
+
+// ---------- dynamic portfolio categories ----------
+async function setupCategoryOptions() {
+  const { data } = await supabase.from("site_settings").select("value").eq("key", "categories").maybeSingle();
+  if (!data || !data.value) return;
+  const categories = data.value.split("|").map(pair => {
+    const [key, label] = pair.split(":");
+    return { key: (key || "").trim(), label: (label || key || "").trim() };
+  }).filter(c => c.key);
+  if (!categories.length) return;
+
+  document.querySelectorAll("select[name=category]").forEach(select => {
+    const current = select.value;
+    select.innerHTML = categories.map(c => `<option value="${esc(c.key)}">${esc(c.label)}</option>`).join("");
+    if (categories.some(c => c.key === current)) select.value = current;
+  });
+}
+setupCategoryOptions();
+
+// ---------- portfolio categories editor (add / delete / reorder) ----------
+async function setupCategoriesEditor() {
+  const hiddenInput = document.querySelector('input[name="categories"]');
+  const list = document.getElementById("categories-list");
+  const addBtn = document.getElementById("add-category-btn");
+  if (!hiddenInput || !list || !addBtn) return;
+
+  const { data } = await supabase.from("site_settings").select("value").eq("key", "categories").maybeSingle();
+  let categories = ((data && data.value) || "").split("|").map(pair => {
+    const [key, label] = pair.split(":");
+    return { key: (key || "").trim(), label: (label || "").trim() };
+  }).filter(c => c.key || c.label);
+
+  function sync() {
+    hiddenInput.value = categories.map(c => `${c.key}:${c.label}`).join("|");
+  }
+
+  function render() {
+    list.innerHTML = categories.map((c, i) => `
+      <div class="category-row" data-index="${i}">
+        <input class="cat-key" placeholder="key" value="${esc(c.key)}">
+        <input class="cat-label" placeholder="Label" value="${esc(c.label)}">
+        <button type="button" class="cat-up" ${i === 0 ? "disabled" : ""} title="Move up">↑</button>
+        <button type="button" class="cat-down" ${i === categories.length - 1 ? "disabled" : ""} title="Move down">↓</button>
+        <button type="button" class="cat-delete" title="Delete">✕</button>
+      </div>`).join("");
+    sync();
+  }
+
+  list.addEventListener("input", e => {
+    const row = e.target.closest(".category-row");
+    if (!row) return;
+    const i = Number(row.dataset.index);
+    if (e.target.classList.contains("cat-key")) categories[i].key = e.target.value.trim();
+    if (e.target.classList.contains("cat-label")) categories[i].label = e.target.value.trim();
+    sync();
+  });
+
+  list.addEventListener("click", e => {
+    const row = e.target.closest(".category-row");
+    if (!row) return;
+    const i = Number(row.dataset.index);
+    if (e.target.classList.contains("cat-delete")) {
+      categories.splice(i, 1);
+      render();
+    } else if (e.target.classList.contains("cat-up") && i > 0) {
+      [categories[i - 1], categories[i]] = [categories[i], categories[i - 1]];
+      render();
+    } else if (e.target.classList.contains("cat-down") && i < categories.length - 1) {
+      [categories[i], categories[i + 1]] = [categories[i + 1], categories[i]];
+      render();
+    }
+  });
+
+  addBtn.addEventListener("click", () => {
+    categories.push({ key: "", label: "" });
+    render();
+    list.querySelector(".category-row:last-child .cat-key")?.focus();
+  });
+
+  render();
+}
+setupCategoriesEditor();
+
+function esc(str) {
+  return String(str ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+// ---------- generic CRUD section (add / list / edit / delete) ----------
+// `sortable: true` lists by sort_order (ascending) instead of orderCol, and
+// renderRow gets (row, index, total) so it can render up/down move buttons —
+// see the portfolio section below for the pattern.
+function setupCrudSection({ table, formId, tbodyId, orderCol, sortable, renderRow, mapRowToForm, beforeSubmit }) {
+  const form = document.getElementById(formId);
+  const tbody = document.getElementById(tbodyId);
+  let editingId = null;
+  let rows = [];
+
+  async function reload() {
+    const { data } = sortable
+      ? await supabase.from(table).select("*").order("sort_order", { ascending: true })
+      : await supabase.from(table).select("*").order(orderCol, { ascending: false });
+    rows = data || [];
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="10">Nothing here yet — add one above.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = rows.map((row, i) => renderRow(row, i, rows.length)).join("");
+
+    tbody.querySelectorAll("[data-edit]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const row = rows.find(r => r.id === btn.dataset.edit);
+        editingId = row.id;
+        mapRowToForm(form, row);
+        form.querySelector("button[type=submit]").textContent = "Save changes";
+      });
+    });
+    tbody.querySelectorAll("[data-delete]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        if (!confirm("Delete this item?")) return;
+        await supabase.from(table).delete().eq("id", btn.dataset.delete);
+        reload();
+      });
+    });
+    if (sortable) {
+      tbody.querySelectorAll("[data-move]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const i = rows.findIndex(r => r.id === btn.dataset.move);
+          const j = i + (btn.dataset.dir === "up" ? -1 : 1);
+          if (j < 0 || j >= rows.length) return;
+          [rows[i], rows[j]] = [rows[j], rows[i]];
+          btn.disabled = true;
+          // Re-numbers every row's sort_order to its new position — items added
+          // before this feature existed all share the same default (0), so
+          // swapping raw values wouldn't move anything; this always works.
+          await Promise.all(rows.map((r, idx) => supabase.from(table).update({ sort_order: idx }).eq("id", r.id)));
+          reload();
+        });
+      });
+    }
+  }
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const payload = {};
+    for (const [key, value] of formData.entries()) {
+      if (value instanceof File) continue; // file inputs are handled by beforeSubmit, not stored directly
+      payload[key] = form.elements[key].type === "checkbox" ? form.elements[key].checked : value;
+    }
+    // unchecked checkboxes are omitted by FormData — fill them in as false
+    form.querySelectorAll('input[type=checkbox]').forEach(cb => { payload[cb.name] = cb.checked; });
+
+    if (beforeSubmit) {
+      let extra;
+      try {
+        extra = await beforeSubmit(form);
+      } catch (err) {
+        alert("Upload failed — " + err.message);
+        return;
+      }
+      Object.assign(payload, extra);
+    }
+
+    let error;
+    if (editingId) {
+      ({ error } = await supabase.from(table).update(payload).eq("id", editingId));
+    } else {
+      ({ error } = await supabase.from(table).insert(payload));
+    }
+    if (error) {
+      alert("Save failed — " + error.message);
+      return;
+    }
+    if (editingId) {
+      editingId = null;
+      form.querySelector("button[type=submit]").textContent = form.dataset.addLabel || "Add";
+    }
+    form.reset();
+    reload();
+  });
+
+  reload();
+}
+
+// ---------- portfolio ----------
+setupCrudSection({
+  table: "portfolio_items",
+  formId: "form-portfolio",
+  tbodyId: "table-portfolio",
+  sortable: true,
+  renderRow: (row, i, total) => `<tr>
+    <td>${esc(row.category)}</td><td>${esc(row.brand)}</td><td>${esc(row.title)}</td>
+    <td>${esc(row.platform)}</td>
+    <td>${row.video_file_path ? "Yes" : ""}</td>
+    <td>${row.featured_ad ? "Yes" : ""}</td>
+    <td class="actions-cell">
+      <button data-move="${row.id}" data-dir="up" ${i === 0 ? "disabled" : ""} title="Move up">↑</button>
+      <button data-move="${row.id}" data-dir="down" ${i === total - 1 ? "disabled" : ""} title="Move down">↓</button>
+      <button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button>
+    </td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.category.value = row.category;
+    form.brand.value = row.brand;
+    form.title.value = row.title;
+    form.platform.value = row.platform || "other";
+    form.link_url.value = row.link_url || "";
+    form.thumbnail_url.value = row.thumbnail_url || "";
+    form.start_seconds.value = row.start_seconds || 0;
+    form.featured_ad.checked = !!row.featured_ad;
+    document.getElementById("portfolio-video-note").textContent = row.video_file_path
+      ? `Video already uploaded: ${row.video_file_path} — choose a file above to replace it.`
+      : "No video uploaded — using the link above instead.";
+  },
+  beforeSubmit: async form => {
+    const extra = {};
+    const videoFile = form.elements.video_file.files[0];
+    if (videoFile) {
+      const path = `portfolio/${Date.now()}-${videoFile.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+      const { error } = await supabase.storage.from("site-media").upload(path, videoFile);
+      if (error) throw error;
+      extra.video_file_path = path;
+    }
+    const thumbFile = form.elements.thumbnail_file.files[0];
+    if (thumbFile) {
+      extra.thumbnail_url = await uploadToSiteMedia(thumbFile, "portfolio-thumbs");
+    }
+    return extra;
+  },
+});
+
+// ---------- brand logos ----------
+setupCrudSection({
+  table: "brand_logos",
+  formId: "form-logos",
+  tbodyId: "table-logos",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td><img src="${esc(row.image_url)}" alt="" style="height:28px;width:auto;max-width:90px;object-fit:contain"></td>
+    <td>${esc(row.brand_name)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.image_url.value = row.image_url;
+    form.brand_name.value = row.brand_name || "";
+    form.link_url.value = row.link_url || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+  beforeSubmit: async form => {
+    const file = form.elements.image_file.files[0];
+    if (file) return { image_url: await uploadToSiteMedia(file, "brand-logos") };
+    if (!form.elements.image_url.value) throw new Error("Please choose a logo image.");
+    return {};
+  },
+});
+
+// ---------- case studies ----------
+setupCrudSection({
+  table: "case_studies",
+  formId: "form-case-studies",
+  tbodyId: "table-case-studies",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${row.image_url ? `<img src="${esc(row.image_url)}" alt="" style="height:28px;width:auto;max-width:90px;object-fit:cover">` : ""}</td>
+    <td>${esc(row.brand)}</td><td>${esc(row.headline_stat)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.brand.value = row.brand;
+    form.headline_stat.value = row.headline_stat;
+    form.description.value = row.description;
+    form.image_url.value = row.image_url || "";
+    form.link_url.value = row.link_url || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+  beforeSubmit: async form => {
+    const file = form.elements.image_file.files[0];
+    if (file) return { image_url: await uploadToSiteMedia(file, "case-studies") };
+    return {};
+  },
+});
+
+// ---------- case study pages ----------
+setupCrudSection({
+  table: "case_study_pages",
+  formId: "form-case-study-pages",
+  tbodyId: "table-case-study-pages",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${esc(row.slug)}</td><td>${esc(row.headline)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.slug.value = row.slug;
+    form.page_title.value = row.page_title;
+    form.meta_description.value = row.meta_description || "";
+    form.label.value = row.label || "";
+    form.headline.value = row.headline;
+    form.intro.value = row.intro || "";
+    form.client.value = row.client || "";
+    form.sector.value = row.sector || "";
+    form.period.value = row.period || "";
+    form.role.value = row.role || "";
+    form.stats.value = row.stats || "";
+    form.challenge_label.value = row.challenge_label || "";
+    form.challenge_heading.value = row.challenge_heading || "";
+    form.challenge_body.value = row.challenge_body || "";
+    form.tags.value = row.tags || "";
+    form.proof_caption.value = row.proof_caption || "";
+    form.proof_urls.value = row.proof_urls || "";
+    form.featured_label.value = row.featured_label || "";
+    form.featured_heading.value = row.featured_heading || "";
+    form.featured_intro.value = row.featured_intro || "";
+    form.featured_pages.value = row.featured_pages || "";
+    form.wearables_label.value = row.wearables_label || "";
+    form.wearables_heading.value = row.wearables_heading || "";
+    form.wearables_intro.value = row.wearables_intro || "";
+    form.wearables_pages.value = row.wearables_pages || "";
+    form.moodboard_label.value = row.moodboard_label || "";
+    form.moodboard_heading.value = row.moodboard_heading || "";
+    form.moodboard_intro.value = row.moodboard_intro || "";
+    form.moodboard_items.value = row.moodboard_items || "";
+    form.moodboard_note.value = row.moodboard_note || "";
+    form.brand_label.value = row.brand_label || "";
+    form.brand_heading.value = row.brand_heading || "";
+    form.brand_intro.value = row.brand_intro || "";
+    form.brand_pages.value = row.brand_pages || "";
+    form.linkedin_label.value = row.linkedin_label || "";
+    form.linkedin_heading.value = row.linkedin_heading || "";
+    form.linkedin_intro.value = row.linkedin_intro || "";
+    form.video_label.value = row.video_label || "";
+    form.video_heading.value = row.video_heading || "";
+    form.video_intro.value = row.video_intro || "";
+    form.video_captions.value = row.video_captions || "";
+    form.video_all_caption.value = row.video_all_caption || "";
+    form.video_all_list.value = row.video_all_list || "";
+    form.email_label.value = row.email_label || "";
+    form.email_heading.value = row.email_heading || "";
+    form.email_intro.value = row.email_intro || "";
+    form.email_segments.value = row.email_segments || "";
+    form.email_webinar_topic.value = row.email_webinar_topic || "";
+    form.email_webinar_detail.value = row.email_webinar_detail || "";
+    form.delivered_label.value = row.delivered_label || "";
+    form.delivered_heading.value = row.delivered_heading || "";
+    form.delivered_intro.value = row.delivered_intro || "";
+    form.delivered_items.value = row.delivered_items || "";
+    form.approach_label.value = row.approach_label || "";
+    form.approach_heading.value = row.approach_heading || "";
+    form.approach_intro.value = row.approach_intro || "";
+    form.approach_items.value = row.approach_items || "";
+    form.spotlight_label.value = row.spotlight_label || "";
+    form.spotlight_heading.value = row.spotlight_heading || "";
+    form.spotlight_intro.value = row.spotlight_intro || "";
+    form.spotlight_quote.value = row.spotlight_quote || "";
+    form.spotlight_body.value = row.spotlight_body || "";
+    form.supporting_label.value = row.supporting_label || "";
+    form.supporting_heading.value = row.supporting_heading || "";
+    form.supporting_body.value = row.supporting_body || "";
+    form.results_label.value = row.results_label || "";
+    form.results_heading.value = row.results_heading || "";
+    form.results_intro.value = row.results_intro || "";
+    form.reflection_label.value = row.reflection_label || "";
+    form.reflection_heading.value = row.reflection_heading || "";
+    form.reflection_body.value = row.reflection_body || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+});
+
+// ---------- services ----------
+setupCrudSection({
+  table: "services",
+  formId: "form-services",
+  tbodyId: "table-services",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${row.image_url ? `<img src="${esc(row.image_url)}" alt="" style="height:28px;width:auto;max-width:90px;object-fit:cover">` : ""}</td>
+    <td>${esc(row.title)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.title.value = row.title;
+    form.description.value = row.description;
+    form.image_url.value = row.image_url || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+  beforeSubmit: async form => {
+    const file = form.elements.image_file.files[0];
+    if (file) return { image_url: await uploadToSiteMedia(file, "services") };
+    return {};
+  },
+});
+
+// ---------- testimonials ----------
+setupCrudSection({
+  table: "testimonials",
+  formId: "form-testimonials",
+  tbodyId: "table-testimonials",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${row.image_url ? `<img src="${esc(row.image_url)}" alt="" style="height:28px;width:auto;max-width:90px;object-fit:cover">` : ""}</td>
+    <td>${esc(row.brand_handle)}</td><td>${row.sort_order}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.brand_handle.value = row.brand_handle || "";
+    form.title.value = row.title || "";
+    form.quote.value = row.quote || "";
+    form.result_stat.value = row.result_stat || "";
+    form.image_url.value = row.image_url || "";
+    form.photo_url.value = row.photo_url || "";
+    form.photo_position.value = row.photo_position || "top";
+    form.quote_date.value = row.quote_date || "";
+    form.sender_email.value = row.sender_email || "";
+    form.sort_order.value = row.sort_order || 0;
+  },
+  beforeSubmit: async form => {
+    const extra = {};
+    const imageFile = form.elements.image_file.files[0];
+    if (imageFile) extra.image_url = await uploadToSiteMedia(imageFile, "testimonials");
+    const photoFile = form.elements.photo_file.files[0];
+    if (photoFile) extra.photo_url = await uploadToSiteMedia(photoFile, "testimonials");
+    return extra;
+  },
+});
+
+// ---------- checklist notes ----------
+setupCrudSection({
+  table: "checklist_notes",
+  formId: "form-checklist",
+  tbodyId: "table-checklist",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${esc(row.category)}</td><td>${esc(row.notes)}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.category.value = row.category;
+    form.notes.value = row.notes;
+  },
+});
+
+// ---------- calendar ----------
+setupCrudSection({
+  table: "calendar_events",
+  formId: "form-calendar",
+  tbodyId: "table-calendar",
+  orderCol: "event_date",
+  renderRow: row => `<tr>
+    <td>${esc(row.event_date)}</td><td>${esc(row.title)}</td><td>${esc(row.event_type)}</td><td>${esc(row.status)}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.title.value = row.title;
+    form.event_type.value = row.event_type;
+    form.event_date.value = row.event_date;
+    form.status.value = row.status;
+  },
+});
+
+// ---------- campaigns ----------
+setupCrudSection({
+  table: "campaigns",
+  formId: "form-campaigns",
+  tbodyId: "table-campaigns",
+  orderCol: "created_at",
+  renderRow: row => `<tr>
+    <td>${esc(row.name)}</td><td>${esc(row.brand)}</td><td>${esc(row.status)}</td><td>${esc(row.deadline)}</td>
+    <td class="actions-cell"><button data-edit="${row.id}">Edit</button><button data-delete="${row.id}">Delete</button></td>
+  </tr>`,
+  mapRowToForm: (form, row) => {
+    form.name.value = row.name;
+    form.brand.value = row.brand || "";
+    form.status.value = row.status;
+    form.deadline.value = row.deadline || "";
+    form.notes.value = row.notes || "";
+  },
+});
+
+// ---------- leads (read + status update + delete, no add form) ----------
+async function loadLeads() {
+  const tbody = document.getElementById("table-leads");
+  const { data } = await supabase.from("leads").select("*").order("created_at", { ascending: false });
+  if (!data || data.length === 0) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No leads yet — they'll show up here when someone submits your contact form.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(lead => `<tr>
+    <td>${new Date(lead.created_at).toLocaleDateString()}</td>
+    <td>${esc(lead.name)}</td><td>${esc(lead.email)}</td><td>${esc(lead.company)}</td><td>${esc(lead.budget)}</td>
+    <td><select data-status="${lead.id}">
+      ${["new", "contacted", "won", "lost"].map(s => `<option value="${s}"${lead.status === s ? " selected" : ""}>${s}</option>`).join("")}
+    </select></td>
+    <td class="actions-cell"><button data-delete-lead="${lead.id}">Delete</button></td>
+  </tr>`).join("");
+
+  tbody.querySelectorAll("[data-status]").forEach(sel => {
+    sel.addEventListener("change", async () => {
+      await supabase.from("leads").update({ status: sel.value }).eq("id", sel.dataset.status);
+    });
+  });
+  tbody.querySelectorAll("[data-delete-lead]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this lead?")) return;
+      await supabase.from("leads").delete().eq("id", btn.dataset.deleteLead);
+      loadLeads();
+    });
+  });
+}
+loadLeads();

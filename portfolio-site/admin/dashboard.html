@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="dash">
+  <aside class="sidebar">
+    <p class="brand">[Your Name].</p>
+    <button class="tab-btn" data-tab="settings">Site Settings</button>
+    <button class="tab-btn" data-tab="sla-task">SLA Task</button>
+    <button class="tab-btn active" data-tab="portfolio">Portfolio</button>
+    <button class="tab-btn" data-tab="logos">Brand logos</button>
+    <button class="tab-btn" data-tab="case-studies">Case Studies</button>
+    <button class="tab-btn" data-tab="case-study-pages">Case Study Pages</button>
+    <button class="tab-btn" data-tab="services">Services</button>
+    <button class="tab-btn" data-tab="testimonials">Testimonials</button>
+    <button class="tab-btn" data-tab="checklist">Checklist (bonus)</button>
+    <button class="tab-btn" data-tab="calendar">Calendar</button>
+    <button class="tab-btn" data-tab="campaigns">Campaigns</button>
+    <button class="tab-btn" data-tab="leads">Leads &amp; Clients</button>
+    <button class="tab-btn" data-tab="email">Email</button>
+    <div class="spacer"></div>
+    <button class="btn secondary" id="logout-btn">Log out</button>
+  </aside>
+
+  <main class="main">
+
+    <!-- SITE SETTINGS -->
+    <section class="panel" id="panel-settings">
+      <h2>Site Settings</h2>
+      <p class="hint">Everything here fills in the public site's identity, headline, photos and contact info — no code needed. Save, then refresh your site to see it.</p>
+      <form class="add-form" id="form-settings">
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:0">Identity</p>
+        <div class="field"><label>Your name</label><input name="display_name" placeholder="Your Name"></div>
+        <div class="field"><label>Name text color (header/footer logo text)</label><input name="name_text_color" type="color"></div>
+        <div class="field full"><label>Website title (shown in the browser tab)</label><input name="site_title" placeholder="e.g. Priscila Zaghini Portfolio"></div>
+        <div class="field full">
+          <label>Favicon (the small icon in the browser tab)</label>
+          <input type="file" name="favicon_file" accept="image/*">
+          <input type="hidden" name="favicon_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_favicon" style="width:auto"> Remove favicon (use the default icon instead)</label>
+          <p id="favicon-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field full">
+          <label>Logo image (optional — replaces the text name in the header/footer)</label>
+          <input type="file" name="logo_file" accept="image/*">
+          <input type="hidden" name="logo_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_logo" style="width:auto"> Remove logo (show text name instead)</label>
+          <p id="logo-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field"><label>Tagline</label><input name="tagline" placeholder="e.g. UGC Creator &amp; Content Strategist"></div>
+        <div class="field"><label>Availability badge</label><input name="availability" placeholder="e.g. Available 2026"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Header navigation</p>
+        <div class="field"><label>Nav link 1</label><input name="nav_link_1_text" placeholder="e.g. Portfolio"></div>
+        <div class="field"><label>Nav link 2</label><input name="nav_link_2_text" placeholder="e.g. Services"></div>
+        <div class="field"><label>Nav link 3</label><input name="nav_link_3_text" placeholder="e.g. Results"></div>
+        <div class="field"><label>Header button text</label><input name="header_cta_text" placeholder="e.g. Work with me"></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Each nav link automatically hides itself if its matching section (Portfolio, Services, Results/Testimonials) is turned off under "Sections" below.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Hero</p>
+        <div class="field full"><label>Hero headline (use a line break where you want it to wrap)</label><textarea name="hero_headline" rows="2"></textarea></div>
+        <div class="field full"><label>Hero subcopy</label><input name="hero_subcopy"></div>
+        <div class="field full"><label>Hero stats line</label><input name="hero_stats_line" placeholder="e.g. +500 videos · +200 brand partners · 100M+ views"></div>
+        <div class="field"><label>Primary button text</label><input name="hero_btn_primary_text" placeholder="e.g. Let's create together"></div>
+        <div class="field"><label>Secondary button text</label><input name="hero_btn_secondary_text" placeholder="e.g. Learn more →"></div>
+        <div class="field"><label>Hero text color (headline, subcopy, stats line)</label><input name="hero_text_color" type="color"></div>
+        <div class="field"><label>Hero tagline/label color (the small line above the headline)</label><input name="hero_label_color" type="color"></div>
+        <div class="field">
+          <label>Hero text horizontal position</label>
+          <select name="hero_text_align">
+            <option value="left">Left</option>
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hero text vertical position</label>
+          <select name="hero_text_valign">
+            <option value="top">Top</option>
+            <option value="center">Center</option>
+            <option value="bottom">Bottom</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Hero photo (upload a file, or paste a URL below)</label>
+          <input type="file" name="hero_photo_file" accept="image/*">
+          <input name="hero_photo_url" placeholder="https://..." style="margin-top:6px">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">This frame is portrait-shaped (4:5). Use "Fill frame" below with a photo already close to that shape, or "Show whole photo" to never crop it.</p>
+        </div>
+        <div class="field">
+          <label>Hero photo position</label>
+          <select name="hero_photo_position">
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Hero photo fit</label>
+          <select name="hero_photo_fit">
+            <option value="cover">Fill frame (crop to fit)</option>
+            <option value="contain">Show whole photo (may add padding)</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Hero video (optional — replaces the hero photo with an autoplaying looped video)</label>
+          <input type="file" name="hero_video_file" accept="video/*">
+          <input type="hidden" name="hero_video_url">
+          <p id="hero-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Floating badges (over the hero photo)</p>
+        <div class="field"><label><input type="checkbox" name="hero_badge_1_enabled" style="width:auto"> Show badge 1</label></div>
+        <div class="field"><label>Badge 1 title</label><input name="hero_badge_1_title" placeholder="e.g. Delivery was perfect!"></div>
+        <div class="field"><label>Badge 1 subtitle</label><input name="hero_badge_1_subtitle" placeholder="e.g. Super on-brief"></div>
+        <div class="field">
+          <label>Badge 1 position</label>
+          <select name="hero_badge_1_position">
+            <option value="top-right">Top right</option>
+            <option value="top-left">Top left</option>
+            <option value="middle-right">Middle right</option>
+            <option value="middle-left">Middle left</option>
+            <option value="bottom-right">Bottom right</option>
+            <option value="bottom-left">Bottom left</option>
+          </select>
+        </div>
+        <div class="field"><label><input type="checkbox" name="hero_badge_2_enabled" style="width:auto"> Show badge 2</label></div>
+        <div class="field"><label>Badge 2 title</label><input name="hero_badge_2_title" placeholder="e.g. CTR record on Meta"></div>
+        <div class="field"><label>Badge 2 subtitle</label><input name="hero_badge_2_subtitle" placeholder="e.g. +100M views · BrandName"></div>
+        <div class="field">
+          <label>Badge 2 position</label>
+          <select name="hero_badge_2_position">
+            <option value="bottom-left">Bottom left</option>
+            <option value="bottom-right">Bottom right</option>
+            <option value="top-left">Top left</option>
+            <option value="top-right">Top right</option>
+            <option value="middle-left">Middle left</option>
+            <option value="middle-right">Middle right</option>
+          </select>
+        </div>
+        <div class="field"><label><input type="checkbox" name="hero_badge_3_enabled" style="width:auto"> Show badge 3</label></div>
+        <div class="field"><label>Badge 3 title</label><input name="hero_badge_3_title" placeholder="e.g. 5-star rated"></div>
+        <div class="field"><label>Badge 3 subtitle</label><input name="hero_badge_3_subtitle" placeholder="e.g. by 40+ brands"></div>
+        <div class="field">
+          <label>Badge 3 position</label>
+          <select name="hero_badge_3_position">
+            <option value="middle-right">Middle right</option>
+            <option value="middle-left">Middle left</option>
+            <option value="top-left">Top left</option>
+            <option value="top-right">Top right</option>
+            <option value="bottom-left">Bottom left</option>
+            <option value="bottom-right">Bottom right</option>
+          </select>
+        </div>
+
+        <div class="field"><label>Hero section background color (independent of the site background color below)</label><input name="hero_bg_color" type="color"></div>
+        <div class="field full">
+          <label>Hero section background image (behind the whole hero, not just the photo box)</label>
+          <input type="file" name="hero_bg_file" accept="image/*">
+          <input type="hidden" name="hero_bg_url">
+          <p id="hero-bg-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field">
+          <label>Hero background image/video focal point (which part stays visible when cropped)</label>
+          <select name="hero_bg_position">
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+            <option value="top-left">Top left</option>
+            <option value="top-right">Top right</option>
+            <option value="bottom-left">Bottom left</option>
+            <option value="bottom-right">Bottom right</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>Hero section background video (optional — plays instead of the background image above; keep it short and compressed, it loads on every visit)</label>
+          <input type="file" name="hero_bg_video_file" accept="video/*">
+          <input type="hidden" name="hero_bg_video_url">
+          <p id="hero-bg-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field full">
+          <label style="display:block"><input type="checkbox" name="remove_hero_bg" style="width:auto"> Remove background image/video (use plain color background instead)</label>
+        </div>
+        <div class="field">
+          <label>Background dimming (lower = see your image/video more clearly)</label>
+          <input name="hero_overlay_opacity" type="range" min="0" max="90" step="5">
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Hero logo badge</p>
+        <div class="field full">
+          <label>Small logo badge (optional — shows your logo at a fixed size in a corner of the hero, the same size on every screen, phone or desktop)</label>
+          <input type="file" name="hero_logo_file" accept="image/*">
+          <input type="hidden" name="hero_logo_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_hero_logo" style="width:auto"> Remove logo badge</label>
+          <p id="hero-logo-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field">
+          <label>Logo badge corner</label>
+          <select name="hero_logo_position">
+            <option value="top-left">Top left</option>
+            <option value="top-right">Top right</option>
+            <option value="bottom-left">Bottom left</option>
+            <option value="bottom-right">Bottom right</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Logo badge size (pixels)</label>
+          <input name="hero_logo_size" type="number" min="24" max="120" step="4">
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Animated stats</p>
+        <div class="field"><label>Stat: videos</label><input name="stat_videos" type="number"></div>
+        <div class="field"><label>Videos suffix</label><input name="stat_videos_suffix" placeholder="e.g. +"></div>
+        <div class="field"><label>Videos label</label><input name="stat_videos_label" placeholder="e.g. Videos recorded"></div>
+        <div class="field"><label>Stat: partners</label><input name="stat_partners" type="number"></div>
+        <div class="field"><label>Partners suffix</label><input name="stat_partners_suffix" placeholder="e.g. +"></div>
+        <div class="field"><label>Partners label</label><input name="stat_partners_label" placeholder="e.g. Brand partners"></div>
+        <div class="field"><label>Stat: views</label><input name="stat_views" type="number"></div>
+        <div class="field"><label>Views suffix</label><input name="stat_views_suffix" placeholder="e.g. M+"></div>
+        <div class="field"><label>Views label</label><input name="stat_views_label" placeholder="e.g. Cumulative views"></div>
+        <div class="field"><label>Stat: years</label><input name="stat_years" type="number"></div>
+        <div class="field"><label>Years suffix</label><input name="stat_years_suffix" placeholder="e.g. +"></div>
+        <div class="field"><label>Years label</label><input name="stat_years_label" placeholder="e.g. Years experience"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">About</p>
+        <div class="field full"><label>Label (small tag above the heading)</label><input name="about_label" placeholder="e.g. About"></div>
+        <div class="field"><label>Label text color</label><input name="about_label_color" type="color"></div>
+        <div class="field full"><label>About heading (leave blank to use "Hey, I'm [Your name]")</label><input name="about_heading" placeholder="e.g. Hey, I'm Priscila Zaghini"></div>
+        <div class="field full"><label>About bio (leave a blank line between paragraphs for spacing)</label><textarea name="about_bio" rows="8"></textarea></div>
+        <div class="field"><label>About text color (heading, bio, location)</label><input name="about_text_color" type="color"></div>
+        <div class="field"><label>Section background color</label><input name="about_bg_color" type="color"></div>
+        <div class="field"><label>Location</label><input name="about_location" placeholder="City · Country"></div>
+        <div class="field"><label><input type="checkbox" name="show_about_location" style="width:auto"> Show location</label></div>
+        <div class="field full">
+          <label>About photo (upload a file, or paste a URL below)</label>
+          <input type="file" name="about_photo_file" accept="image/*">
+          <input name="about_photo_url" placeholder="https://..." style="margin-top:6px">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">This frame is portrait-shaped (4:5). Use "Fill frame" below with a photo already close to that shape, or "Show whole photo" to never crop it.</p>
+        </div>
+        <div class="field">
+          <label>About photo position</label>
+          <select name="about_photo_position">
+            <option value="center">Center</option>
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>About photo fit</label>
+          <select name="about_photo_fit">
+            <option value="cover">Fill frame (crop to fit)</option>
+            <option value="contain">Show whole photo (may add padding)</option>
+          </select>
+        </div>
+        <div class="field"><label><input type="checkbox" name="show_about_stat_1" style="width:auto"> Show stat 1</label></div>
+        <div class="field full"><label>About stat 1</label><input name="about_stat_1"></div>
+        <div class="field"><label><input type="checkbox" name="show_about_stat_2" style="width:auto"> Show stat 2</label></div>
+        <div class="field full"><label>About stat 2</label><input name="about_stat_2"></div>
+        <div class="field"><label><input type="checkbox" name="show_about_stat_3" style="width:auto"> Show stat 3</label></div>
+        <div class="field full"><label>About stat 3</label><input name="about_stat_3"></div>
+        <div class="field"><label><input type="checkbox" name="show_about_stat_4" style="width:auto"> Show stat 4</label></div>
+        <div class="field full"><label>About stat 4</label><input name="about_stat_4"></div>
+        <div class="field"><label>About stats color</label><input name="about_stats_color" type="color"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Contact</p>
+        <div class="field full"><label>Label (small tag above the heading)</label><input name="contact_label" placeholder="e.g. Contact"></div>
+        <div class="field"><label>Label text color</label><input name="contact_label_color" type="color"></div>
+        <div class="field full"><label>Heading</label><input name="contact_heading" placeholder="e.g. Let's work together"></div>
+        <div class="field full"><label>Subcopy</label><input name="contact_subcopy" placeholder="e.g. Tell me about your brand and what you need..."></div>
+        <div class="field"><label>Heading/subcopy text color</label><input name="contact_text_color" type="color"></div>
+        <div class="field"><label>Section background color</label><input name="contact_bg_color" type="color"></div>
+        <div class="field"><label>Email/LinkedIn/WhatsApp badge text color</label><input name="contact_info_text_color" type="color"></div>
+        <div class="field"><label>Contact email</label><input name="contact_email" type="email"></div>
+        <div class="field"><label>LinkedIn handle</label><input name="linkedin_handle" placeholder="e.g. priscila-zaghini, or paste the full linkedin.com/in/... URL"></div>
+        <div class="field"><label>WhatsApp number or link</label><input name="whatsapp_number" placeholder="e.g. +44 7700 900000 or a wa.me link"></div>
+        <div class="field"><label><input type="checkbox" name="show_contact_info_email" style="width:auto"> Show email badge</label></div>
+        <div class="field"><label><input type="checkbox" name="show_contact_info_linkedin" style="width:auto"> Show LinkedIn badge</label></div>
+        <div class="field"><label><input type="checkbox" name="show_contact_info_whatsapp" style="width:auto"> Show WhatsApp badge</label></div>
+        <div class="field"><label><input type="checkbox" name="show_contact_form" style="width:auto"> Show contact form</label></div>
+        <div class="field full">
+          <label>Photo or video next to the form (optional)</label>
+          <input type="file" name="contact_media_file" accept="image/*,video/*">
+          <input type="hidden" name="contact_media_url">
+          <label style="margin-top:6px;display:block"><input type="checkbox" name="remove_contact_media" style="width:auto"> Remove media</label>
+          <p id="contact-media-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Site-wide theme colors</p>
+        <div class="field"><label>Background color</label><input name="bg_color" type="color"></div>
+        <div class="field"><label>Panel background</label><input name="bg_alt_color" type="color"></div>
+        <div class="field"><label>Panel text color (headings on panel background — About, Case Studies, Services, Contact)</label><input name="alt_text_color" type="color"></div>
+        <div class="field"><label>Text color</label><input name="ink_color" type="color"></div>
+        <div class="field"><label>Accent color (links, icons)</label><input name="accent_color" type="color"></div>
+        <div class="field"><label><input type="checkbox" name="texture_enabled" style="width:auto"> Grain/texture overlay</label></div>
+        <div class="field"><label>Texture intensity</label><input name="texture_intensity" type="range" min="5" max="80" step="5"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Buttons</p>
+        <div class="field"><label>Button background color</label><input name="button_bg_color" type="color"></div>
+        <div class="field"><label>Button text color</label><input name="button_text_color" type="color"></div>
+        <div class="field">
+          <label>Button shape</label>
+          <select name="button_radius">
+            <option value="0">Sharp corners</option>
+            <option value="6">Slightly rounded</option>
+            <option value="16">Rounded</option>
+            <option value="999">Pill</option>
+          </select>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Fonts</p>
+        <div class="field full">
+          <label>Font pairing (headings / body text)</label>
+          <select name="font_pairing">
+            <option value="grotesk">Modern — Space Grotesk / Inter</option>
+            <option value="fraunces">Editorial Serif — Fraunces / Inter</option>
+            <option value="playfair">Classic Serif — Playfair Display / Source Sans</option>
+            <option value="manrope">Clean Geometric — Manrope</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Text size (headings and body text everywhere)</label>
+          <select name="text_scale">
+            <option value="85">Compact</option>
+            <option value="100">Default</option>
+            <option value="115">Large</option>
+            <option value="130">Extra large</option>
+          </select>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Portfolio</p>
+        <div class="field full"><label>Label text (shown above the heading)</label><input name="portfolio_label" placeholder="e.g. Portfolio"></div>
+        <div class="field"><label>Label text color</label><input name="portfolio_label_color" type="color"></div>
+        <div class="field full"><label>Heading</label><input name="portfolio_heading" placeholder="e.g. Work by category"></div>
+        <div class="field"><label>Heading text color</label><input name="portfolio_text_color" type="color"></div>
+        <div class="field"><label>Section background color</label><input name="portfolio_bg_color" type="color"></div>
+        <div class="field"><label>Box (card) background color</label><input name="portfolio_card_bg_color" type="color"></div>
+        <div class="field"><label>Box title text color</label><input name="portfolio_card_title_color" type="color"></div>
+        <div class="field"><label>Box description text color</label><input name="portfolio_card_text_color" type="color"></div>
+        <div class="field"><label>"Swipe to see more" hint text color</label><input name="portfolio_swipe_hint_color" type="color"></div>
+        <div class="field">
+          <label>Category button font</label>
+          <select name="portfolio_button_font">
+            <option value="">Match site's font pairing</option>
+            <option value="grotesk">Modern — Space Grotesk</option>
+            <option value="fraunces">Editorial Serif — Fraunces</option>
+            <option value="playfair">Classic Serif — Playfair Display</option>
+            <option value="manrope">Clean Geometric — Manrope</option>
+          </select>
+        </div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or edit the actual portfolio items from the "Portfolio" tab in the sidebar.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Portfolio categories</p>
+        <div class="field full">
+          <label>Categories — click ↑↓ to reorder, ✕ to delete</label>
+          <input type="hidden" name="categories">
+          <div id="categories-list"></div>
+          <button type="button" id="add-category-btn" class="btn secondary" style="width:auto;margin-top:4px;">+ Add category</button>
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">The "Key" is what links a portfolio item to this category — changing a key on an existing category disconnects portfolio items already tagged with the old one. Removing a category doesn't delete portfolio items in it — they just won't show until you re-add it.</p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Scrolling banner</p>
+        <div class="field full"><label>Banner text (separate phrases with |)</label><input name="marquee_text" placeholder="Phrase one|Phrase two|Phrase three"></div>
+        <div class="field"><label>Banner background color</label><input name="marquee_bg_color" type="color"></div>
+        <div class="field"><label>Banner text color</label><input name="marquee_text_color" type="color"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Brand logos banner</p>
+        <div class="field full"><label>Heading text (shown above the logos)</label><input name="logos_heading" placeholder="e.g. Brands I've worked with"></div>
+        <div class="field"><label>Heading text color</label><input name="logos_heading_color" type="color"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Content that performed</p>
+        <div class="field full"><label>Label (small tag above the heading)</label><input name="case_studies_label" placeholder="e.g. Results"></div>
+        <div class="field"><label>Label text color</label><input name="case_studies_label_color" type="color"></div>
+        <div class="field full"><label>Heading</label><input name="case_studies_heading" placeholder="e.g. Content that performed"></div>
+        <div class="field full"><label>Subheading</label><input name="case_studies_subheading" placeholder="e.g. A few highlights — replace with your own real numbers."></div>
+        <div class="field"><label>Heading/subheading text color</label><input name="case_studies_text_color" type="color"></div>
+        <div class="field"><label>Section background color</label><input name="case_studies_bg_color" type="color"></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or edit the actual case study cards from the "Case Studies" tab in the sidebar.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Services</p>
+        <div class="field full"><label>Label (small tag above the heading)</label><input name="services_label" placeholder="e.g. Services"></div>
+        <div class="field"><label>Label text color</label><input name="services_label_color" type="color"></div>
+        <div class="field full"><label>Heading</label><input name="services_heading" placeholder="e.g. What we can create together"></div>
+        <div class="field full"><label>Subheading (optional)</label><input name="services_subheading" placeholder="e.g. A quick look at what I offer"></div>
+        <div class="field"><label>Heading/subheading text color</label><input name="services_text_color" type="color"></div>
+        <div class="field"><label>Section background color</label><input name="services_bg_color" type="color"></div>
+        <div class="field"><label>Box (card) background color</label><input name="services_card_bg_color" type="color"></div>
+        <div class="field"><label>Box title text color</label><input name="services_card_title_color" type="color"></div>
+        <div class="field"><label>Box description text color</label><input name="services_card_text_color" type="color"></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or edit the actual service cards from the "Services" tab in the sidebar.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Testimonials</p>
+        <div class="field full"><label>Label (small tag above the heading)</label><input name="testimonials_label" placeholder="e.g. Recommendations"></div>
+        <div class="field"><label>Label text color</label><input name="testimonials_label_color" type="color"></div>
+        <div class="field full"><label>Heading</label><input name="testimonials_heading" placeholder="e.g. What brands say"></div>
+        <div class="field full"><label>Subheading (optional)</label><input name="testimonials_subheading" placeholder="e.g. Recommendations from people I've worked with"></div>
+        <div class="field"><label>Heading/subheading text color</label><input name="testimonials_text_color" type="color"></div>
+        <div class="field"><label>Section background color</label><input name="testimonials_bg_color" type="color"></div>
+        <div class="field"><label>Quote text size (px, text-only cards)</label><input name="testimonials_quote_font_size" type="number" min="12" max="32" placeholder="e.g. 16"></div>
+        <div class="field"><label>Quote text color (text-only cards)</label><input name="testimonials_quote_color" type="color"></div>
+        <div class="field">
+          <label>Quote font (text-only cards)</label>
+          <select name="testimonials_quote_font">
+            <option value="">Match site's font pairing</option>
+            <option value="grotesk">Modern — Space Grotesk</option>
+            <option value="fraunces">Editorial Serif — Fraunces</option>
+            <option value="playfair">Classic Serif — Playfair Display</option>
+            <option value="manrope">Clean Geometric — Manrope</option>
+          </select>
+        </div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or edit the actual testimonial cards from the "Testimonials" tab in the sidebar.</p>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Add or remove the actual logo images from the "Brand logos" tab in the sidebar.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Sections (uncheck to hide from the public site)</p>
+        <div class="field"><label><input type="checkbox" name="show_marquee" style="width:auto"> Scrolling banner</label></div>
+        <div class="field"><label><input type="checkbox" name="show_stats" style="width:auto"> Animated stats</label></div>
+        <div class="field"><label><input type="checkbox" name="show_about" style="width:auto"> About</label></div>
+        <div class="field"><label><input type="checkbox" name="show_logos" style="width:auto"> Brand logos</label></div>
+        <div class="field"><label><input type="checkbox" name="show_case_studies" style="width:auto"> Case studies</label></div>
+        <div class="field"><label><input type="checkbox" name="show_portfolio" style="width:auto"> Portfolio</label></div>
+        <div class="field"><label><input type="checkbox" name="show_services" style="width:auto"> Services</label></div>
+        <div class="field"><label><input type="checkbox" name="show_testimonials" style="width:auto"> Testimonials</label></div>
+        <div class="field"><label><input type="checkbox" name="show_contact" style="width:auto"> Contact form</label></div>
+
+        <div class="actions"><button class="btn" type="submit">Save settings</button></div>
+        <p class="msg" id="settings-msg"></p>
+      </form>
+
+      <div class="notice">
+        <p style="margin:0 0 10px"><b>Export current settings</b> — click below, then copy the text and send it to your developer/assistant when asked for your current design values.</p>
+        <button class="btn secondary" type="button" id="export-settings-btn">Generate export</button>
+        <textarea id="export-settings-output" readonly style="width:100%;margin-top:10px;min-height:120px;font-family:var(--mono);font-size:11.5px;display:none"></textarea>
+      </div>
+    </section>
+
+    <!-- SLA TASK -->
+    <section class="panel" id="panel-sla-task">
+      <h2>SLA Task</h2>
+      <p class="hint">A one-off page to host your SLA Pharma application task: a TikTok-format video with your reasoning, and an Instagram carousel with its own reasoning. Lives at <code>case-studies/sla-pharma-task.html</code> — not linked from your main site, just a link you send directly.</p>
+      <form class="add-form" id="form-sla-task">
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:0">TikTok video</p>
+        <div class="field full">
+          <label>Video file</label>
+          <input type="file" name="sla_tiktok_video_file" accept="video/*">
+          <input type="hidden" name="sla_tiktok_video_url">
+          <p id="sla-tiktok-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field full"><label>Why you made it</label><textarea name="sla_tiktok_caption" rows="5" placeholder="Explain the thinking behind the video..."></textarea></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Instagram carousel</p>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">Upload each slide in order. Leave any you don't need empty.</p>
+        <div class="field"><label>Slide 1</label><input type="file" name="sla_carousel_img_1_file" accept="image/*"><input type="hidden" name="sla_carousel_img_1_url"></div>
+        <div class="field"><label>Slide 2</label><input type="file" name="sla_carousel_img_2_file" accept="image/*"><input type="hidden" name="sla_carousel_img_2_url"></div>
+        <div class="field"><label>Slide 3</label><input type="file" name="sla_carousel_img_3_file" accept="image/*"><input type="hidden" name="sla_carousel_img_3_url"></div>
+        <div class="field"><label>Slide 4</label><input type="file" name="sla_carousel_img_4_file" accept="image/*"><input type="hidden" name="sla_carousel_img_4_url"></div>
+        <div class="field"><label>Slide 5</label><input type="file" name="sla_carousel_img_5_file" accept="image/*"><input type="hidden" name="sla_carousel_img_5_url"></div>
+        <div class="field"><label>Slide 6</label><input type="file" name="sla_carousel_img_6_file" accept="image/*"><input type="hidden" name="sla_carousel_img_6_url"></div>
+        <p id="sla-carousel-note" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0"></p>
+        <div class="field full"><label>Why you made it</label><textarea name="sla_carousel_caption" rows="5" placeholder="Explain the thinking behind the carousel..."></textarea></div>
+
+        <div class="actions"><button class="btn" type="submit">Save</button></div>
+        <p class="msg" id="sla-task-msg"></p>
+      </form>
+      <div class="notice">
+        <p style="margin:0"><b>Live page:</b> <a href="../case-studies/sla-pharma-task.html" target="_blank" rel="noopener">case-studies/sla-pharma-task.html</a> — open it in a new tab to check how it looks after saving.</p>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section class="panel active" id="panel-portfolio">
+      <h2>Portfolio</h2>
+      <p class="hint">These items power the "Work by category" section on your public site.</p>
+      <form class="add-form" id="form-portfolio">
+        <div class="field"><label>Category</label>
+          <select name="category" required>
+            <option value="ai">AI</option>
+            <option value="beauty">Beauty</option>
+            <option value="home-deco">Home &amp; Decor</option>
+            <option value="tech">Tech &amp; Apps</option>
+            <option value="finance">Finance</option>
+            <option value="food">Food</option>
+            <option value="drinks">Drinks &amp; Desserts</option>
+            <option value="fitness">Health &amp; Fitness</option>
+            <option value="fashion">Fashion</option>
+            <option value="travel">Travel</option>
+          </select>
+        </div>
+        <div class="field"><label>Brand</label><input name="brand" required></div>
+        <div class="field"><label>Title</label><input name="title" required></div>
+        <div class="field"><label>Platform</label>
+          <select name="platform">
+            <option value="youtube">YouTube</option>
+            <option value="tiktok">TikTok</option>
+            <option value="instagram">Instagram</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field full"><label>Video/post link (used if you don't upload a file below)</label><input name="link_url" placeholder="https://tiktok.com/@... or https://youtube.com/watch?v=..."></div>
+        <div class="field full">
+          <label>Thumbnail (upload a file, or paste a URL — required for TikTok/Instagram, auto-filled for YouTube if left blank)</label>
+          <input type="file" name="thumbnail_file" accept="image/*">
+          <input name="thumbnail_url" placeholder="https://..." style="margin-top:6px">
+        </div>
+        <div class="field full">
+          <label>Upload video instead of linking out (optional — lets you set a start time)</label>
+          <input type="file" name="video_file" accept="video/*">
+          <p id="portfolio-video-note" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0"></p>
+        </div>
+        <div class="field"><label>Start at (seconds, uploaded video only)</label><input name="start_seconds" type="number" min="0" step="0.5" value="0"></div>
+        <div class="field"><label><input type="checkbox" name="featured_ad" style="width:auto"> Featured item</label></div>
+        <div class="actions"><button class="btn" type="submit">Add item</button></div>
+      </form>
+      <table><thead><tr><th>Category</th><th>Brand</th><th>Title</th><th>Platform</th><th>Video?</th><th>Featured?</th><th></th></tr></thead>
+        <tbody id="table-portfolio"></tbody></table>
+    </section>
+
+    <!-- BRAND LOGOS -->
+    <section class="panel" id="panel-logos">
+      <h2>Brand logos</h2>
+      <p class="hint">These logos scroll in the banner between the animated stats and case studies. Drag order isn't supported yet — use "Order" to control left-to-right position (lower shows first).</p>
+      <form class="add-form" id="form-logos">
+        <div class="field full">
+          <label>Logo image</label>
+          <input type="file" name="image_file" accept="image/*">
+          <input type="hidden" name="image_url">
+        </div>
+        <div class="field"><label>Brand name (alt text)</label><input name="brand_name" placeholder="e.g. Brand Name"></div>
+        <div class="field"><label>Link (optional — opens when clicked)</label><input name="link_url" placeholder="https://..."></div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add logo</button></div>
+      </form>
+      <table><thead><tr><th>Logo</th><th>Brand</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-logos"></tbody></table>
+    </section>
+
+    <!-- CASE STUDIES -->
+    <section class="panel" id="panel-case-studies">
+      <h2>Case Studies</h2>
+      <p class="hint">These power the "Content that performed" cards on your public site.</p>
+      <form class="add-form" id="form-case-studies">
+        <div class="field"><label>Brand</label><input name="brand" required></div>
+        <div class="field"><label>Headline stat</label><input name="headline_stat" placeholder="e.g. +100M views" required></div>
+        <div class="field full"><label>Description</label><input name="description" placeholder="e.g. on TikTok alone" required></div>
+        <div class="field full">
+          <label>Image (optional — a screenshot or thumbnail shown on the card)</label>
+          <input type="file" name="image_file" accept="image/*">
+          <input type="hidden" name="image_url">
+        </div>
+        <div class="field full"><label>Case study link (optional — the card opens this webpage when clicked; a full URL or a site path like /case-studies/your-page.html)</label><input name="link_url" type="text" placeholder="/case-studies/your-page.html"></div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add case study</button></div>
+      </form>
+      <table><thead><tr><th>Image</th><th>Brand</th><th>Headline stat</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-case-studies"></tbody></table>
+    </section>
+
+    <!-- CASE STUDY PAGES -->
+    <section class="panel" id="panel-case-study-pages">
+      <h2>Case Study Pages</h2>
+      <p class="hint">Controls every text section of a case study webpage (the pages your case study cards link to — e.g. case-studies/1fit-website.html). The "Slug" must match the page's filename exactly, without the .html. Photos/screenshots on these pages aren't editable here — ask to have those swapped directly.</p>
+      <form class="add-form" id="form-case-study-pages">
+        <div class="field"><label>Slug (matches the page's filename, e.g. 1fit-website)</label><input name="slug" required placeholder="1fit-website"></div>
+        <div class="field"><label>Browser tab title</label><input name="page_title" required></div>
+        <div class="field full"><label>Meta description (optional — for search engines)</label><input name="meta_description"></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Hero</p>
+        <div class="field full"><label>Label (small tag above the headline)</label><input name="label" placeholder="e.g. Case Study · Website & Product Marketing"></div>
+        <div class="field full"><label>Headline (press Enter where you want a line break)</label><textarea name="headline" rows="2" required></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="intro" rows="3"></textarea></div>
+        <div class="field"><label>Client</label><input name="client" placeholder="e.g. 1FIT (1fit.com)"></div>
+        <div class="field"><label>Sector</label><input name="sector" placeholder="e.g. B2B SaaS · Health & Fitness"></div>
+        <div class="field"><label>Period</label><input name="period" placeholder="e.g. May – Aug 2026"></div>
+        <div class="field"><label>Role (optional 4th hero meta item)</label><input name="role" placeholder="e.g. Growth Marketing Executive"></div>
+        <div class="field full">
+          <label>Stat cards (format: number:label, separated by |)</label>
+          <input name="stats" placeholder="10:New landing pages|2:Platform pages updated|12:Total URLs delivered|1:Website redesign moodboard">
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">Each number:label pair becomes one of the stat cards next to the headline. Add, remove or reorder by editing this list.</p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">"The challenge" section</p>
+        <div class="field full"><label>Label</label><input name="challenge_label" placeholder="e.g. The challenge"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="challenge_heading" rows="2"></textarea></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line — **text** for bold, [text](url) for a link)</label>
+          <textarea name="challenge_body" rows="5"></textarea>
+        </div>
+        <div class="field full">
+          <label>Tags (separated by |)</label>
+          <input name="tags" placeholder="Product Copywriting|Landing Pages|Information Architecture">
+        </div>
+        <div class="field full"><label>Proof panel caption</label><input name="proof_caption" placeholder="e.g. All URLs delivered · May – Aug 2026"></div>
+        <div class="field full">
+          <label>Proof panel URL list (one per line, format: url|status)</label>
+          <textarea name="proof_urls" rows="5" placeholder="https://1fit.com/platform/payments/|Updated
+https://1fit.com/platform/wearable-integrations/|New"></textarea>
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">Status is usually "New" or "Updated".</p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">First "featured page" section</p>
+        <div class="field full"><label>Label</label><input name="featured_label" placeholder="e.g. Featured page"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="featured_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="featured_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Page mockup cards (one per line, format: heading|description)</label>
+          <textarea name="featured_pages" rows="5" placeholder="Hero — benefit-led headline|Three-line headline that directly addresses the coach's goal."></textarea>
+          <p style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:4px 0 0">This only changes the captions under each mockup screenshot — swapping the screenshots themselves isn't done here.</p>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Second "featured page" section</p>
+        <div class="field full"><label>Label</label><input name="wearables_label" placeholder="e.g. Featured page"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="wearables_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="wearables_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Page mockup cards (one per line, format: heading|description)</label>
+          <textarea name="wearables_pages" rows="6"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Moodboard section</p>
+        <div class="field full"><label>Label</label><input name="moodboard_label" placeholder="e.g. Website redesign"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="moodboard_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="moodboard_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>"What the moodboard covered" cards (one per line, format: title|description)</label>
+          <textarea name="moodboard_items" rows="6"></textarea>
+        </div>
+        <div class="field full"><label>Note box text</label><textarea name="moodboard_note" rows="2"></textarea></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">"Brand identity" section</p>
+        <div class="field full"><label>Label</label><input name="brand_label" placeholder="e.g. Brand identity"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="brand_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="brand_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Brand guide page captions (one per line, matched to the images by position)</label>
+          <textarea name="brand_pages" rows="4"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">"LinkedIn presence" section</p>
+        <div class="field full"><label>Label</label><input name="linkedin_label" placeholder="e.g. LinkedIn presence"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="linkedin_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="linkedin_intro" rows="3"></textarea></div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Video case studies section</p>
+        <div class="field full"><label>Label</label><input name="video_label" placeholder="e.g. YouTube content"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="video_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="video_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Video thumbnail captions (one per line, matched to the thumbnails by position)</label>
+          <textarea name="video_captions" rows="3"></textarea>
+        </div>
+        <div class="field full"><label>"All videos produced" caption</label><input name="video_all_caption" placeholder="e.g. All 7 videos produced"></div>
+        <div class="field full">
+          <label>Full video list (one per line, matched by position)</label>
+          <textarea name="video_all_list" rows="8"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Email marketing + "Also delivered" section</p>
+        <div class="field full"><label>Email label</label><input name="email_label" placeholder="e.g. Email marketing"></div>
+        <div class="field full"><label>Email heading (press Enter where you want a line break)</label><textarea name="email_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Email intro paragraph</label><textarea name="email_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Audience segments (one per line, format: title|description — first 2 lines only)</label>
+          <textarea name="email_segments" rows="3"></textarea>
+        </div>
+        <div class="field full"><label>Webinar topic</label><input name="email_webinar_topic"></div>
+        <div class="field full"><label>Webinar detail (host / date)</label><input name="email_webinar_detail" placeholder="e.g. Hosted by Phil Smith · 10 June 2026"></div>
+        <div class="field full"><label>"Also delivered" label</label><input name="delivered_label" placeholder="e.g. Also delivered"></div>
+        <div class="field full"><label>"Also delivered" heading (press Enter where you want a line break)</label><textarea name="delivered_heading" rows="2"></textarea></div>
+        <div class="field full"><label>"Also delivered" intro paragraph</label><textarea name="delivered_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Delivered items (one per line, format: title|description)</label>
+          <textarea name="delivered_items" rows="4"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">"Approach" section</p>
+        <div class="field full"><label>Label</label><input name="approach_label" placeholder="e.g. Approach"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="approach_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="approach_intro" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Timeline steps (one per line, format: heading|description)</label>
+          <textarea name="approach_items" rows="5"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Content spotlight section</p>
+        <div class="field full"><label>Label</label><input name="spotlight_label" placeholder="e.g. Content spotlight"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="spotlight_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="spotlight_intro" rows="3"></textarea></div>
+        <div class="field full"><label>Pull-quote</label><textarea name="spotlight_quote" rows="2"></textarea></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line — **text** for bold, [text](url) for a link)</label>
+          <textarea name="spotlight_body" rows="4"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Supporting content section</p>
+        <div class="field full"><label>Label</label><input name="supporting_label" placeholder="e.g. Supporting content"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="supporting_heading" rows="2"></textarea></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line — **text** for bold, [text](url) for a link, e.g. [visit the site](https://example.com) or a link to another case study, [see the video work](1fit-brand-content.html#youtube-content))</label>
+          <textarea name="supporting_body" rows="5"></textarea>
+        </div>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Results section</p>
+        <div class="field full"><label>Label</label><input name="results_label" placeholder="e.g. Results"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="results_heading" rows="2"></textarea></div>
+        <div class="field full"><label>Intro paragraph</label><textarea name="results_intro" rows="3"></textarea></div>
+        <p class="full" style="grid-column:1/-1;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin:0">The number panels in this section aren't editable here — ask to have those changed directly.</p>
+
+        <p class="full" style="grid-column:1/-1;font-weight:600;margin:8px 0 0">Reflection section</p>
+        <div class="field full"><label>Label</label><input name="reflection_label" placeholder="e.g. Reflection"></div>
+        <div class="field full"><label>Heading (press Enter where you want a line break)</label><textarea name="reflection_heading" rows="2"></textarea></div>
+        <div class="field full">
+          <label>Body (separate paragraphs with a blank line — **text** for bold, [text](url) for a link)</label>
+          <textarea name="reflection_body" rows="5"></textarea>
+        </div>
+
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add case study page</button></div>
+      </form>
+      <table><thead><tr><th>Slug</th><th>Headline</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-case-study-pages"></tbody></table>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="panel" id="panel-services">
+      <h2>Services</h2>
+      <p class="hint">These power the "What we can create together" cards on your public site.</p>
+      <form class="add-form" id="form-services">
+        <div class="field full"><label>Title</label><input name="title" required></div>
+        <div class="field full"><label>Description</label><input name="description" required></div>
+        <div class="field full">
+          <label>Image (optional)</label>
+          <input type="file" name="image_file" accept="image/*">
+          <input type="hidden" name="image_url">
+        </div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add service</button></div>
+      </form>
+      <table><thead><tr><th>Image</th><th>Title</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-services"></tbody></table>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="panel" id="panel-testimonials">
+      <h2>Testimonials</h2>
+      <p class="hint">These power the "What brands say" cards on your public site — e.g. LinkedIn recommendations from previous managers.</p>
+      <form class="add-form" id="form-testimonials">
+        <div class="field full">
+          <label>Screenshot (e.g. a LinkedIn recommendation) — optional, shown instead of/above the quote text</label>
+          <input type="file" name="image_file" accept="image/*">
+          <input type="hidden" name="image_url">
+        </div>
+        <div class="field"><label>Brand / handle (optional)</label><input name="brand_handle" placeholder="e.g. @brandname or Jane Smith"></div>
+        <div class="field"><label>Title (optional — the screenshot headline, or their role on text-only/email-style cards, e.g. "Managing Partner, Acme Co.")</label><input name="title" placeholder="e.g. Record-breaking Meta video"></div>
+        <div class="field full"><label>Quote (optional if you upload a screenshot)</label><textarea name="quote" rows="3"></textarea></div>
+        <div class="field full">
+          <label>Their photo (optional — shown next to their name; only used when there's no screenshot above)</label>
+          <input type="file" name="photo_file" accept="image/*">
+          <input type="hidden" name="photo_url">
+        </div>
+        <div class="field">
+          <label>Photo focal point (if their head is getting cropped, try a different one)</label>
+          <select name="photo_position">
+            <option value="top">Top</option>
+            <option value="center">Center</option>
+            <option value="bottom">Bottom</option>
+          </select>
+        </div>
+        <div class="field"><label>Sender email (optional — shown as "From: ****@domain" on text-only cards; the part before @ is blurred for privacy)</label><input name="sender_email" type="email" placeholder="e.g. dora@gracecertifiedaccountants.co.uk"></div>
+        <div class="field"><label>Sent date (optional — shown as "Sent:" on text-only cards, e.g. an emailed recommendation)</label><input name="quote_date" placeholder="e.g. 29 July 2022"></div>
+        <div class="field"><label>Result stat (optional)</label><input name="result_stat" placeholder="e.g. 50M views on 1 video"></div>
+        <div class="field"><label>Order</label><input name="sort_order" type="number" value="0"></div>
+        <div class="actions"><button class="btn" type="submit">Add testimonial</button></div>
+      </form>
+      <table><thead><tr><th>Screenshot</th><th>Brand / handle</th><th>Order</th><th></th></tr></thead>
+        <tbody id="table-testimonials"></tbody></table>
+    </section>
+
+    <!-- CHECKLIST / notes for advanced-checklist bonus tab -->
+    <section class="panel" id="panel-checklist">
+      <h2>Checklist (bonus)</h2>
+      <p class="hint">A reference table of content ideas and what brands look for, per niche. Reuses the Portfolio categories.</p>
+      <form class="add-form" id="form-checklist">
+        <div class="field"><label>Category</label>
+          <select name="category" required>
+            <option value="ai">AI</option><option value="beauty">Beauty</option>
+            <option value="home-deco">Home &amp; Decor</option><option value="tech">Tech &amp; Apps</option>
+            <option value="finance">Finance</option><option value="food">Food</option>
+            <option value="drinks">Drinks &amp; Desserts</option><option value="fitness">Health &amp; Fitness</option>
+            <option value="fashion">Fashion</option><option value="travel">Travel</option>
+          </select>
+        </div>
+        <div class="field full"><label>What brands in this niche look for</label><textarea name="notes" rows="2"></textarea></div>
+        <div class="actions"><button class="btn" type="submit">Save note</button></div>
+      </form>
+      <table><thead><tr><th>Category</th><th>Notes</th><th></th></tr></thead>
+        <tbody id="table-checklist"></tbody></table>
+    </section>
+
+    <!-- CALENDAR -->
+    <section class="panel" id="panel-calendar">
+      <h2>Content Calendar</h2>
+      <p class="hint">What to film, edit and post — sorted by date.</p>
+      <form class="add-form" id="form-calendar">
+        <div class="field"><label>Title</label><input name="title" required></div>
+        <div class="field"><label>Type</label>
+          <select name="event_type"><option value="film">Film</option><option value="edit">Edit</option><option value="post">Post</option></select>
+        </div>
+        <div class="field"><label>Date</label><input type="date" name="event_date" required></div>
+        <div class="field"><label>Status</label>
+          <select name="status"><option value="planned">Planned</option><option value="done">Done</option></select>
+        </div>
+        <div class="actions"><button class="btn" type="submit">Add event</button></div>
+      </form>
+      <table><thead><tr><th>Date</th><th>Title</th><th>Type</th><th>Status</th><th></th></tr></thead>
+        <tbody id="table-calendar"></tbody></table>
+    </section>
+
+    <!-- CAMPAIGNS -->
+    <section class="panel" id="panel-campaigns">
+      <h2>Campaign Organization</h2>
+      <p class="hint">Track active brand campaigns end to end.</p>
+      <form class="add-form" id="form-campaigns">
+        <div class="field"><label>Name</label><input name="name" required></div>
+        <div class="field"><label>Brand</label><input name="brand"></div>
+        <div class="field"><label>Status</label>
+          <select name="status"><option value="active">Active</option><option value="pending">Pending</option><option value="done">Done</option></select>
+        </div>
+        <div class="field"><label>Deadline</label><input type="date" name="deadline"></div>
+        <div class="field full"><label>Notes</label><textarea name="notes" rows="2"></textarea></div>
+        <div class="actions"><button class="btn" type="submit">Add campaign</button></div>
+      </form>
+      <table><thead><tr><th>Name</th><th>Brand</th><th>Status</th><th>Deadline</th><th></th></tr></thead>
+        <tbody id="table-campaigns"></tbody></table>
+    </section>
+
+    <!-- LEADS -->
+    <section class="panel" id="panel-leads">
+      <h2>Leads &amp; Clients</h2>
+      <p class="hint">Submissions from your public contact form land here automatically.</p>
+      <table><thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Company</th><th>Budget</th><th>Status</th><th></th></tr></thead>
+        <tbody id="table-leads"></tbody></table>
+    </section>
+
+    <!-- EMAIL -->
+    <section class="panel" id="panel-email">
+      <h2>Email</h2>
+      <div class="notice">
+        Sending real email needs a mail provider (e.g. Resend or SendGrid) wired up
+        through a Supabase Edge Function, since browsers can't send email directly
+        or securely hold provider API keys. That function isn't set up yet — this
+        tab is a placeholder so the layout is ready when you add one. See the
+        README's "Adding real email sending" section for the next step.
+      </div>
+      <form class="add-form" id="form-email">
+        <div class="field full"><label>Subject</label><input name="subject" disabled></div>
+        <div class="field full"><label>Message</label><textarea name="body" rows="4" disabled></textarea></div>
+        <div class="actions"><button class="btn" type="button" disabled>Send to all leads (not configured)</button></div>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<script type="module" src="../js/config.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>
