@@ -166,6 +166,22 @@
             ${slide.caption ? `<p class="carousel-item-caption">${escapeHtml(slide.caption)}</p>` : ""}
           </div>`)
         .join("");
+
+      // Carousel videos autoplay (muted) from the start the moment they
+      // scroll into view, and pause when they scroll back out — matching
+      // how Instagram plays carousel video slides.
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const v = entry.target;
+          if (entry.isIntersecting) {
+            v.currentTime = 0;
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.6 });
+      row.querySelectorAll("video").forEach(v => io.observe(v));
     }
 
     // Arrow scrolling — steps by one slide's width (+gap) at a time, and
