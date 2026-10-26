@@ -445,6 +445,10 @@ on conflict (key) do nothing;
 insert into storage.buckets (id, name, public)
 values ('site-media', 'site-media', true)
 on conflict (id) do nothing;
+-- Raise the per-file upload cap (the default is well under 24MB, which is
+-- why video uploads were being rejected) to comfortably fit short videos.
+-- Re-run this file any time to bump it further if needed. 300MB.
+update storage.buckets set file_size_limit = 314572800 where id = 'site-media';
 
 -- Row Level Security: public site can read published content and submit leads,
 -- only the logged-in admin (you) can write/manage anything.
