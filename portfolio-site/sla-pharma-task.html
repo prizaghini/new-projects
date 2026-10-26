@@ -39,7 +39,7 @@
 .carousel-slide {
   aspect-ratio: 4/5; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-alt);
 }
-.carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .carousel-item-caption { margin-top: 10px; font-size: 0.8125rem; color: var(--ink-soft); white-space: pre-line; }
 .carousel-arrow {
   position: absolute; top: 50%; translate: 0 -50%; z-index: 2;
@@ -151,6 +151,7 @@
     }
 
     const escapeHtml = str => str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const isVideoUrl = url => /\.(mp4|mov|webm|m4v|ogg)$/i.test(url);
     const slides = [1, 2, 3, 4, 5, 6]
       .map(n => ({ url: s[`sla_carousel_img_${n}_url`], caption: s[`sla_carousel_img_${n}_caption`] }))
       .filter(slide => slide.url);
@@ -159,7 +160,9 @@
       row.innerHTML = slides
         .map((slide, i) => `
           <div class="carousel-item">
-            <div class="carousel-slide"><img src="${slide.url}" alt="Carousel slide ${i + 1}"></div>
+            <div class="carousel-slide">${isVideoUrl(slide.url)
+              ? `<video src="${slide.url}" controls playsinline muted loop></video>`
+              : `<img src="${slide.url}" alt="Carousel slide ${i + 1}">`}</div>
             ${slide.caption ? `<p class="carousel-item-caption">${escapeHtml(slide.caption)}</p>` : ""}
           </div>`)
         .join("");
