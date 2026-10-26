@@ -139,9 +139,19 @@
     if (s.sla_headline) document.getElementById("sla-headline").textContent = s.sla_headline;
     if (s.sla_intro) document.getElementById("sla-intro").textContent = s.sla_intro;
 
+    // If a video's codec/container isn't playable in the visitor's browser
+    // (e.g. a non-H.264 "MPEG-4" export), swap in a clear explanation
+    // instead of leaving a silent blank box.
+    function attachVideoErrorFallback(video, container) {
+      video.addEventListener("error", () => {
+        container.innerHTML = '<div class="empty-note">This video’s format isn’t supported by your browser — re-export it as an H.264 MP4 and re-upload.</div>';
+      }, { once: true });
+    }
+
     if (s.sla_tiktok_video_url) {
-      document.getElementById("tiktok-frame").innerHTML =
-        `<video src="${s.sla_tiktok_video_url}" controls playsinline></video>`;
+      const tiktokFrame = document.getElementById("tiktok-frame");
+      tiktokFrame.innerHTML = `<video src="${s.sla_tiktok_video_url}" controls playsinline></video>`;
+      attachVideoErrorFallback(tiktokFrame.querySelector("video"), tiktokFrame);
     }
     if (s.sla_tiktok_caption) {
       document.getElementById("tiktok-caption").textContent = s.sla_tiktok_caption;
@@ -166,6 +176,11 @@
             ${slide.caption ? `<p class="carousel-item-caption">${escapeHtml(slide.caption)}</p>` : ""}
           </div>`)
         .join("");
+
+      row.querySelectorAll(".carousel-slide").forEach(slideEl => {
+        const v = slideEl.querySelector("video");
+        if (v) attachVideoErrorFallback(v, slideEl);
+      });
 
       // Carousel videos autoplay (muted) from the start the moment they
       // scroll into view, and pause when they scroll back out — matching
