@@ -303,8 +303,10 @@ body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
 
   (async () => {
     try {
-    await loadSiteChrome();
-    const { data } = await supabase.from("site_settings").select("*");
+    const [, { data }] = await Promise.all([
+      loadSiteChrome(),
+      supabase.from("site_settings").select("*"),
+    ]);
     const s = {};
     (data || []).forEach(row => { s[row.key] = row.value; });
 
