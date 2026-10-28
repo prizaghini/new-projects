@@ -201,6 +201,23 @@ async function setupSlaTask() {
   if (!form) return;
   const msg = document.getElementById("sla-task-msg");
 
+  // Bold button: wraps the current text selection in **asterisks** instead
+  // of making the admin type the markdown by hand — select a word, click B.
+  form.querySelectorAll(".bold-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const field = form.elements[btn.dataset.target];
+      if (!field) return;
+      const { selectionStart: start, selectionEnd: end, value } = field;
+      if (start === end) {
+        alert("Select the text you want bold first, then click B.");
+        return;
+      }
+      const selected = value.slice(start, end);
+      field.setRangeText(`**${selected}**`, start, end, "end");
+      field.focus();
+    });
+  });
+
   const { data } = await supabase.from("site_settings").select("*");
   (data || []).forEach(row => {
     const el = form.elements[row.key];
