@@ -291,19 +291,17 @@
 
 <script>
 // Plain, import-free script: a <script type="module"> can't run ANY of its
-// own code — even code placed before every other statement — until its
-// entire import chain (here, the Supabase library loaded from a third-party
-// CDN) has been fetched and evaluated. That makes the module script a poor
-// place for something that should run instantly regardless of network
-// speed, like turning on these already-present .reveal sections.
+// own code until its entire import chain has been fetched and evaluated,
+// so this can't live in the module script below without being delayed by
+// the same network dependency it needs to be independent of.
+//
+// Unlike the scroll-triggered fade-in used on longer portfolio pages,
+// every .reveal section here is shown immediately rather than waiting for
+// it to scroll into view — on a short, single-purpose page like this one,
+// a section sitting just below the fold staying invisible until scrolled
+// to is easily mistaken for the page being slow to load.
 (function () {
-  var els = document.querySelectorAll(".reveal");
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.1 });
-  els.forEach(function (el) { io.observe(el); });
+  document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
 })();
 </script>
 <script type="module" src="js/config.js"></script>
