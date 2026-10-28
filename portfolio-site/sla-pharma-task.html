@@ -296,19 +296,29 @@ body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
 <script type="module" src="js/config.js"></script>
 <script type="module">
   import { supabase } from "./js/supabase-client.js";
-  import { loadSiteChrome, initReveal, applyInlineMarkdown } from "./js/case-study-loader.js";
+  import { initReveal, applyInlineMarkdown } from "./js/case-study-loader.js";
 
   // Safety net: never leave the page blank if the fetch hangs.
   setTimeout(() => document.body.classList.add("sla-loaded"), 4000);
 
   (async () => {
     try {
-    const [, { data }] = await Promise.all([
-      loadSiteChrome(),
-      supabase.from("site_settings").select("*"),
-    ]);
+    const { data } = await supabase.from("site_settings").select("*");
     const s = {};
     (data || []).forEach(row => { s[row.key] = row.value; });
+
+    // Same site-wide chrome loadSiteChrome() would apply, using the
+    // site_settings rows already fetched above instead of a second,
+    // redundant query for the exact same table.
+    if (s.display_name) {
+      document.querySelectorAll(".site-name-text").forEach(el => { el.textContent = s.display_name; });
+    }
+    if (s.name_text_color) {
+      document.querySelectorAll(".site-name-text").forEach(el => { el.style.color = s.name_text_color; });
+    }
+    if (s.header_cta_text) {
+      document.querySelectorAll(".site-cta-text").forEach(el => { el.textContent = s.header_cta_text; });
+    }
 
     if (s.sla_back_link_text) document.getElementById("sla-back-link").textContent = s.sla_back_link_text;
     if (s.sla_headline) document.getElementById("sla-headline").textContent = s.sla_headline;
