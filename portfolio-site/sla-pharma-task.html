@@ -39,15 +39,11 @@
 }
 .tt-play-toggle.show { opacity: 1; pointer-events: auto; }
 .tt-play-toggle svg { width: 56px; height: 56px; color: rgba(255,255,255,0.9); filter: drop-shadow(0 2px 10px rgba(0,0,0,0.4)); }
-.tt-mute-toggle {
-  position: absolute; top: 54px; right: 10px; z-index: 4;
-  width: 30px; height: 30px; border-radius: 50%; border: 0; background: rgba(0,0,0,0.35);
-  display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;
+.tt-progress-track {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18px; z-index: 5; cursor: pointer;
 }
-.tt-mute-toggle svg { width: 17px; height: 17px; color: #fff; }
-.tt-mute-toggle .icon-unmuted { display: none; }
-.tt-mute-toggle.unmuted .icon-muted { display: none; }
-.tt-mute-toggle.unmuted .icon-unmuted { display: block; }
+.tt-progress-bg { position: absolute; left: 0; right: 0; bottom: 3px; height: 3px; background: rgba(255,255,255,0.3); }
+.tt-progress-fill { position: absolute; left: 0; bottom: 3px; height: 3px; width: 0%; background: #fff; }
 .tt-screen .empty-note {
   width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px;
   font-family: var(--mono); font-size: 0.75rem; color: rgba(255,255,255,0.4);
@@ -321,26 +317,36 @@
     if (s.sla_tiktok_video_url) {
       const tiktokFrame = document.getElementById("tiktok-frame");
       tiktokFrame.innerHTML = `
-        <video src="${s.sla_tiktok_video_url}" muted loop playsinline autoplay></video>
+        <video src="${s.sla_tiktok_video_url}" loop playsinline></video>
         <button type="button" class="tt-play-toggle" aria-label="Play or pause video">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </button>
-        <button type="button" class="tt-mute-toggle" aria-label="Toggle sound">
-          <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-          <svg class="icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" stroke="none"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
-        </button>`;
+        <div class="tt-progress-track">
+          <div class="tt-progress-bg"></div>
+          <div class="tt-progress-fill"></div>
+        </div>`;
       const ttVideo = tiktokFrame.querySelector("video");
       const ttToggle = tiktokFrame.querySelector(".tt-play-toggle");
-      const ttMute = tiktokFrame.querySelector(".tt-mute-toggle");
+      const ttTrack = tiktokFrame.querySelector(".tt-progress-track");
+      const ttFill = tiktokFrame.querySelector(".tt-progress-fill");
       const updateToggle = () => ttToggle.classList.toggle("show", ttVideo.paused);
       ttVideo.addEventListener("play", updateToggle);
       ttVideo.addEventListener("pause", updateToggle);
       ttVideo.addEventListener("click", () => ttVideo.paused ? ttVideo.play() : ttVideo.pause());
       ttToggle.addEventListener("click", () => ttVideo.paused ? ttVideo.play() : ttVideo.pause());
-      ttMute.addEventListener("click", () => {
-        ttVideo.muted = !ttVideo.muted;
-        ttMute.classList.toggle("unmuted", !ttVideo.muted);
+      ttVideo.addEventListener("timeupdate", () => {
+        if (ttVideo.duration) ttFill.style.width = (ttVideo.currentTime / ttVideo.duration * 100) + "%";
       });
+      let seeking = false;
+      const seekFromEvent = e => {
+        const rect = ttTrack.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+        if (ttVideo.duration) ttVideo.currentTime = ratio * ttVideo.duration;
+      };
+      ttTrack.addEventListener("pointerdown", e => { seeking = true; seekFromEvent(e); });
+      window.addEventListener("pointermove", e => { if (seeking) seekFromEvent(e); });
+      window.addEventListener("pointerup", () => { seeking = false; });
       updateToggle();
       attachVideoErrorFallback(ttVideo, tiktokFrame);
     }
