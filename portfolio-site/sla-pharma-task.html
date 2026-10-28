@@ -97,7 +97,7 @@
         </div>
       </div>
       <div class="task-copy-col reveal">
-        <span class="label">01 · TikTok video</span>
+        <span class="label" id="tiktok-label">01 · TikTok video</span>
         <div class="task-copy-box">
           <div class="task-copy">
             <h3 id="tiktok-caption-heading">Why I made it</h3>
@@ -107,7 +107,7 @@
       </div>
     </div>
     <div class="task-copy reveal" style="margin-top:36px;">
-      <h3>Strategic thinking behind the concept</h3>
+      <h3 id="tiktok-strategy-heading">Strategic thinking behind the concept</h3>
       <p id="tiktok-strategy">—</p>
     </div>
   </div>
@@ -116,7 +116,7 @@
 <!-- INSTAGRAM CAROUSEL -->
 <section class="task-section">
   <div class="wrap">
-    <span class="label reveal">02 · Instagram carousel</span>
+    <span class="label reveal" id="carousel-label">02 · Instagram carousel</span>
     <div class="reveal carousel-wrap">
       <button class="carousel-arrow prev" id="carousel-prev" type="button" aria-label="Previous slide">‹</button>
       <div class="carousel-row" id="carousel-row">
@@ -162,6 +162,12 @@
       video.addEventListener("error", () => {
         container.innerHTML = '<div class="empty-note">This video’s format isn’t supported by your browser — re-export it as an H.264 MP4 and re-upload.</div>';
       }, { once: true });
+    }
+
+    if (s.sla_tiktok_label) document.getElementById("tiktok-label").textContent = s.sla_tiktok_label;
+    if (s.sla_carousel_label) document.getElementById("carousel-label").textContent = s.sla_carousel_label;
+    if (s.sla_tiktok_strategy_heading) {
+      document.getElementById("tiktok-strategy-heading").textContent = s.sla_tiktok_strategy_heading;
     }
 
     if (s.sla_tiktok_video_url) {
