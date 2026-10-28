@@ -15,10 +15,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:wght@500;600;700&family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/case-study.css">
 <style>
-/* Hide the page until the real saved text/media is in, instead of
-   flashing the hardcoded placeholder content first. */
-body { opacity: 0; }
-body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
 .task-section { border-top: 1px solid var(--line); }
 .task-grid { display: grid; gap: clamp(28px, 5vw, 48px); }
 @media (min-width: 760px) { .task-grid { grid-template-columns: 1fr 1fr; align-items: stretch; } }
@@ -298,11 +294,7 @@ body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
   import { supabase } from "./js/supabase-client.js";
   import { initReveal, applyInlineMarkdown } from "./js/case-study-loader.js";
 
-  // Safety net: never leave the page blank if the fetch hangs.
-  setTimeout(() => document.body.classList.add("sla-loaded"), 4000);
-
   (async () => {
-    try {
     const { data } = await supabase.from("site_settings").select("*");
     const s = {};
     (data || []).forEach(row => { s[row.key] = row.value; });
@@ -347,7 +339,7 @@ body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
     if (s.sla_tiktok_video_url) {
       const tiktokFrame = document.getElementById("tiktok-frame");
       tiktokFrame.innerHTML = `
-        <video src="${s.sla_tiktok_video_url}" loop playsinline preload="metadata"></video>
+        <video src="${s.sla_tiktok_video_url}" loop playsinline></video>
         <button type="button" class="tt-play-toggle" aria-label="Play or pause video">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </button>
@@ -459,9 +451,6 @@ body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
     updateArrows();
 
     initReveal();
-    } finally {
-      document.body.classList.add("sla-loaded");
-    }
   })();
 </script>
 </body>
