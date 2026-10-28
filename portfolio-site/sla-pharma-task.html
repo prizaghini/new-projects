@@ -290,16 +290,27 @@
   </div>
 </footer>
 
+<script>
+// Plain, import-free script: a <script type="module"> can't run ANY of its
+// own code — even code placed before every other statement — until its
+// entire import chain (here, the Supabase library loaded from a third-party
+// CDN) has been fetched and evaluated. That makes the module script a poor
+// place for something that should run instantly regardless of network
+// speed, like turning on these already-present .reveal sections.
+(function () {
+  var els = document.querySelectorAll(".reveal");
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
 <script type="module" src="js/config.js"></script>
 <script type="module">
   import { supabase } from "./js/supabase-client.js";
-  import { initReveal, applyInlineMarkdown } from "./js/case-study-loader.js";
-
-  // Runs immediately, independent of the data fetch below — these .reveal
-  // sections already exist in the static HTML, so there's no reason their
-  // scroll fade-in should stay inactive (and the whole section invisible)
-  // while waiting on the network.
-  initReveal();
+  import { applyInlineMarkdown } from "./js/case-study-loader.js";
 
   (async () => {
     const { data } = await supabase.from("site_settings").select("*");
