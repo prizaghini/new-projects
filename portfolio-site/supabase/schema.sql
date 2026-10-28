@@ -449,7 +449,9 @@ insert into site_settings (key, value) values
   ('sla_carousel_img_6_url', ''),
   ('sla_carousel_img_6_caption', ''),
   ('sla_carousel_caption_heading', 'Why I made it'),
-  ('sla_carousel_caption', '')
+  ('sla_carousel_caption', ''),
+  ('sla_carousel_strategy_heading', 'Strategic thinking behind the concept'),
+  ('sla_carousel_strategy', '')
 on conflict (key) do nothing;
 
 -- Storage bucket for uploaded portfolio videos and the hero video.
