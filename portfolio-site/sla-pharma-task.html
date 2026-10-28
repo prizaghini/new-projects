@@ -100,7 +100,7 @@
         <span class="label">01 · TikTok video</span>
         <div class="task-copy-box">
           <div class="task-copy">
-            <h3>Why I made it</h3>
+            <h3 id="tiktok-caption-heading">Why I made it</h3>
             <p id="tiktok-caption">—</p>
           </div>
           <div class="task-copy">
@@ -125,7 +125,7 @@
       <button class="carousel-arrow next" id="carousel-next" type="button" aria-label="Next slide">›</button>
     </div>
     <div class="task-copy reveal">
-      <h3>Why I made it</h3>
+      <h3 id="carousel-caption-heading">Why I made it</h3>
       <p id="carousel-caption">—</p>
     </div>
   </div>
@@ -169,11 +169,17 @@
       tiktokFrame.innerHTML = `<video src="${s.sla_tiktok_video_url}" controls playsinline></video>`;
       attachVideoErrorFallback(tiktokFrame.querySelector("video"), tiktokFrame);
     }
+    if (s.sla_tiktok_caption_heading) {
+      document.getElementById("tiktok-caption-heading").textContent = s.sla_tiktok_caption_heading;
+    }
     if (s.sla_tiktok_caption) {
       document.getElementById("tiktok-caption").textContent = s.sla_tiktok_caption;
     }
     if (s.sla_tiktok_strategy) {
       document.getElementById("tiktok-strategy").textContent = s.sla_tiktok_strategy;
+    }
+    if (s.sla_carousel_caption_heading) {
+      document.getElementById("carousel-caption-heading").textContent = s.sla_carousel_caption_heading;
     }
     if (s.sla_carousel_caption) {
       document.getElementById("carousel-caption").textContent = s.sla_carousel_caption;

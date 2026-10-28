@@ -425,6 +425,7 @@ insert into site_settings (key, value) values
   ('sla_headline', 'Social Media & Content Executive — Health & Science'),
   ('sla_intro', 'Two pieces made for this application: a TikTok-format video and an Instagram carousel, each with the thinking behind it.'),
   ('sla_tiktok_video_url', ''),
+  ('sla_tiktok_caption_heading', 'Why I made it'),
   ('sla_tiktok_caption', ''),
   ('sla_tiktok_strategy', ''),
   ('sla_carousel_img_1_url', ''),
@@ -439,6 +440,7 @@ insert into site_settings (key, value) values
   ('sla_carousel_img_5_caption', ''),
   ('sla_carousel_img_6_url', ''),
   ('sla_carousel_img_6_caption', ''),
+  ('sla_carousel_caption_heading', 'Why I made it'),
   ('sla_carousel_caption', '')
 on conflict (key) do nothing;
 
