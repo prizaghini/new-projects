@@ -431,6 +431,7 @@ insert into site_settings (key, value) values
   ('sla_tiktok_comments', '891'),
   ('sla_tiktok_sound', 'Original sound · Cilla Zaghini'),
   ('sla_tiktok_video_url', ''),
+  ('sla_tiktok_poster_url', ''),
   ('sla_tiktok_caption_heading', 'Why I made it'),
   ('sla_tiktok_caption', ''),
   ('sla_tiktok_strategy_heading', 'Strategic thinking behind the concept'),

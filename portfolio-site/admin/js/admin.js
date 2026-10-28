@@ -188,6 +188,7 @@ setupSettings();
 const SLA_MEDIA_FIELDS = [
   { file: "sla_tiktok_video_file", url: "sla_tiktok_video_url", folder: "sla-task", noteId: "sla-tiktok-video-note",
     setMsg: "A video is uploaded.", unsetMsg: "No video uploaded yet." },
+  { file: "sla_tiktok_poster_file", url: "sla_tiktok_poster_url", folder: "sla-task" },
   { file: "sla_carousel_img_1_file", url: "sla_carousel_img_1_url", folder: "sla-task" },
   { file: "sla_carousel_img_2_file", url: "sla_carousel_img_2_url", folder: "sla-task" },
   { file: "sla_carousel_img_3_file", url: "sla_carousel_img_3_url", folder: "sla-task" },
@@ -226,7 +227,7 @@ async function setupSlaTask() {
   const videoField = SLA_MEDIA_FIELDS[0];
   document.getElementById(videoField.noteId).textContent =
     form.elements[videoField.url].value ? videoField.setMsg : videoField.unsetMsg;
-  const filledSlides = SLA_MEDIA_FIELDS.slice(1).filter(f => form.elements[f.url].value).length;
+  const filledSlides = SLA_MEDIA_FIELDS.slice(2).filter(f => form.elements[f.url].value).length;
   document.getElementById("sla-carousel-note").textContent =
     filledSlides ? `${filledSlides} slide${filledSlides === 1 ? "" : "s"} uploaded.` : "No slides uploaded yet.";
 
@@ -258,7 +259,7 @@ async function setupSlaTask() {
       SLA_MEDIA_FIELDS.forEach(f => { form.elements[f.file].value = ""; });
       document.getElementById(videoField.noteId).textContent =
         form.elements[videoField.url].value ? videoField.setMsg : videoField.unsetMsg;
-      const filled = SLA_MEDIA_FIELDS.slice(1).filter(f => form.elements[f.url].value).length;
+      const filled = SLA_MEDIA_FIELDS.slice(2).filter(f => form.elements[f.url].value).length;
       document.getElementById("sla-carousel-note").textContent =
         filled ? `${filled} slide${filled === 1 ? "" : "s"} uploaded.` : "No slides uploaded yet.";
     }
