@@ -88,7 +88,9 @@ function applyPairsList(containerId, itemSelector, titleSelector, descSelector, 
 // permanently invisible (opacity: 0) — that was the second real bug.
 // Lets the admin type **bold** and [link text](url) in a body textarea
 // instead of raw HTML — converted here before the paragraph is rendered.
-function applyInlineMarkdown(text) {
+// Exported so other pages (e.g. sla-pharma-task.html) can reuse the same
+// shorthand instead of inventing a second convention.
+export function applyInlineMarkdown(text) {
   return text
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" class="body-link">$1</a>');

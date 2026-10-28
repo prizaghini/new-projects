@@ -143,7 +143,7 @@
 <script type="module" src="js/config.js"></script>
 <script type="module">
   import { supabase } from "./js/supabase-client.js";
-  import { loadSiteChrome, initReveal } from "./js/case-study-loader.js";
+  import { loadSiteChrome, initReveal, applyInlineMarkdown } from "./js/case-study-loader.js";
   loadSiteChrome();
 
   (async () => {
@@ -179,16 +179,16 @@
       document.getElementById("tiktok-caption-heading").textContent = s.sla_tiktok_caption_heading;
     }
     if (s.sla_tiktok_caption) {
-      document.getElementById("tiktok-caption").textContent = s.sla_tiktok_caption;
+      document.getElementById("tiktok-caption").innerHTML = applyInlineMarkdown(s.sla_tiktok_caption);
     }
     if (s.sla_tiktok_strategy) {
-      document.getElementById("tiktok-strategy").textContent = s.sla_tiktok_strategy;
+      document.getElementById("tiktok-strategy").innerHTML = applyInlineMarkdown(s.sla_tiktok_strategy);
     }
     if (s.sla_carousel_caption_heading) {
       document.getElementById("carousel-caption-heading").textContent = s.sla_carousel_caption_heading;
     }
     if (s.sla_carousel_caption) {
-      document.getElementById("carousel-caption").textContent = s.sla_carousel_caption;
+      document.getElementById("carousel-caption").innerHTML = applyInlineMarkdown(s.sla_carousel_caption);
     }
 
     const escapeHtml = str => str.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -204,7 +204,7 @@
             <div class="carousel-slide">${isVideoUrl(slide.url)
               ? `<video src="${slide.url}" controls playsinline muted loop></video>`
               : `<img src="${slide.url}" alt="Carousel slide ${i + 1}">`}</div>
-            ${slide.caption ? `<p class="carousel-item-caption">${escapeHtml(slide.caption)}</p>` : ""}
+            ${slide.caption ? `<p class="carousel-item-caption">${applyInlineMarkdown(escapeHtml(slide.caption))}</p>` : ""}
           </div>`)
         .join("");
 
