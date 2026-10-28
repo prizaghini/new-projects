@@ -6,13 +6,12 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Application Task — SLA Pharma | Priscila Zaghini</title>
 <meta name="description" content="Application task for the Social Media &amp; Content Executive – Health &amp; Science role: a TikTok-format video and an Instagram carousel, each with the reasoning behind it.">
-<link rel="modulepreload" href="js/supabase-client.js">
-<link rel="modulepreload" href="js/case-study-loader.js">
-<link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='black'/%3E%3Ctext x='50' y='53' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPZ%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cizkzrxsnhfcorafmbbo.supabase.co" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:wght@500;600;700&family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/case-study.css">
 <style>
@@ -309,8 +308,23 @@
 </script>
 <script type="module" src="js/config.js"></script>
 <script type="module">
-  import { supabase } from "./js/supabase-client.js";
-  import { applyInlineMarkdown } from "./js/case-study-loader.js";
+  // This page loads the Supabase client from a different CDN endpoint
+  // (jsdelivr's single-file "+esm" bundle) than the rest of the site's
+  // shared js/supabase-client.js (which uses esm.sh, whose dependency
+  // graph for this package resolves into many separate chained requests —
+  // slow and inconsistent specifically in Safari). It also skips
+  // case-study-loader.js entirely, since that file itself imports the
+  // shared (slow) client — inlining the one small helper this page needs
+  // from it (applyInlineMarkdown) instead. None of this touches anything
+  // another page depends on.
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+  function applyInlineMarkdown(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" class="body-link">$1</a>');
+  }
 
   (async () => {
     const { data } = await supabase.from("site_settings").select("*");
