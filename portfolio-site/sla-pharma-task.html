@@ -239,7 +239,7 @@
         <span class="label" id="tiktok-label">01 · TikTok video</span>
         <div class="task-copy-box">
           <div class="task-copy">
-            <h3 id="tiktok-caption-heading"></h3>
+            <h3 id="tiktok-caption-heading">Captions</h3>
             <p id="tiktok-caption"></p>
           </div>
         </div>
@@ -404,9 +404,8 @@
       updateToggle();
       attachVideoErrorFallback(ttVideo, tiktokFrame);
     }
-    if (s.sla_tiktok_caption_heading) {
-      document.getElementById("tiktok-caption-heading").textContent = s.sla_tiktok_caption_heading;
-    }
+    // tiktok-caption-heading is intentionally NOT set from s.sla_tiktok_caption_heading
+    // here — it's fixed to "Captions" directly in the HTML for now.
     if (s.sla_tiktok_caption) {
       document.getElementById("tiktok-caption").innerHTML = applyInlineMarkdown(s.sla_tiktok_caption);
     }
