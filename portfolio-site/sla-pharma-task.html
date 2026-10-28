@@ -347,7 +347,7 @@ body.sla-loaded { opacity: 1; transition: opacity 0.2s ease; }
     if (s.sla_tiktok_video_url) {
       const tiktokFrame = document.getElementById("tiktok-frame");
       tiktokFrame.innerHTML = `
-        <video src="${s.sla_tiktok_video_url}" loop playsinline></video>
+        <video src="${s.sla_tiktok_video_url}" loop playsinline preload="auto"></video>
         <button type="button" class="tt-play-toggle" aria-label="Play or pause video">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         </button>
