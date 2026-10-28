@@ -316,7 +316,13 @@
   // from it (applyInlineMarkdown) instead. None of this touches anything
   // another page depends on.
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-  const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+  // This page only ever does public, anonymous reads — never a login — so
+  // skip the client's default session-restore-from-storage step entirely.
+  // That step touches localStorage on startup, which Safari's storage
+  // access policies can make slower than in Chrome for no benefit here.
+  const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
 
   function applyInlineMarkdown(text) {
     return text
