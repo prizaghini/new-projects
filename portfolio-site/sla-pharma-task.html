@@ -17,7 +17,7 @@
 <style>
 .task-section { border-top: 1px solid var(--line); }
 .task-grid { display: grid; gap: clamp(28px, 5vw, 48px); }
-@media (min-width: 760px) { .task-grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+@media (min-width: 760px) { .task-grid { grid-template-columns: 1fr 1fr; align-items: stretch; } }
 .task-grid.reverse { direction: rtl; }
 .task-grid.reverse > * { direction: ltr; }
 
@@ -55,6 +55,14 @@
 .task-copy { margin-top: 24px; }
 .task-copy h3 { margin-bottom: 14px; }
 .task-copy p { color: var(--ink-soft); white-space: pre-line; }
+
+.task-copy-col { display: flex; flex-direction: column; height: 100%; }
+.task-copy-box {
+  flex: 1; box-sizing: border-box; border: 1px solid var(--line); border-radius: 16px;
+  padding: clamp(24px, 4vw, 36px); display: flex; flex-direction: column; justify-content: center; gap: 24px;
+}
+.task-copy-box .task-copy { margin-top: 0; }
+.task-copy-box .task-copy + .task-copy { padding-top: 24px; border-top: 1px solid var(--line); }
 </style>
 </head>
 <body>
@@ -88,10 +96,18 @@
           <div class="empty-note">Video not uploaded yet.</div>
         </div>
       </div>
-      <div class="task-copy reveal">
+      <div class="task-copy-col reveal">
         <span class="label">01 · TikTok video</span>
-        <h3>Why I made it</h3>
-        <p id="tiktok-caption">—</p>
+        <div class="task-copy-box">
+          <div class="task-copy">
+            <h3>Why I made it</h3>
+            <p id="tiktok-caption">—</p>
+          </div>
+          <div class="task-copy">
+            <h3>Strategic thinking behind the concept</h3>
+            <p id="tiktok-strategy">—</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -155,6 +171,9 @@
     }
     if (s.sla_tiktok_caption) {
       document.getElementById("tiktok-caption").textContent = s.sla_tiktok_caption;
+    }
+    if (s.sla_tiktok_strategy) {
+      document.getElementById("tiktok-strategy").textContent = s.sla_tiktok_strategy;
     }
     if (s.sla_carousel_caption) {
       document.getElementById("carousel-caption").textContent = s.sla_carousel_caption;
