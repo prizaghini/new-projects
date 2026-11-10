@@ -11,15 +11,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <style>
-/* This page only reuses .section-head / .marquee / .logo-track / .logo-card
-   / .brand-logo-img from css/style.css as-is — nothing in that shared file
-   is changed. Everything below is local layout for this standalone banner. */
+/* This page only reuses .section-head / .marquee / .logo-card /
+   .brand-logo-img from css/style.css as-is — nothing in that shared file
+   is changed. .logo-track is overridden locally below to scroll vertically
+   instead of horizontally, scoped to this standalone banner only. */
 body {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   padding: 40px 0;
 }
-.banner-wrap { width: 100%; max-width: 1800px; padding: 0 48px; }
-.logo-track.no-scroll { justify-content: center; }
+.banner-wrap { width: 100%; max-width: 420px; padding: 0 24px; text-align: center; }
+.marquee { height: 70vh; }
+@keyframes scroll-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+.logo-track {
+  flex-direction: column; width: auto; height: max-content;
+  animation: scroll-up 24s linear infinite;
+}
+.logo-track.no-scroll { animation: none; margin: 0 auto; }
 .logo-card { width: 180px; height: 180px; }
 </style>
 </head>
