@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Brands I've Worked With — Banner</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='black'/%3E%3Ctext x='50' y='53' font-family='Arial, sans-serif' font-size='42' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPZ%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* This page only reuses .section-head / .marquee / .logo-track / .logo-card
+   / .brand-logo-img from css/style.css as-is — nothing in that shared file
+   is changed. Everything below is local layout for this standalone banner. */
+body {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 40px 0;
+}
+.banner-wrap { width: 100%; max-width: 1800px; padding: 0 48px; }
+.logo-track.no-scroll { justify-content: center; }
+.logo-card { width: 180px; height: 180px; }
+</style>
+</head>
+<body>
+
+<div class="banner-wrap">
+  <div class="section-head"><h2>Brands I've worked with</h2></div>
+  <div class="marquee" style="background:transparent;overflow:hidden">
+    <div class="logo-track" id="logo-marquee"></div>
+  </div>
+</div>
+
+<script type="module" src="js/config.js"></script>
+<script type="module">
+  import { supabase } from "./js/supabase-client.js";
+
+  const track = document.getElementById("logo-marquee");
+  const { data } = await supabase
+    .from("brand_logos")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  if (data && data.length) {
+    const cards = data.map(logo => {
+      const img = `<img src="${logo.image_url}" alt="${logo.brand_name || "Brand logo"}" class="brand-logo-img">`;
+      const inner = logo.link_url
+        ? `<a href="${logo.link_url}" target="_blank" rel="noopener">${img}</a>`
+        : img;
+      return `<div class="logo-card">${inner}</div>`;
+    });
+    // Same seamless-loop rule as the main site: only duplicate (and
+    // animate) the row once there are enough logos to fill it.
+    const enoughToScroll = cards.length > 5;
+    track.classList.toggle("no-scroll", !enoughToScroll);
+    track.innerHTML = (enoughToScroll ? [...cards, ...cards] : cards).join("");
+  }
+</script>
+</body>
+</html>
