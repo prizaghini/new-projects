@@ -86,7 +86,7 @@ def strip(s, y, label, w=1040):
 # 1 Cover
 s = new_slide(); logo(s)
 headline(s, ['LinkedIn', 'just gave', 'you a', 'business', 'card'], y=300, size=250)
-strip(s, 1560, 'New feature · rolling out from 15 Oct 2026')
+strip(s, 1560, 'Announced 15 Oct 2026 · rolling out worldwide')
 swipe(s)
 
 # 2 2018 vs 2026
