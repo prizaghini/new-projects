@@ -2,7 +2,9 @@
 
 LinkedIn just gave everyone a business card. And it's free. 🪪
 
-On 15 October 2026, LinkedIn started rolling out the new LinkedIn Business Card. It's reaching members worldwide gradually, and you don't need Premium.
+LinkedIn officially announced its digital Business Card on 15 October 2026. It showcased the tool at its Connection by Design event in New York and formally unveiled it in a corporate communications update the same day.
+
+Since then, it's been rolling out gradually to all members worldwide over the following months, and you don't need Premium.
 
 It builds on the profile QR code LinkedIn launched in June 2018. That one did a single job: scan it and you landed on someone's profile.
 
