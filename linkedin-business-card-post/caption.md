@@ -1,6 +1,6 @@
 # LinkedIn caption: Business Card post
 
-LinkedIn just gave everyone a digital business card, and it's free.
+LinkedIn is giving everyone a digital business card, and it's free.
 
 So, back in the middle of October, LinkedIn announced they were going to roll it out to everyone over the next few months. And I've just found out mine is here! The best part? You don't need a Premium subscription to get one, so thank you LinkedIn.
 
