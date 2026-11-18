@@ -6,7 +6,7 @@ So, back in the middle of October, LinkedIn announced they were going to roll it
 
 Before this, all we had was the trusty little profile QR code from 2018. Bless it. You scanned it, it took you to someone's profile, and that was pretty much its whole personality.
 
-This one feels modern. It feels like 2026:
+This one has had a proper glow-up. It finally feels like 2026:
 
 - You pick the layout, font, colours and pattern
 - You can pop it in your Apple Wallet or Google Wallet, so it's right there when you're at an event
