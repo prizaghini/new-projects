@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:transparent}
+.wrap{position:relative;width:1190px;height:2450px;padding:0}
+.body{position:absolute;left:24px;top:0;width:1142px;height:2450px;border-radius:92px;
+ background:linear-gradient(135deg,#5b5e63 0%,#2a2c30 18%,#1b1c1f 50%,#2a2c30 82%,#64676c 100%);
+ box-shadow:0 0 0 2px #77797e inset}
+.bezel{position:absolute;left:10px;top:10px;right:10px;bottom:10px;border-radius:84px;background:#050505}
+.screen{position:absolute;left:31px;top:55px;width:1080px;height:2340px;border-radius:58px;overflow:hidden;background:#000}
+.screen img{display:block;width:1080px;height:2340px}
+.cam{position:absolute;left:50%;top:22px;width:36px;height:36px;margin-left:-18px;border-radius:50%;
+ background:radial-gradient(circle at 40% 40%,#2b3a55 0 18%,#0a0a0f 45%,#000 70%);box-shadow:0 0 0 3px #111}
+.btn{position:absolute;right:0;width:26px;border-radius:0 8px 8px 0;background:linear-gradient(90deg,#3a3c40,#6d7075 60%,#3a3c40)}
+.glare{position:absolute;inset:0;border-radius:58px;background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,0) 35%);pointer-events:none}
+</style></head><body>
+<div class="wrap" id="p">
+ <div class="btn" style="top:470px;height:300px"></div>
+ <div class="btn" style="top:820px;height:170px"></div>
+ <div class="body"><div class="bezel"></div>
+  <div class="screen"><img id="shot"><div class="cam"></div><div class="glare"></div></div>
+ </div>
+</div>
+</body></html>
