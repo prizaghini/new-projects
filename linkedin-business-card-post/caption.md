@@ -13,9 +13,9 @@ Well, it's finally had a proper glow-up, and it actually feels like 2026. Now yo
 - scan other people's cards to add them to your collection
 - change jobs without reprinting a thing, because it updates whenever your profile does
 
-Honestly, the bit I love most is how quick it is. Scan, connect, move on. No typing names into search, and no more "is that Priscila with double L?" (For the record: Priscila, single L. Cilla, double. If you know, you know.)
-
 As soon as mine landed, I made it my own: black, grid, bold type, and my Treze Media logo on the back. Swipe to have a look.
+
+Honestly, the bit I love most is how quick it is. Scan, connect, move on. No typing names into search, and no more "is that Priscila with double L?" (For the record: Priscila, single L. Cilla, double. If you know, you know.)
 
 Have you got yours yet, or are you still waiting for it to pop up?
 
