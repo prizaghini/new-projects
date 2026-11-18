@@ -2,21 +2,19 @@
 
 LinkedIn just gave everyone a business card. And it's free. 🪪
 
-LinkedIn showcased its new digital Business Card at the Connection by Design event in New York, and formally announced it on 15 October 2026. It's rolling out globally over the coming months to every member, whatever their subscription tier.
+It was announced on 15 October and it's rolling out to everyone over the next few months, no Premium needed.
 
-It finally solves the offline connection problem LinkedIn first tried to fix in 2018 with profile QR codes. That version worked, but you couldn't customise it or save it anywhere.
+Remember the profile QR code from 2018? Scan it, land on someone's profile, done. That was it.
 
-The 2026 card fixes both:
+This one actually feels like yours:
 
-🎨 It pulls your headshot and job role from your profile, adds a scannable QR code, and gives you multiple layouts, fonts, colours and patterns
-📲 You can save it to Apple Wallet or Google Wallet for instant access at events
-📇 You can scan other people's cards and keep them in one collection
-🔄 It updates when you change roles, so it never goes out of date (the problem that killed the paper original)
+🎨 You pick the layout, font, colours and pattern
+📲 You can save it to Apple Wallet or Google Wallet, so it's right there at events
+📇 You can scan other people's cards and keep them all in one place
+🔄 And it updates when your profile does, so no more reprinting cards every time you change jobs
 
-For social media managers working events, the value is speed. Scan, connect, move on. No typing names into search, no "is that one L or two?", no business card box gathering dust. And when half your LinkedIn connections change jobs within 18 months of connecting, a card that updates itself actually matters.
+Honestly, the bit I love most is the speed. Scan, connect, move on. No typing names into search, no "is that one L or two?" 😅
 
-So I made mine: black, grid, bold type, and the 13 on the back. (Swipe to see it 👉)
+So of course I made mine: black, grid, bold type, and my 13 on the back. Swipe to see it 👉
 
-Have you got yours yet? Is it on your profile, or still waiting for the rollout? Tell me in the comments 👇
-
-#LinkedIn #LinkedInTips #PersonalBranding #Networking #SocialMediaMarketing #DigitalMarketing #EventMarketing #13Media
+Have you got yours yet, or are you still waiting for it to land? Tell me in the comments 👇
