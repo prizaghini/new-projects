@@ -10,7 +10,7 @@ Well, it's finally had a proper glow-up, and it actually feels like 2026. Now yo
 
 - pick your own layout, font, colours and pattern
 - pop it in your Apple Wallet or Google Wallet, so it's right there when you're at an event
-- scan other people's cards and keep them all in one place
+- scan other people's cards to add them to your collection
 - change jobs without reprinting a thing, because it updates whenever your profile does
 
 Honestly, the bit I love most is how quick it is. Scan, connect, move on. No typing names into search, and no more "is that Priscila with one L or two?"
