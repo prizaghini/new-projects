@@ -2,24 +2,21 @@
 
 LinkedIn just gave everyone a business card. And it's free. 🪪
 
-LinkedIn officially announced its digital Business Card on 15 October 2026. It showcased the tool at its Connection by Design event in New York and formally unveiled it in a corporate communications update the same day.
+LinkedIn showcased its new digital Business Card at the Connection by Design event in New York, and formally announced it on 15 October 2026. It's rolling out globally over the coming months to every member, whatever their subscription tier.
 
-Since then, it's been rolling out gradually to all members worldwide over the following months, and you don't need Premium.
+It finally solves the offline connection problem LinkedIn first tried to fix in 2018 with profile QR codes. That version worked, but you couldn't customise it or save it anywhere.
 
-It builds on the profile QR code LinkedIn launched in June 2018. That one did a single job: scan it and you landed on someone's profile.
+The 2026 card fixes both:
 
-The 2026 version does a lot more:
+🎨 It pulls your headshot and job role from your profile, adds a scannable QR code, and gives you multiple layouts, fonts, colours and patterns
+📲 You can save it to Apple Wallet or Google Wallet for instant access at events
+📇 You can scan other people's cards and keep them in one collection
+🔄 It updates when you change roles, so it never goes out of date (the problem that killed the paper original)
 
-🎨 It looks like you: 6 layouts, 6 fonts, a full colour palette and patterns
-✏️ It has its own headline (up to 100 characters), separate from your profile
-📲 You can save it to Apple Wallet or Google Wallet, so sharing takes seconds
-🖼️ The back takes photo cut-outs and doodles. Mine has my 13 Media stamp
-📇 You can collect other people's cards and remember who you met
+For social media managers working events, the value is speed. Scan, connect, move on. No typing names into search, no "is that one L or two?", no business card box gathering dust. And when half your LinkedIn connections change jobs within 18 months of connecting, a card that updates itself actually matters.
 
 So I made mine: black, grid, bold type, and the 13 on the back. (Swipe to see it 👉)
 
-For anyone who goes to events, meetups or networking breakfasts, this is now the easiest way to swap details without a paper card.
+Have you got yours yet? Is it on your profile, or still waiting for the rollout? Tell me in the comments 👇
 
-Have you seen this feature yet? Is it on your profile, or still waiting for the rollout? Tell me in the comments 👇
-
-#LinkedIn #LinkedInTips #PersonalBranding #Networking #SocialMediaMarketing #DigitalMarketing #13Media
+#LinkedIn #LinkedInTips #PersonalBranding #Networking #SocialMediaMarketing #DigitalMarketing #EventMarketing #13Media
