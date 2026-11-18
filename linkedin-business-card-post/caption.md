@@ -18,6 +18,7 @@ Honestly, the bit I love most is how quick it is. Scan, connect, move on. No typ
 So of course I had to make mine: black, grid, bold type, and my Treze Media logo on the back. Swipe to have a look.
 
 Have you got yours yet, or are you still waiting for it to pop up?
+
 ‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐-------------------------------------------------------------------------
 
 ⚫ Welcome to Treze Media, where I unpack marketing and creative insights, one topic at a time. Follow me so you don’t miss the next one, or let’s connect if this is your world too!
