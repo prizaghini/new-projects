@@ -4,7 +4,7 @@ LinkedIn just gave everyone a digital business card, and it's free.
 
 So, back in the middle of October, LinkedIn announced they were going to roll it out to everyone over the next few months. And I've just found out mine is here! And thank you LinkedIn, you don't need a Premium subscription to have it. Honestly, it's fantastic and I'm so excited about it.
 
-Do you remember the old profile QR code from 2018? You scanned it, it took you to someone's profile, and that was pretty much it.
+Before this, all we had was the trusty little profile QR code from 2018. Bless it. You scanned it, it took you to someone's profile, and that was pretty much its whole personality.
 
 This one feels modern. It feels like 2026:
 
