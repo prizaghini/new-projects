@@ -15,6 +15,6 @@ This one has had a proper glow-up. It finally feels like 2026:
 
 Honestly, the bit I love most is how quick it is. Scan, connect, move on. No typing names into search, and no more "is that Priscila with one L or two?"
 
-So of course I had to make mine: black, grid, bold type, and my 13 on the back. Swipe to have a look.
+So of course I had to make mine: black, grid, bold type, and my Treze Media logo on the back. Swipe to have a look.
 
 Have you got yours yet, or are you still waiting for it to pop up? Let me know in the comments.
