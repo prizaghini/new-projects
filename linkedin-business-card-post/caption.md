@@ -12,7 +12,7 @@ The 2026 version does a lot more:
 
 🎨 It looks like you: 6 layouts, 6 fonts, a full colour palette and patterns
 ✏️ It has its own headline (up to 100 characters), separate from your profile
-📲 You can save it to Google Wallet, so sharing takes seconds
+📲 You can save it to Apple Wallet or Google Wallet, so sharing takes seconds
 🖼️ The back takes photo cut-outs and doodles. Mine has my 13 Media stamp
 📇 You can collect other people's cards and remember who you met
 
