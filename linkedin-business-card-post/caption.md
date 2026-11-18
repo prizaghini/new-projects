@@ -6,12 +6,12 @@ So, back in the middle of October, LinkedIn announced they were going to roll it
 
 Before this, all we had was the trusty little profile QR code from 2018. Bless it. You scanned it, it took you to someone's profile, and that was pretty much its whole personality.
 
-Well, it's finally had a proper glow-up, and it actually feels like 2026:
+Well, it's finally had a proper glow-up, and it actually feels like 2026. Now you can:
 
-- You pick the layout, font, colours and pattern
-- You can pop it in your Apple Wallet or Google Wallet, so it's right there when you're at an event
-- You can scan other people's cards and keep them all in one place
-- And it updates whenever your profile does, so no more reprinting cards every time you change jobs
+- pick your own layout, font, colours and pattern
+- pop it in your Apple Wallet or Google Wallet, so it's right there when you're at an event
+- scan other people's cards and keep them all in one place
+- change jobs without reprinting a thing, because it updates whenever your profile does
 
 Honestly, the bit I love most is how quick it is. Scan, connect, move on. No typing names into search, and no more "is that Priscila with one L or two?"
 
