@@ -302,7 +302,6 @@ With a background in Media Production, I combine creative thinking with a commer
   ('about_location', 'Hertfordshire · UK'),
   ('about_photo_url', ''),
   ('contact_email', 'pri.zaghini@outlook.com'),
-  ('instagram_handle', '@yourhandle'),
   ('bg_color', '#F7F5F0'),
   ('bg_alt_color', '#EFEBE2'),
   ('alt_text_color', ''),
