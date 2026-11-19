@@ -292,8 +292,14 @@ insert into site_settings (key, value) values
   ('stat_views', '100'),
   ('stat_views_suffix', 'M+'),
   ('stat_years', '3'),
-  ('about_bio', 'Replace with your real bio — 2-4 sentences on your background, niche, and what makes your content work.'),
-  ('about_location', '[Your City] · [Your Country]'),
+  ('about_bio', 'I''m a Digital and Social Media Marketing Executive, and for me, marketing''s all about finding ways to always analyse and improve performance. Over the last 7+ years, I''ve been hands-on with the whole process, from paid media and SEO to content production, creation and strategy.
+
+My marketing career has taken me through a pretty interesting mix of industries, including SaaS (health and fitness), infrastructure, professional services, and automotive. Working across such different worlds has made me highly adaptable, and I''m just as comfortable planning out the big-picture strategy as I am jumping into the daily execution and data analysis.
+
+Before moving fully into marketing, I spent time in retail, hospitality, and commercial management. That real-world experience in day-to-day business operations shapes how I approach marketing today. I don''t look at vanity metrics; I look at what actually helps a business grow.
+
+With a background in Media Production, I combine creative thinking with a commercial mindset to create marketing that genuinely connects and gets results.'),
+  ('about_location', 'Hertfordshire · UK'),
   ('about_photo_url', ''),
   ('contact_email', 'you@example.com'),
   ('instagram_handle', '@yourhandle'),
@@ -377,8 +383,8 @@ insert into site_settings (key, value) values
   ('logos_heading_color', ''),
   ('case_studies_label', ''),
   ('case_studies_label_color', ''),
-  ('case_studies_heading', 'Content that performed'),
-  ('case_studies_subheading', 'A few highlights — replace with your own real numbers.'),
+  ('case_studies_heading', 'Case Studies'),
+  ('case_studies_subheading', 'A selection of work from my time at 1FIT, covering SEO and content strategy, brand and content, website and product marketing. From growing organic visibility to building out the brand and creating product-led website content, these projects show the range of marketing work I handled across the business.'),
   ('case_studies_text_color', ''),
   ('case_studies_bg_color', ''),
   ('services_label', ''),
