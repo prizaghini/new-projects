@@ -378,7 +378,7 @@ With a background in Media Production, I combine creative thinking with a commer
   ('about_heading', ''),
   ('about_label', ''),
   ('about_label_color', ''),
-  ('linkedin_handle', ''),
+  ('linkedin_handle', 'priscila-zaghini-368012118'),
   ('logos_heading', 'Brands I''ve worked with'),
   ('logos_heading_color', ''),
   ('case_studies_label', ''),
